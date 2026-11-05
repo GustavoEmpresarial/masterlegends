@@ -1,0 +1,106 @@
+{
+  "name": "@mll/stadium-live",
+  "private": true,
+  "version": "1.0.0",
+  "description": "MLL Stadium Live — widget Taskbar Hero (desktop + mobile)",
+  "main": "electron/main.cjs",
+  "type": "commonjs",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "pack:linux": "electron-builder --linux deb AppImage dir --x64",
+    "pack:win": "electron-builder --win nsis --x64",
+    "pack:desktop": "npm run pack:linux && npm run pack:win",
+    "cap:sync": "npx cap sync android",
+    "cap:open": "npx cap open android",
+    "android:build": "cd android && ./gradlew assembleDebug",
+    "build:all": "npm run pack:desktop && npm run cap:sync && npm run android:build"
+  },
+  "build": {
+    "appId": "online.masterlegends.stadiumlive",
+    "productName": "MLL-Stadium-Live",
+    "executableName": "mll-stadium-live",
+    "copyright": "Copyright © Genesis DAO Network",
+    "directories": {
+      "output": "release",
+      "buildResources": "build"
+    },
+    "files": [
+      "electron/**/*",
+      "www/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "build/icon.png",
+        "to": "icon.png"
+      }
+    ],
+    "linux": {
+      "target": [
+        "deb",
+        "AppImage",
+        "dir"
+      ],
+      "category": "Game",
+      "icon": "build/icon.png",
+      "artifactName": "MLL-Stadium-Live-${version}-linux.${ext}",
+      "executableArgs": [
+        "--no-sandbox"
+      ],
+      "desktop": {
+        "Name": "MLL Stadium Live",
+        "Comment": "Campo ao vivo Master Legends League",
+        "Categories": "Game;"
+      }
+    },
+    "deb": {
+      "packageName": "mll-stadium-live",
+      "maintainer": "Genesis DAO Network <no-reply@masterlegends.online>",
+      "afterInstall": "build/after-install.sh",
+      "depends": [
+        "libgtk-3-0",
+        "libnotify4",
+        "libnss3",
+        "libxss1",
+        "libxtst6",
+        "xdg-utils",
+        "libatspi2.0-0",
+        "libuuid1"
+      ]
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "build/icon.ico",
+      "artifactName": "MLL-Stadium-Live-${version}-windows.${ext}",
+      "signAndEditExecutable": false
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "allowElevation": false,
+      "packElevateHelper": false,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "MLL Stadium Live",
+      "artifactName": "MLL-Stadium-Live-${version}-windows.exe"
+    },
+    "asar": true
+  },
+  "author": "Genesis DAO Network <no-reply@masterlegends.online>",
+  "homepage": "https://masterlegends.online",
+  "dependencies": {
+    "@capacitor/android": "^6.2.0",
+    "@capacitor/app": "^6.0.2",
+    "@capacitor/browser": "^6.0.6",
+    "@capacitor/core": "^6.2.0",
+    "@capacitor/status-bar": "^6.0.2"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6.2.0",
+    "electron": "^33.2.1",
+    "electron-builder": "^25.1.8"
+  }
+}

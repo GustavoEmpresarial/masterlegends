@@ -1,0 +1,96 @@
+# Deploy na VM 177.7.47.139 — masterlegends.online
+# Porta externa 4000 → interna 4100 (web). Infra sem portas no host.
+services:
+  postgres:
+    ports: !reset []
+    container_name: mll-postgres
+    environment:
+      POSTGRES_DB: mll
+  redis:
+    ports: !reset []
+    container_name: mll-redis
+  mongo-logs:
+    ports: !reset []
+    container_name: mll-mongo-logs
+  api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.api-runtime
+    ports: !reset []
+    volumes:
+      - ./apps/api/uploads:/app/apps/api/uploads
+      - ./apps/api/private-uploads:/app/apps/api/private-uploads
+      - ./.env.admin.literal:/run/mll-admin.env:ro
+      - ./docker/admin-env-entrypoint.sh:/run/admin-env-entrypoint.sh:ro
+    entrypoint: ["/bin/sh", "/run/admin-env-entrypoint.sh"]
+    environment:
+      WEB_URL: https://masterlegends.online
+      CORS_ORIGINS: https://masterlegends.online,https://www.masterlegends.online,https://dev.masterlegends.online,http://177.7.47.139:4000,http://143.20.50.96,http://143.20.50.96:4000
+      JWT_SECRET: ${JWT_SECRET}
+      ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET}
+      COOKIE_SECRET: ${COOKIE_SECRET}
+      TURNSTILE_SECRET_KEY: ${TURNSTILE_SECRET_KEY:-}
+      ADMIN_ALLOW_PLAINTEXT_PASSWORDS: ${ADMIN_ALLOW_PLAINTEXT_PASSWORDS:-true}
+      ADMIN_2FA_DISABLED: ${ADMIN_2FA_DISABLED:-false}
+      CONTRACT_USDC_VAULT: ${CONTRACT_USDC_VAULT:-0x967659a8Fe5C15728eD900eF9a90c44bE20190f3}
+      USDC_ADDRESS: ${USDC_ADDRESS:-0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359}
+      CHAIN_ID: ${CHAIN_ID:-137}
+      POLYGON_RPC_URL: ${POLYGON_RPC_URL:-https://polygon-bor-rpc.publicnode.com}
+      POLYGONSCAN_API_KEY: ${POLYGONSCAN_API_KEY:-}
+      TELEGRAM_ENABLED: ${TELEGRAM_ENABLED:-false}
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-}
+      TELEGRAM_BOT_USERNAME: ${TELEGRAM_BOT_USERNAME:-}
+      TELEGRAM_WEBHOOK_SECRET: ${TELEGRAM_WEBHOOK_SECRET:-}
+      TELEGRAM_GLOBAL_CHAT_ID: ${TELEGRAM_GLOBAL_CHAT_ID:-}
+      TELEGRAM_GLOBAL_THREAD_ID: ${TELEGRAM_GLOBAL_THREAD_ID:-}
+      TELEGRAM_UPDATES_MODE: ${TELEGRAM_UPDATES_MODE:-polling}
+      MLL_AI_ENABLED: ${MLL_AI_ENABLED:-false}
+      MLL_AI_BASE_URL: ${MLL_AI_BASE_URL:-}
+      MLL_AI_API_KEY: ${MLL_AI_API_KEY:-}
+      MLL_AI_MODEL: ${MLL_AI_MODEL:-cx/gpt-5.6-terra}
+      MLL_AI_MODEL_FALLBACKS: ${MLL_AI_MODEL_FALLBACKS:-mmf/mimo-auto}
+      MLL_AI_TIMEOUT_MS: ${MLL_AI_TIMEOUT_MS:-45000}
+      MLL_AI_TIP_ENABLED: ${MLL_AI_TIP_ENABLED:-true}
+      MLL_AI_TIP_INTERVAL_MS: ${MLL_AI_TIP_INTERVAL_MS:-1800000}
+      MLL_AI_TIP_THREAD_ID: ${MLL_AI_TIP_THREAD_ID:-}
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
+      OPENROUTER_IMAGE_MODEL: ${OPENROUTER_IMAGE_MODEL:-bytedance-seed/seedream-5-0-flash,recraft/recraft-v4.1-flash,inclusionai/ming-image-0.1-design}
+      SMTP_HOST: ${SMTP_HOST:-smtp.hostinger.com}
+      SMTP_PORT: ${SMTP_PORT:-465}
+      SMTP_SECURE: ${SMTP_SECURE:-true}
+      SMTP_USER: ${SMTP_USER:-no-reply@masterlegends.online}
+      SMTP_PASS: ${SMTP_PASS:-}
+      SMTP_FROM: ${SMTP_FROM:-Master Legends League <no-reply@masterlegends.online>}
+      EMAIL_MARKETING_DAILY_LIMIT: ${EMAIL_MARKETING_DAILY_LIMIT:-250}
+      EMAIL_MARKETING_PER_MINUTE: ${EMAIL_MARKETING_PER_MINUTE:-8}
+    env_file:
+      # Write each literal $ as $$ in this file. Compose otherwise deletes $words.
+      - .env.admin
+  worker:
+    build:
+      context: .
+      dockerfile: apps/worker/Dockerfile
+    container_name: mll-worker
+    environment:
+      POLYGON_RPC_URL: ${POLYGON_RPC_URL:-https://polygon-bor-rpc.publicnode.com}
+      POLYGONSCAN_API_KEY: ${POLYGONSCAN_API_KEY:-}
+      CONTRACT_USDC_VAULT: ${CONTRACT_USDC_VAULT:-0x967659a8Fe5C15728eD900eF9a90c44bE20190f3}
+      USDC_ADDRESS: ${USDC_ADDRESS:-0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359}
+      CHAIN_ID: ${CHAIN_ID:-137}
+      SMTP_HOST: ${SMTP_HOST:-smtp.hostinger.com}
+      SMTP_PORT: ${SMTP_PORT:-465}
+      SMTP_SECURE: ${SMTP_SECURE:-true}
+      SMTP_USER: ${SMTP_USER:-no-reply@masterlegends.online}
+      SMTP_PASS: ${SMTP_PASS:-}
+      SMTP_FROM: ${SMTP_FROM:-Master Legends League <no-reply@masterlegends.online>}
+      EMAIL_MARKETING_DAILY_LIMIT: ${EMAIL_MARKETING_DAILY_LIMIT:-250}
+      EMAIL_MARKETING_PER_MINUTE: ${EMAIL_MARKETING_PER_MINUTE:-8}
+      TELEGRAM_ENABLED: ${TELEGRAM_ENABLED:-false}
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-}
+  web:
+    ports: !override
+      # Host :80 fica com app_nginx (TLS masterlegends.online → proxy :4000).
+      - "4000:4100"
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.web-runtime-online

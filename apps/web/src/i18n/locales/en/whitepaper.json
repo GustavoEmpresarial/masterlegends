@@ -1,0 +1,162 @@
+{
+  "title": "WHITEPAPER",
+  "subtitle": "Master Legends League — Complete Game Guide",
+  "version": "v0.1 Beta",
+  "footer": "© 2025 Master Legends League · Polygon Blockchain · All rights reserved",
+
+  "intro": {
+    "title": "What is Master Legends League?",
+    "body1": "Master Legends League (MLL) is a play-to-earn football management game on the Polygon blockchain. Build your club, scout players as NFTs, line up your squad and earn real USDC.",
+    "body2": "The game combines club management strategy with DeFi mechanics: your lineup generates passive USDC income per hour, and your NFT players can be traded on the internal marketplace.",
+    "blockchain": "Blockchain",
+    "currency": "Currency",
+    "players": "Players",
+    "version": "Version",
+    "playersValue": "6 rarities",
+    "versionValue": "v0.1 Beta"
+  },
+
+  "scout": {
+    "title": "NFT Players — Scout & Rarities",
+    "body": "Players are minted via Scout for {{price}} each, with a limit of {{max}} scouts per user. Each scout reveals a random rarity:",
+    "staminaNote": "⚡ Max stamina: 100. Players in the lineup drain stamina per hour based on rarity. When it hits 0, the Coach automatically removes them.",
+    "rarities": {
+      "common": "Common",
+      "rare": "Rare",
+      "superRare": "Super-Rare",
+      "epic": "Epic",
+      "legendary": "Legendary"
+    }
+  },
+
+  "farming": {
+    "title": "Farming — Passive USDC Income",
+    "body": "Your 11-player lineup generates USDC per hour while you're offline. The calculation considers the total overwall of your 11 starters and your stadium bonus.",
+    "formulaLabel": "FORMULA",
+    "formula": "USDC/h = Σ overwall × 0.000001 × stadium bonus",
+    "formulaNote": "Requires a hired coach. Stops when stamina runs out and the player leaves the stadium.",
+    "minLineup": "Minimum lineup",
+    "minLineupValue": "Players on the stadium",
+    "maxAccum": "Payout",
+    "maxAccumValue": "Every 10 min",
+    "claimAt": "Credit",
+    "claimAtValue": "Automatic to wallet",
+    "bonusPerLevel": "Bonus per stadium level",
+    "bonusPerLevelValue": "+5%/level",
+    "stadiumInitial": "Initial stadium",
+    "stadiumInitialValue": "0% bonus",
+    "stadiumMax": "Max stadium (level 5)",
+    "stadiumMaxValue": "+25%"
+  },
+
+  "stamina": {
+    "title": "Stamina & Training Center",
+    "body": "Players in the lineup lose stamina on the field based on rarity. Benched players do not decay — they only recover with a Coach or minigame.",
+    "maxStamina": "Max stamina",
+    "benchNote": "On the bench (locker room)",
+    "benchNoteValue": "No stamina loss",
+    "drainTitle": "On-field drain (by rarity)",
+    "recovery": "Passive recovery (with Coach)",
+    "minigameRecovery": "Minigame recovery",
+    "minigameRecoveryValue": "+10 per run (with a goal)",
+    "coachNote": "🎽 The Coach automatically rotates the squad: removes players with 0 stamina and puts players with 100 stamina on the field.",
+    "minigameNote": "🎮 Recovery penalty: +10 stamina on your chosen player if you score at least 1 goal. Unlimited plays; every 10 runs adds +10s cooldown (decays after 12h)."
+  },
+
+  "merger": {
+    "title": "Player Merger",
+    "body": "Fuse 5 players of the same rarity and receive 1 of the next rarity. Common becomes uncommon. The fee is GMT. The five cards are consumed and the same card cannot enter two fusions.",
+    "note": "A legendary is worth 3,125 GMT and is not an ingredient. The new card's OVERWALL is rolled in the output rarity band.",
+    "legendaryValue": "Legendary value",
+    "commonToRare": "Common → Rare",
+    "rareToSuperRare": "Rare → Super-Rare",
+    "superRareToEpic": "Super-Rare → Epic",
+    "epicToLegendary": "Epic → Legendary"
+  },
+
+  "marketplace": {
+    "title": "Marketplace",
+    "body": "Buy and sell NFT players with other users. The marketplace charges a fee on each sale.",
+    "saleFee": "Sale fee",
+    "withdrawFee": "Withdrawal fee (wallet)",
+    "basePlayers": "Base Players",
+    "basePlayersValue": "Not tradeable",
+    "referralNfts": "Referral NFTs",
+    "referralNftsValue": "Not tradeable",
+    "scoutNfts": "Scout NFTs",
+    "scoutNftsValue": "Tradeable"
+  },
+
+  "buildings": {
+    "title": "Club Buildings",
+    "body": "Upgrade club buildings to unlock bonuses and features. Upgrade cost: {{formula}} (max level 10).",
+    "stadium": { "name": "Stadium", "bonus": "+5% farm/level" },
+    "locker": { "name": "Locker Room", "bonus": "Increases players' staminaMax" },
+    "ct": { "name": "Training Center (CT)", "bonus": "Passive recovery + minigames" },
+    "trophy": { "name": "Trophy Room", "bonus": "Displays achievements in the Museum" },
+    "office": { "name": "Office", "bonus": "Hire Coach and Staff" }
+  },
+
+  "referral": {
+    "title": "Referral Program",
+    "body": "Refer friends and earn automatic USDC commissions plus an exclusive bonus NFT.",
+    "depositCommission": "Commission on referred user's deposit",
+    "scoutCommission": "Commission on referred user's scout",
+    "referrerNft": "Referrer NFT (you)",
+    "referrerNftValue": "Finite — expires 30 days after fielding",
+    "referredNft": "Referred user NFT (new user)",
+    "referredNftValue": "Infinite — permanent",
+    "note": "Commissions are automatically credited to your in-game USDC balance."
+  },
+
+  "pass": {
+    "title": "Season Pass",
+    "body": "The Season Pass unlocks exclusive rewards and accelerated progress. Cost: {{price}}.",
+    "xpLabel": "XP EARNED PER ACTION",
+    "scoutXp": "Scout a player",
+    "buyXp": "Buy on marketplace",
+    "sellXp": "Sell on marketplace",
+    "mergeXp": "Merge players"
+  },
+
+  "museum": {
+    "title": "Club Museum",
+    "body": "The Museum records your club's history: trophies won, retired players and stadium evolution.",
+    "trophies": "Trophies",
+    "trophiesValue": "Awarded for achievements and events",
+    "retired": "Retired players",
+    "retiredValue": "Full history of retirements",
+    "stadiums": "Stadium evolution",
+    "stadiumsValue": "5 unlockable stadiums",
+    "lifetime": "Lifetime earnings",
+    "lifetimeValue": "Total USDC earned by the club"
+  },
+
+  "roadmap": {
+    "title": "Roadmap",
+    "phase1": {
+      "phase": "Phase 1",
+      "title": "Beta & Core Loop",
+      "status": "IN PROGRESS",
+      "items": ["Scout & NFT Players", "USDC Farming", "Marketplace", "Club Buildings", "Training Center", "Referral Program", "Season Pass"]
+    },
+    "phase2": {
+      "phase": "Phase 2",
+      "title": "PvP Competition",
+      "status": "UPCOMING",
+      "items": ["League & PvP Tournaments", "Club Rankings", "League Rewards", "Seasonal Events"]
+    },
+    "phase3": {
+      "phase": "Phase 3",
+      "title": "Expansion",
+      "status": "FUTURE",
+      "items": ["Advanced transfer market", "Stadium skins & customization", "Club story mode"]
+    },
+    "phase4": {
+      "phase": "Phase 4",
+      "title": "Governance",
+      "status": "FUTURE",
+      "items": ["MLL governance token", "Game decisions DAO", "Staking & rewards"]
+    }
+  }
+}

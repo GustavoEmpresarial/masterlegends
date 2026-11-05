@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "Deep Dig — Coleta automática",
+  "version": "1.4.1",
+  "minimum_chrome_version": "118",
+  "description": "Coleta automática com planejamento de meta e tempo, mira sincronizada e opção de coletar tudo no Hook Rush.",
+  "permissions": ["storage", "debugger"],
+  "host_permissions": ["https://deep-dig.xyz/*"],
+  "background": { "service_worker": "background.js" },
+  "action": { "default_title": "Deep Dig — Coleta automática", "default_popup": "popup.html" },
+  "content_scripts": [{
+    "matches": ["https://deep-dig.xyz/*"],
+    "js": ["vision.js", "content.js"],
+    "run_at": "document_idle"
+  }]
+}

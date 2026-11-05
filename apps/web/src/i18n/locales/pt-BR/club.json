@@ -1,0 +1,407 @@
+{
+  "title": "MEU CLUBE",
+  "create": {
+    "title": "CRIAR SEU CLUBE",
+    "subtitle": "Dê um nome ao seu clube para começar a jogar.",
+    "placeholder": "FC Legends",
+    "submit": "CRIAR CLUBE"
+  },
+  "stats": {
+    "mgt": "GMT",
+    "nfts": "Jogadores",
+    "base": "BASE",
+    "overwall": "OVERWALL"
+  },
+  "buildings": {
+    "title": "EDIFÍCIOS",
+    "stadium": {
+      "name": "ESTÁDIO",
+      "description": "Lojinha e manutenção do campo",
+      "bonus": "+{{value}}% receita do elenco"
+    },
+    "vestiario": {
+      "name": "VESTIÁRIO",
+      "description": "Escalação, stamina e descanso diário",
+      "bonus": "1x descanso/dia"
+    },
+    "ct": {
+      "name": "CT",
+      "description": "Recupera stamina",
+      "bonus": "+{{value}} st/h"
+    },
+    "treasurer": {
+      "name": "TESOUREIRO",
+      "description": "Aumenta APR staking",
+      "bonus": "+{{value}}% APR"
+    },
+    "trophies": {
+      "name": "TROFÉUS",
+      "description": "Registra conquistas",
+      "bonus": "COSMÉTICOS"
+    },
+    "upgrade": "UPGRADE"
+  },
+  "quickActions": {
+    "title": "AÇÕES RÁPIDAS",
+    "pvp": { "label": "ARENA PVP", "desc": "Desafie outros clubes" },
+    "minigames": { "label": "MINIJOGOS", "desc": "Jogue e ganhe USDC" },
+    "pass": { "label": "PASSE", "desc": "Complete missões" }
+  },
+  "dailyFarm": {
+    "title": "PATROCÍNIOS DA LIGA",
+    "subtitle": "Cota USDC a cada 10 min — proporcional ao OW dos titulares escalados no estádio.",
+    "stadium": "ESTÁDIO",
+    "totalOverwall": "OW EM CAMPO",
+    "usdcPerRound": "USDC/RODADA",
+    "usdcPerHour": "USDC/HORA",
+    "pending": "acumulado (USDC no vault)",
+    "hintUsdc": "Paga em USDC (saldo vault), não em GMT.",
+    "hintFormula": "Sua fatia = OW em campo ÷ OW total da rede × cota da rodada.",
+    "hintAccum": "Creditado automaticamente a cada rodada (~10 min).",
+    "hintNotMining": "Não depende de stamina nem treinador — só quem está escalado conta.",
+    "sponsorshipLink": "Ver patrocínios →"
+  },
+  "header": {
+    "squad": "ELENCO",
+    "scout": "SCOUT"
+  },
+  "stadium": {
+    "dragHint": "Arraste jogadores do elenco para os slots no campo",
+    "benchHint": "Arraste do elenco para posicionar",
+    "selectHint": "Clique no jogador no campo para ver ou remover",
+    "save": "SALVAR ESCALAÇÃO",
+    "saved": "Escalação salva!",
+    "removeFromField": "TIRAR JOGADOR DE CAMPO",
+    "editLineup": "MONTAR ESCALAÇÃO",
+    "openLive": "LIVE",
+    "openLiveHint": "Abrir widget ao vivo (campo + jogadores)",
+    "backToStadium": "ESTÁDIO",
+    "liveUnavailable": "Não foi possível carregar o campo ao vivo.",
+    "incomeNowFull": "AGORA VOCÊ GANHA 100%",
+    "incomeNowReduced": "AGORA VOCÊ GANHA 70%",
+    "incomeLiveFull": "Online · 100% da renda",
+    "incomeLiveReduced": "Offline · 70% da renda",
+    "incomeRuleOpen": "Aba do estádio aberta e online: você ganha 100% da renda.",
+    "incomeRuleClosed": "Site fechado ou offline: você perde 30% e fica com 70%.",
+    "installTitle": "INSTALAR STADIUM LIVE",
+    "installSubtitle": "Baixe o app do campo ao vivo no seu sistema",
+    "downloadLinux": "LINUX",
+    "downloadLinuxHint": "Baixar pacote .deb para Ubuntu/Debian",
+    "downloadWindows": "WINDOWS",
+    "downloadWindowsHint": "Baixar o .exe para Windows",
+    "downloadAndroid": "ANDROID",
+    "downloadAndroidHint": "Baixar APK para Android",
+    "liveRetry": "TENTAR DE NOVO",
+    "liveRefresh": "ATUALIZAR",
+    "liveRefreshHint": "Recarregar escalação ao vivo",
+    "livePin": "FIXAR",
+    "livePinHint": "Manter janela sempre no topo",
+    "titlebar": "LIVE · ESTÁDIO",
+    "titleMin": "Minimizar",
+    "titleMax": "Maximizar",
+    "titleClose": "Fechar",
+    "noLineupShort": "Sem titulares",
+    "noLineupHintWidget": "Sem titulares — monte a escalação no jogo (navegador) e atualize aqui",
+    "widgetLoginHint": "Stadium Live — só o campo ao vivo",
+    "widgetAuthorizeTitle": "AUTORIZAR NO NAVEGADOR",
+    "widgetAuthorizeBody": "O login abre no site. Entre na sua conta e autorize este aparelho.",
+    "widgetAuthorizeWaiting": "Esperando a autorização…",
+    "widgetAuthorizeRetry": "ABRIR DE NOVO",
+    "widgetAuthorizeError": "Não foi possível abrir a autorização.",
+    "authorizeTitle": "AUTORIZAR STADIUM LIVE",
+    "authorizeBody": "Este aparelho quer mostrar só o campo ao vivo da sua conta.",
+    "authorizeButton": "AUTORIZAR",
+    "authorizeDone": "Autorizado. Pode voltar ao app Stadium Live.",
+    "lineupOnField": "{{count}} titular(es) em campo — stamina não bloqueia escalação",
+    "noLineupHint": "Nenhum titular ainda — monte a escalação no vestiário"
+  },
+  "vestiario": {
+    "title": "VESTIÁRIO",
+    "subtitle": "Monte sua escalação e gerencie a stamina do elenco",
+    "bench": "ELENCO",
+    "benchEmpty": "Nenhum jogador no elenco",
+    "benchHint": "Arraste ou toque no + do campo para escalar",
+    "pickPlayerTitle": "ESCOLHER JOGADOR",
+    "pickPlayerSlot": "Posição: {{slot}}",
+    "pickPlayerEmpty": "Todos os jogadores já estão escalados",
+    "tapToAssign": "Toque para escalar nesta posição",
+    "alreadyAssigned": "Já escalado",
+    "stamina": "STAMINA",
+    "rest": "DESCANSAR",
+    "restUsed": "DESCANSO USADO",
+    "restDone": "{{count}} jogadores recuperaram {{points}} de stamina.",
+    "ctHint": "CT recupera {{rate}} stamina/h passivamente"
+  },
+  "ct": {
+    "subtitle": "Treino gasta stamina. A recuperação fica no treinador e no descanso diário.",
+    "levelTitle": "Nível do CT",
+    "upgrade": "MELHORAR CT ({{cost}} USDC)",
+    "maxLevel": "CT no nível máximo",
+    "squadStamina": "Stamina do elenco titular",
+    "lineupCount": "Titulares",
+    "avgStamina": "Média",
+    "minStamina": "Mínima",
+    "maxStamina": "Máxima"
+  },
+  "shop": {
+    "title": "LOJINHA DO ESTÁDIO",
+    "subtitle": "Equipamentos, stamina e produtos afiliados — tudo em um só lugar",
+    "maintenanceHint": "Equipe de manutenção preparando o campo",
+    "pickPlayer": "Escolha o jogador que receberá o item",
+    "buy": "COMPRAR",
+    "buyGear": "COMPRAR → MOCHILA",
+    "gearBought": "Item na mochila! Equipe no Elenco.",
+    "goElenco": "Abrir Elenco",
+    "gearSection": "EQUIPAMENTOS",
+    "staminaSection": "STAMINA",
+    "affiliateSection": "AFILIADOS",
+    "bought": "Stamina: {{before}}% → {{after}}%",
+    "effectFlat": "+{{value}} stamina",
+    "effectFull": "Restaura 100% stamina",
+    "staminaFull": "Stamina já está em 100%",
+    "staminaFullShort": "Stamina cheia",
+    "staminaFullHint": "Só jogadores abaixo de 100% de stamina podem receber o item.",
+    "currencyGmt": "GMT",
+    "emptyGear": "Nenhum equipamento à venda no momento",
+    "emptyStamina": "Nenhum item de stamina disponível",
+    "emptyAffiliate": "Nenhum produto afiliado no momento",
+    "openAffiliate": "ABRIR LOJA",
+    "affiliateMeta": "Produto parceiro",
+    "affiliateFree": "Ver oferta",
+    "noPlayers": "Nenhum jogador no elenco",
+    "items": {
+      "energyDrink": "Bebida Energética",
+      "fullRestore": "Kit de Recuperação"
+    }
+  },
+  "gear": {
+    "boots": "Chuteiras",
+    "gloves": "Luvas",
+    "shinguards": "Caneleiras",
+    "empty": "Sem chuteira",
+    "emptySlot": "vazio",
+    "equip": "Equipar",
+    "unequip": "Remover",
+    "bag": "Mochila",
+    "bagEmpty": "Mochila vazia — compre na Loja do Estádio",
+    "bonus": "Bônus: +{{ow}}{{unit}} no poder do jogador",
+    "bonusTotal": "Bônus no poder do jogador",
+    "bonusCompact": "Bônus: +{{ow}}{{unit}}",
+    "powerTarget": "Poder do jogador",
+    "equipped": "Equipado",
+    "inventory": "Inventário",
+    "hint": "Clique ou arraste itens da mochila → slots",
+    "filterAll": "Tudo",
+    "clickToEquip": "Clique para equipar neste slot",
+    "clickToUnequip": "Clique para remover do loadout",
+    "dropHere": "Solte o item aqui",
+    "selectedHint": "Item selecionado — clique no slot certo ou clique de novo na mochila",
+    "slotMismatch": "Esse item não cabe neste slot",
+    "inLoadout": "No loadout",
+    "onOther": "Em outro jogador",
+    "discard": "Descartar",
+    "save": "Salvar",
+    "saving": "Salvando…",
+    "saved": "Salvo!",
+    "tabEquip": "EQUIPAMENTO",
+    "tabInfo": "INFO",
+    "equippedList": "GEAR EQUIPADO",
+    "noneEquipped": "Nenhum gear equipado — arrasta da mochila",
+    "sellMarketplace": "Vender no Marketplace",
+    "inLineup": "Em campo",
+    "infoKind": "Tipo",
+    "infoPosition": "Posição",
+    "infoBaseOw": "OW base",
+    "infoGearOw": "OW gear",
+    "infoTotalOw": "OW total",
+    "infoCreated": "Criado em",
+    "tapOrDrop": "Toque ou solte",
+    "removeSlot": "Remover",
+    "oneClickHint": "Toque num item para equipar",
+    "goShop": "Ir para Loja do Estádio"
+  },
+  "tutorial": {
+    "badge": "Tutorial",
+    "stepOf": "Passo {{current}} de {{total}}",
+    "prev": "Voltar",
+    "next": "Continuar",
+    "finish": "Começar a jogar",
+    "finishing": "Salvando…",
+    "closeReplay": "Fechar",
+    "skip": "Pular tutorial",
+    "mandatoryHint": "Você pode pular o tutorial e assistir de novo em Configurações.",
+    "replay": "Assistir tutorial novamente",
+    "email": {
+      "pending": "Confirme seu e-mail pelo link que enviamos. Sem isso, saques e algumas ações ficam bloqueados.",
+      "verified": "E-mail confirmado ✓",
+      "resend": "REENVIAR E-MAIL DE CONFIRMAÇÃO",
+      "resending": "ENVIANDO...",
+      "resent": "Novo e-mail enviado. Confira a caixa de entrada e o spam.",
+      "alreadyVerified": "Seu e-mail já está confirmado."
+    },
+    "steps": {
+      "freeStart": {
+        "title": "Ganhos grátis ao começar",
+        "where": "Conta nova → Elenco · depois Meu Clube",
+        "body": "Antes de gastar nada: ao criar a conta você já ganha 1 atleta Common no Elenco. Depois crie o clube.",
+        "bullets": [
+          "Na hora do cadastro o jogo entrega 1 atleta Common (FT) de graça",
+          "Veja ele em Meu Clube → Elenco — já pode ir para o campo",
+          "Ainda sem clube? Abra Meu Clube, digite o nome e clique CRIAR CLUBE",
+          "Só depois do clube você usa Vestiário, Presença e Patrocínios"
+        ]
+      },
+      "lineup": {
+        "title": "Escale o atleta grátis",
+        "where": "Menu → Meu Clube → Vestiário",
+        "body": "Coloque o atleta da conta em campo. Overwall em campo é o que gera rendimento — sem gastar GMT.",
+        "bullets": [
+          "Abra Vestiário no menu Meu Clube",
+          "Arraste ou toque no atleta grátis para uma posição do campo",
+          "Salve com SALVAR ESCALAÇÃO (ou espere o auto-save)",
+          "Use DESCANSAR 1× por dia (UTC) para encher a stamina do elenco de graça"
+        ]
+      },
+      "checkin": {
+        "title": "Presença diária (grátis todo dia)",
+        "where": "Menu → Meu Clube → Presença Diária",
+        "body": "Marque presença todo dia: +100 overwall por 7 dias. Em 7 dias seguidos você ganha 1 jogador temporário.",
+        "bullets": [
+          "Abra Presença Diária (também dá pelo card no hub Meu Clube)",
+          "Clique em ✅ Marcar presença hoje — 1× por dia (UTC)",
+          "Cada marcação dá +100 OW por 7 dias (empilha até 700 OW)",
+          "Complete 7 dias seguidos e ganhe 1 jogador temporário (streak). Pular um dia zera a sequência"
+        ]
+      },
+      "patrocinios": {
+        "title": "Patrocínios: ganho automático",
+        "where": "Menu → Economia → Patrocínios",
+        "body": "Com atleta em campo + bônus de presença, os Patrocínios creditam sozinhos. Não precisa mintar para começar a render.",
+        "bullets": [
+          "Confirme escalação no Vestiário e presença marcada",
+          "Abra Patrocínios no menu Economia",
+          "Veja overwall em campo (escalação + bônus de presença)",
+          "O crédito entra automático — não precisa clicar para “minerar”"
+        ]
+      },
+      "wallet": {
+        "title": "Quer acelerar? Use a Wallet",
+        "where": "Menu → Economia → Wallet",
+        "body": "O caminho grátis já funciona. Quando quiser mais atletas ou staff, deposite e troque por GMT.",
+        "bullets": [
+          "Abra Wallet no grupo Economia",
+          "Na aba DEPÓSITO, deposite USDC (Polygon)",
+          "Em SWAP, troque USDC → GMT (TROCAR AGORA)",
+          "Confira o saldo GMT antes de gastar no Olheiro ou Escritório"
+        ]
+      },
+      "scout": {
+        "title": "Olheiro: recrutar com GMT",
+        "where": "Menu → Mercado → Olheiro",
+        "body": "Com GMT você minta mais atletas para subir o overwall do time.",
+        "bullets": [
+          "Abra Olheiro (Mercado) ou o botão SCOUT no hub",
+          "Escolha 1×, 3×, 5× ou 10×",
+          "Clique MINTAR — o custo sai do GMT",
+          "Novos atletas aparecem em Meu Clube → Elenco"
+        ]
+      },
+      "office": {
+        "title": "Contrate o Treinador",
+        "where": "Menu → Meu Clube → Escritório",
+        "body": "Sem Treinador o banco quase não recupera stamina. Contrate no Escritório quando tiver saldo.",
+        "bullets": [
+          "Abra Escritório no menu Meu Clube (não fica no grid do hub)",
+          "No card TREINADOR, clique CONTRATAR",
+          "Status ● CONTRATADO = staff ativo",
+          "Confira também em Meu Clube → CT"
+        ]
+      },
+      "economy": {
+        "title": "USDC, GMT e USDT",
+        "where": "Menu → Economia → Wallet",
+        "body": "A partir de 1º de agosto a economia fica assim:",
+        "bullets": [
+          "Depósitos: USDC na Wallet",
+          "Economia interna (mint, staff, etc.): GMT",
+          "Patrocínios / mineração e saques: USDT",
+          "Sempre confira saldos e histórico na Wallet"
+        ]
+      },
+      "referrals": {
+        "title": "Indicações",
+        "where": "Menu → Economia → Indicações",
+        "body": "Compartilhe seu link: quando alguém se cadastra com ele, você pode ganhar recompensa de indicação (ex.: jogador temporário).",
+        "bullets": [
+          "Abra Indicações no menu Economia",
+          "Copie o link ou código e envie para amigos",
+          "Cada indicação válida conta para o seu progresso",
+          "Combine com presença e escalação — não substitui o check-in diário"
+        ]
+      },
+      "ready": {
+        "title": "Checklist do dia 1",
+        "where": "Primeiro o grátis, depois o pago",
+        "body": "Ordem recomendada para começar sem gastar e só depois acelerar:",
+        "bullets": [
+          "Conta (atleta grátis) → criar clube → escalar no Vestiário",
+          "Marcar Presença Diária todo dia (+ streak → jogador temp)",
+          "Olhar Patrocínios (ganho automático)",
+          "Quando quiser: Wallet → Olheiro → Treinador no Escritório"
+        ]
+      }
+    }
+  },
+  "checkin": {
+    "building": {
+      "description": "Marque presença e ganhe +100 overwall por 7 dias",
+      "bonus": "Até 700 OW empilhados"
+    },
+    "popup": {
+      "title": "PRESENÇA DIÁRIA!",
+      "bonusAmount": "+100 OW",
+      "notCheckedIn": "Você ainda não marcou presença hoje.",
+      "description": "Ganhe +100 overwall por 7 dias (empilha até 700). Bônus ativo agora: {{amount}} OW.",
+      "claiming": "MARCANDO...",
+      "claim": "✅ MARCAR PRESENÇA",
+      "later": "DEPOIS"
+    },
+    "page": {
+      "backToClub": "← Clube",
+      "subtitle": "+{{amount}} overwall por dia · dura {{days}} dias · empilha até {{max}} OW",
+      "activeBonus": "BÔNUS ATIVO",
+      "max": "máx.",
+      "lineup": "ESCALAÇÃO",
+      "totalSponsorships": "TOTAL (PATROCÍNIOS)",
+      "activeGrants": "Grants ativos ({{count}}/{{total}})",
+      "daysLeft": "{{count}}d restantes",
+      "claimToday": "✅ Marcar presença hoje",
+      "alreadyClaimed": "Presença já marcada hoje",
+      "nextCheckIn": "Próxima presença em {{countdown}} (UTC)",
+      "claimSuccess": "Presença marcada! +{{amount}} overwall por {{days}} dias.",
+      "streakTitle": "SEQUÊNCIA",
+      "streakCount": "{{streak}}/{{target}} dias",
+      "streakReady": "Recompensa de sequência disponível nesta marcação!",
+      "streakNext": "Faltam {{count}} dia(s) para ganhar 1 jogador temporário.",
+      "streakNextNamed": "Faltam {{count}} dia(s) para receber {{name}}.",
+      "streakRewardBadge": "RECOMPENSA DA SEQUÊNCIA",
+      "streakPrizeLabel": "Você ganha ao completar",
+      "streakDuration": "{{days}} dias",
+      "streakReward": "Sequência de {{streak}} dias! Você ganhou {{name}} (temporário).",
+      "info": "O bônus de presença diária soma ao overwall da escalação e conta para patrocínios e ranking. Cada +100 OW expira individualmente após 7 dias. Complete 7 dias consecutivos e ganhe 1 jogador temporário definido pelo admin. Se pular um dia, a sequência zera.",
+      "viewSponsorships": "Ver patrocínios →",
+      "tryAgain": "Tentar novamente"
+    }
+  },
+  "freeField": {
+    "title": "CAMPO LIVRE",
+    "body": "Sem stake, o jogador fica 5 minutos em campo. Depois só volta em 24 horas.",
+    "player": "Jogador",
+    "playing": "{{name}} em campo · {{time}}",
+    "confirmTitle": "COLOCAR EM CAMPO",
+    "confirmBody": "{{name}} entra sem stake por 5 minutos. Depois o campo fecha por 24 horas.",
+    "confirmYes": "COLOCAR",
+    "confirmNo": "CANCELAR",
+    "locked": "Campo livre bloqueado. Volta em {{time}}."
+  }
+}

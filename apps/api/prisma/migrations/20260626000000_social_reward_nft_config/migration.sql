@@ -1,0 +1,6 @@
+ALTER TABLE "PlatformConfig"
+  ADD COLUMN IF NOT EXISTS "socialRewardNftName"     VARCHAR(64)  NOT NULL DEFAULT 'Craque Criador',
+  ADD COLUMN IF NOT EXISTS "socialRewardNftImageUrl" VARCHAR(512),
+  ADD COLUMN IF NOT EXISTS "socialRewardNftOverwall" INTEGER      NOT NULL DEFAULT 100,
+  ADD COLUMN IF NOT EXISTS "socialRewardNftPosition" INTEGER      NOT NULL DEFAULT 2,
+  ADD COLUMN IF NOT EXISTS "socialRewardNftDays"     INTEGER      NOT NULL DEFAULT 30;

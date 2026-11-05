@@ -1,0 +1,112 @@
+{
+  "hero": {
+    "tagline": "En la Liga, toda leyenda empieza pequeña. Pero solo los clubes más grandes alcanzan la eternidad.",
+    "subtitle": "Gestiona tu club, haz scout de atletas únicos y compite en PvP — todo con la economía USDC del MVP.",
+    "betaBadge": "BETA — FASE 1"
+  },
+  "stats": {
+    "users": "JUGADORES REGISTRADOS",
+    "deposited": "TOTAL DEPOSITADO (USD)",
+    "nfts": "NFTS MINTADOS",
+    "uptime": "TIEMPO DE VIDA",
+    "uptimeValue": "{{days}} días · {{hours}}h",
+    "uptimeHours": "{{hours}} horas"
+  },
+  "features": {
+    "title": "LO QUE PUEDES HACER HOY",
+    "club": {
+      "title": "TU CLUB",
+      "desc": "Crea el club y mejora estadio, CT, tesorería y sala de trofeos. El USDC viene de ingresos del plantel, patrocinios y depósitos.",
+      "cta": "IR AL CLUB"
+    },
+    "scout": {
+      "title": "SCOUT",
+      "desc": "Recluta atletas con sorteo de rareza. Cada scout cuesta 2 USDC.",
+      "cta": "ABRIR SCOUT"
+    },
+    "marketplace": {
+      "title": "MARKETPLACE",
+      "desc": "Compra y vende jugadores de otros clubes de la liga.",
+      "cta": "VER MERCADO"
+    },
+    "pvp": {
+      "title": "PVP",
+      "desc": "Enfrenta otros clubes en partidas en tiempo real vía Socket.IO.",
+      "cta": "ENTRAR A LA ARENA"
+    }
+  },
+  "howItWorks": {
+    "title": "CÓMO FUNCIONA",
+    "stepLabel": "PASO {{n}}",
+    "steps": {
+      "1": {
+        "title": "CREAR CUENTA",
+        "desc": "Registro gratis con email. Recibe 1 atleta Common (FT) al crear la cuenta."
+      },
+      "2": {
+        "title": "FUNDAR TU CLUB",
+        "desc": "Elige el nombre del club y empieza a generar USDC con la fuerza de tu plantel en la cancha."
+      },
+      "3": {
+        "title": "SCOUT DE ATLETAS",
+        "desc": "Gasta 2 USDC por jugador. Rareza sorteada por el servidor — Common a Legendary."
+      },
+      "4": {
+        "title": "MEJORAR EDIFICIOS",
+        "desc": "Invierte USDC en mejoras. El costo sube por nivel — planifica tu economía."
+      },
+      "5": {
+        "title": "MERCADO Y PVP",
+        "desc": "Negocia jugadores en el marketplace y desafía a otros managers."
+      }
+    }
+  },
+  "economy": {
+    "title": "ECONOMÍA USDC",
+    "subtitle": "Valores reales del MVP off-chain (fase 1)",
+    "starterMgt": {
+      "value": "1",
+      "label": "FT COMÚN",
+      "hint": "Al crear la cuenta"
+    },
+    "scoutCost": {
+      "value": "2",
+      "label": "USDC / SCOUT",
+      "hint": "Por atleta reclutado"
+    },
+    "rarities": {
+      "value": "5",
+      "label": "RAREZAS",
+      "hint": "Epic 1% · Legendary 0,05%"
+    },
+    "freeRegister": {
+      "value": "F2P",
+      "label": "REGISTRO",
+      "hint": "Cuenta gratis, sin tarjeta"
+    }
+  },
+  "walletActivity": {
+    "title": "ACTIVIDAD USDC",
+    "subtitle": "Últimos 10 depósitos y retiros confirmados on-chain (datos públicos, wallets enmascaradas)",
+    "depositsTitle": "ÚLTIMOS DEPÓSITOS",
+    "withdrawalsTitle": "ÚLTIMOS RETIROS",
+    "depositsEmpty": "Aún no hay depósitos confirmados.",
+    "withdrawalsEmpty": "Aún no hay retiros confirmados.",
+    "loading": "Cargando…",
+    "loadError": "No se pudo cargar la actividad de la billetera.",
+    "retry": "REINTENTAR",
+    "anonymous": "Jugador",
+    "justNow": "ahora",
+    "minutesAgo": "hace {{count}} min",
+    "hoursAgo": "hace {{count}} h",
+    "daysAgo": "hace {{count}} d"
+  },
+  "cta": {
+    "play": "IR A MI CLUB",
+    "register": "CREAR CUENTA GRATIS",
+    "login": "YA TENGO CUENTA",
+    "ready": "¿LISTO PARA ENTRAR EN LA LIGA?",
+    "joinLeague": "Crea tu cuenta, funda el club y haz tu primer scout en minutos.",
+    "startFree": "EMPEZAR AHORA"
+  }
+}

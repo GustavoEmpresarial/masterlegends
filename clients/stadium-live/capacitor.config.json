@@ -1,0 +1,23 @@
+{
+  "appId": "online.masterlegends.stadiumlive",
+  "appName": "MLL Stadium Live",
+  "webDir": "www",
+  "server": {
+    "url": "http://143.20.50.96/club/stadium/live?widget=1",
+    "cleartext": true,
+    "allowNavigation": [
+      "143.20.50.96",
+      "http://143.20.50.96/*"
+    ]
+  },
+  "android": {
+    "allowMixedContent": true,
+    "backgroundColor": "#000000"
+  },
+  "plugins": {
+    "StatusBar": {
+      "style": "DARK",
+      "backgroundColor": "#000000"
+    }
+  }
+}

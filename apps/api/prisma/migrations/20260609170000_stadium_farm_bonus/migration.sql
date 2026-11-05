@@ -1,0 +1,2 @@
+ALTER TABLE "StadiumTemplate"
+  ADD COLUMN "farmBonusPct" DECIMAL(8,4) NOT NULL DEFAULT 0.05;

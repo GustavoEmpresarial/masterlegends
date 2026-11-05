@@ -1,0 +1,24 @@
+{
+  "title": "Events",
+  "subtitle": "Campaigns, tasks and achievements — separate from the Pass.",
+  "tabs": {
+    "events": "Events",
+    "tasks": "Tasks",
+    "achievements": "Achievements",
+    "history": "History"
+  },
+  "claim": "Claim",
+  "claimed": "Claimed",
+  "progress": "Progress",
+  "badges": "Badges",
+  "reward": {
+    "overwallDuration": "{{days}} days · counts in mining",
+    "overwallHint": "Temporary boost: lasts {{days}} days after claim and counts in the mining contest."
+  },
+  "empty": {
+    "events": "No active events right now.",
+    "tasks": "No active tasks.",
+    "achievements": "No active achievements.",
+    "history": "No collected achievements yet."
+  }
+}

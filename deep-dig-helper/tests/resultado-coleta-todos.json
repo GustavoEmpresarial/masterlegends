@@ -1,0 +1,38 @@
+{
+  "version": "1.3.0",
+  "environment": "Simulação local com regras e sprites públicos, cliques CDP, sem conta online",
+  "collected": [
+    {
+      "id": 0,
+      "kind": "stone_s",
+      "value": 11,
+      "t": 56
+    },
+    {
+      "id": 1,
+      "kind": "copper",
+      "value": 45,
+      "t": 128
+    },
+    {
+      "id": 2,
+      "kind": "bag",
+      "value": 150,
+      "t": 214
+    },
+    {
+      "id": 3,
+      "kind": "gold_s",
+      "value": 90,
+      "t": 333
+    }
+  ],
+  "metrics": {
+    "phase": 1,
+    "trustedShots": 4,
+    "untrustedShots": 0,
+    "nextClicks": 0,
+    "otherClicks": 0,
+    "results": []
+  }
+}

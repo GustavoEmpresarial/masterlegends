@@ -1,0 +1,81 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+dist/
+build/
+coverage/
+.cache/
+
+# Environment
+.env
+.env.local
+.env.*.local
+.env.test
+.env.production
+.env.bak.*
+.env.admin
+.env.admin.literal
+*.bak.*
+vm-credentials.txt
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Testing
+coverage/
+.nyc_output/
+reports/
+.stryker-tmp/
+reports/mutation/
+
+# Hardhat
+apps/contracts/cache/
+apps/contracts/artifacts/
+apps/contracts/typechain-types/
+apps/contracts/deployments/
+
+# Misc
+*.tsbuildinfo
+*.local
+
+# Docker
+docker-compose.override.yml
+
+# SSL certificates
+nginx/ssl/
+
+apps/api/uploads/
+apps/api/private-uploads/
+uploads/
+private-uploads/
+
+# Local backups, installers and scratch output
+backups/
+output/
+clients/stadium-live/release/
+clients/stadium-live/android/app/build/
+*.rar
+*.zip
+*.dump
+
+# Editor and agent scratch
+.cursor/
+.claude/
+.codex/

@@ -1,0 +1,37 @@
+{
+  "name": "@mll/worker",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/main.ts",
+    "predev": "npm run build -w @mll/shared && prisma generate --schema ../api/prisma/schema.prisma",
+    "build": "tsc",
+    "prebuild": "npm run build -w @mll/shared && prisma generate --schema ../api/prisma/schema.prisma",
+    "start": "node dist/main.js",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "db:generate": "prisma generate --schema ../api/prisma/schema.prisma",
+    "postinstall": "npm run db:generate"
+  },
+  "dependencies": {
+    "@mll/logging": "*",
+    "@mll/shared": "*",
+    "@prisma/client": "^5.9.0",
+    "bullmq": "^5.8.0",
+    "dotenv": "^16.4.5",
+    "ioredis": "^5.3.2",
+    "nodemailer": "^6.9.14",
+    "pino": "^9.2.0",
+    "prisma": "^5.9.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/nodemailer": "^6.4.15",
+    "@vitest/coverage-v8": "^1.6.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.0",
+    "vitest": "^1.6.0"
+  }
+}

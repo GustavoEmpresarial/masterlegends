@@ -1,0 +1,1 @@
+ALTER TABLE "PlatformConfig" ADD COLUMN IF NOT EXISTS "allocationJson" JSONB NOT NULL DEFAULT '[{"label":"Saques de jogadores","pct":83,"color":"#22c55e"},{"label":"Bônus de indicação","pct":5,"color":"#a78bfa"},{"label":"Coaches & mineração","pct":2,"color":"#38bdf8"},{"label":"Taxa de marketplace","pct":10,"color":"#fb923c"}]';

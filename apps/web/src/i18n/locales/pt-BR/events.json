@@ -1,0 +1,24 @@
+{
+  "title": "Eventos",
+  "subtitle": "Campanhas, tasks e achievements — separado do Passe.",
+  "tabs": {
+    "events": "Eventos",
+    "tasks": "Tasks",
+    "achievements": "Achievements",
+    "history": "Histórico"
+  },
+  "claim": "Resgatar",
+  "claimed": "Resgatado",
+  "progress": "Progresso",
+  "badges": "Badges",
+  "reward": {
+    "overwallDuration": "{{days}} dias · conta na mineração",
+    "overwallHint": "Boost temporário: vale por {{days}} dias após o resgate e conta na disputa de mineração."
+  },
+  "empty": {
+    "events": "Nenhum evento ativo no momento.",
+    "tasks": "Nenhuma task ativa.",
+    "achievements": "Nenhum achievement ativo.",
+    "history": "Nenhum achievement coletado ainda."
+  }
+}

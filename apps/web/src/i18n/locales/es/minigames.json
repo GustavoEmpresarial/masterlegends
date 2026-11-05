@@ -1,0 +1,34 @@
+{
+  "title": "MINIJUEGOS",
+  "subtitle": "Penalti de recuperación — partidas ilimitadas con cooldown progresivo",
+  "recovery": {
+    "title": "Minijuegos de recuperación",
+    "subtitle": "+10 stamina al jugador elegido (marca al menos 1 gol). Ilimitado — +10s cooldown cada 10 partidas; decae tras 12h."
+  },
+  "stats": {
+    "xpToday": "XP HOY",
+    "mgtToday": "USDC HOY",
+    "stamina": "STAMINA"
+  },
+  "labels": {
+    "reward": "Recompensa",
+    "xp": "XP",
+    "staminaCost": "Stamina",
+    "playedToday": "JUGADO HOY",
+    "play": "JUGAR",
+    "playing": "JUGANDO...",
+    "clickPrompt": "¡HAZ CLIC LO MÁXIMO QUE PUEDAS!",
+    "click": "¡CLIC!",
+    "result": "RESULTADO",
+    "points": "PUNTOS",
+    "close": "CERRAR"
+  },
+  "games": {
+    "penalty": { "name": "PENALES", "description": "Acierta el gol para ganar" },
+    "dribble": { "name": "REGATES", "description": "Regatea los obstáculos" },
+    "header": { "name": "CABEZAZO", "description": "Cabezazo al gol" },
+    "freestyle": { "name": "FREESTYLE", "description": "Malabarismos" },
+    "tactics": { "name": "TÁCTICAS", "description": "Desafíos tácticos" },
+    "reflex": { "name": "REFLEJOS", "description": "Pon a prueba tus reflejos" }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "title": "REFERRALS",
+  "subtitle": "Invite friends and earn 5% of their deposits forever!",
+  "yourLink": "YOUR LINK",
+  "code": "CODE",
+  "stats": {
+    "total": "REFERRED",
+    "active": "ACTIVE",
+    "totalEarned": "TOTAL EARNED",
+    "thisMonth": "THIS MONTH"
+  },
+  "howItWorks": "HOW IT WORKS",
+  "steps": {
+    "1": { "title": "SHARE", "desc": "Send your link to friends" },
+    "2": { "title": "FRIEND SIGNS UP", "desc": "Using your link" },
+    "3": { "title": "EARN FOREVER", "desc": "5% of their deposits" }
+  },
+  "recent": "RECENT REFERRALS",
+  "earned": "EARNED"
+}

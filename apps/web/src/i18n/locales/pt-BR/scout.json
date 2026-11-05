@@ -1,0 +1,82 @@
+{
+  "title": "SCOUT",
+  "subtitle": "Recrute novos atletas lendários para seu clube",
+  "pack": "PACK DE ATLETAS",
+  "packDesc": "Cada recrutamento = 1 atleta aleatório",
+  "info": {
+    "price": "PREÇO",
+    "rarities": "RARIDADES",
+    "fiveTypes": "6 TIPOS",
+    "legendary": "LENDÁRIO"
+  },
+  "quantity": "QUANTIDADE",
+  "total": "TOTAL",
+  "from": "a partir de",
+  "mint_one": "RECRUTAR {{count}} ATLETA",
+  "mint_other": "RECRUTAR {{count}} ATLETAs",
+  "revealing": "REVELANDO...",
+  "chances": "CHANCES",
+  "overwallTitle": "OVERWALL",
+  "overwall": "OVERWALL",
+  "staminaTitle": "STAMINA",
+  "staminaHint": "Quanto mais raro, mais stamina consome por hora em campo.",
+  "recruited": "ATLETAS RECRUTADOS!",
+  "rulesTitle": "REGRAS",
+  "rules": {
+    "attributes": "Os atributos saem da mesma faixa de OVERWALL da raridade sorteada.",
+    "lateral": "{{pct}}% de chance de a posição virar LAT.",
+    "payment": "Cada carta custa 1 GMT, qualquer raridade. Não tem estorno.",
+    "inventory": "A carta entra no inventário como jogador base."
+  },
+  "confirm": {
+    "title": "CONFIRMAR MINT",
+    "cost": "CUSTO",
+    "pay": "PAGAR E MINTAR",
+    "cancel": "CANCELAR"
+  },
+  "attrs": {
+    "ataque": "Ataque",
+    "defesa": "Defesa",
+    "passe": "Passe",
+    "velocidade": "Velocidade",
+    "finalizacao": "Finalização",
+    "forca": "Força",
+    "resistencia": "Resistência",
+    "tecnica": "Técnica",
+    "inteligencia": "Inteligência",
+    "goleiro": "Goleiro"
+  },
+  "stamina": "STAMINA",
+  "scoutAnimation": {
+    "searching": "OLHEIRO EM VOO...",
+    "flight": "VOO {{current}} DE {{total}}",
+    "landing": "ATLETA ENCONTRADO!",
+    "landing_many": "{{count}} ATLETAS RECRUTADOS!",
+    "revealTitle": "REVELAÇÃO",
+    "revealSubtitle": "Novo talento chegou ao seu clube",
+    "continue": "CONTINUAR",
+    "skip": "PULAR",
+    "skipOpen": "PULAR E ABRIR TUDO",
+    "skipOpening": "ABRINDO...",
+    "retry": "TENTAR DE NOVO",
+    "close": "FECHAR",
+    "emailHint": "Abra o link de verificação enviado para seu email e tente novamente."
+  },
+  "emailVerificationRequired": "Verifique seu email para mintar atletas. Confira sua caixa de entrada.",
+  "rarities": {
+    "common": "COMUM",
+    "uncommon": "INCOMUM",
+    "rare": "RARO",
+    "super-rare": "SUPER RARO",
+    "epic": "ÉPICO",
+    "legendary": "LENDÁRIO",
+    "mythic": "EXTRA",
+    "commonShort": "COMUM",
+    "uncommonShort": "INCOMUM",
+    "rareShort": "RARO",
+    "superRareShort": "S.RARO",
+    "epicShort": "ÉPICO",
+    "legendaryShort": "LENDÁRIO",
+    "mythicShort": "EXTRA"
+  }
+}

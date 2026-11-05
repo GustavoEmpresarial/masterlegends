@@ -1,0 +1,38 @@
+{
+  "title": "MINIGAMES",
+  "subtitle": "O treino gasta stamina do jogador escolhido",
+  "recovery": {
+    "title": "Treino",
+    "subtitle": "Abrir a sessão gasta stamina do jogador. Cooldown de +10s a cada 10 treinos; decai após 12h."
+  },
+  "stats": {
+    "xpToday": "XP HOJE",
+    "mgtToday": "USDC HOJE",
+    "stamina": "STAMINA"
+  },
+  "labels": {
+    "reward": "Recompensa",
+    "xp": "XP",
+    "staminaCost": "Stamina",
+    "staminaReward": "Recuperação",
+    "pickPlayer": "Escolha o jogador que vai treinar",
+    "playedToday": "JOGADO HOJE",
+    "play": "JOGAR",
+    "playing": "JOGANDO...",
+    "clickPrompt": "CLIQUE O MÁXIMO QUE PUDER!",
+    "click": "CLIQUE!",
+    "result": "RESULTADO",
+    "points": "PONTOS",
+    "close": "FECHAR"
+  },
+  "games": {
+    "penalty": { "name": "PÊNALTIS", "description": "Acerte o gol para ganhar" },
+    "dribble": { "name": "DRIBLES", "description": "Drible os obstáculos" },
+    "header": { "name": "CABECEIO", "description": "Cabeceie no gol" },
+    "freestyle": { "name": "FREESTYLE", "description": "Malabarismos" },
+    "tactics": { "name": "TÁTICAS", "description": "Desafios táticos" },
+    "reflex": { "name": "REFLEXOS", "description": "Teste seus reflexos" },
+    "recovery_penalty": { "name": "PÊNALTI DE TREINO", "description": "Sessão que gasta stamina do jogador" },
+    "recovery_rest": { "name": "DESCANSO ATIVO", "description": "Alongamento e respiração para o elenco" }
+  }
+}

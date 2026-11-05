@@ -1,0 +1,224 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+      - run: npm ci
+      - run: npm run build -w @mll/shared && npm run build -w @mll/logging
+      - run: npm run type-check
+
+  test-contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+      - run: npm ci
+      - run: npm run build -w @mll/contracts
+      - run: npm run test:contracts
+
+  security-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+      - run: npm ci
+      - name: npm audit (high+)
+        run: npm audit --audit-level=high
+        continue-on-error: true
+
+  test:
+    runs-on: ubuntu-latest
+    needs: [lint, typecheck]
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: mll_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis:7
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      mongo:
+        image: mongo:7
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --eval \"db.adminCommand('ping')\""
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      NODE_ENV: test
+      INTEGRATION_TESTS: 'true'
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/mll_test
+      REDIS_URL: redis://localhost:6379/1
+      MONGODB_URI: mongodb://localhost:27017/mll_logs_test
+      LOG_MONGO_ENABLED: 'false'
+      LOG_LEVEL: silent
+      JWT_SECRET: test-jwt-secret-with-at-least-32-characters!!
+      JWT_EXPIRY: 15m
+      REFRESH_TOKEN_EXPIRY: 7d
+      REFRESH_TOKEN_MAX_AGE_SECONDS: 604800
+      CORS_ORIGINS: http://localhost:5173
+      SMTP_HOST: localhost
+      SMTP_PORT: 1025
+      WEB_URL: http://localhost:5173
+      FLAKY_RUNS: '3'
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+      - run: npm ci
+      - run: npm run db:generate
+      - name: Smoke (fail fast, <5m)
+        run: npm run test:smoke
+      - run: npm run db:migrate
+      - name: Regression (unit + integration + coverage)
+        run: npm run test:regression
+      - name: Flaky detection (smoke × N)
+        run: npm run test:flaky
+      - name: Performance smoke (k6 optional)
+        # Exit 0 with skip report when k6 binary is absent; fails when k6 runs and thresholds break.
+        run: npm run test:perf:smoke
+        env:
+          BASE_URL: http://127.0.0.1:3001
+      - name: Observability summary
+        if: always()
+        run: npm run test:report
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-reports
+          path: |
+            packages/*/coverage
+            apps/*/coverage
+            reports/**
+          if-no-files-found: ignore
+          retention-days: 14
+
+  mutation:
+    runs-on: ubuntu-latest
+    needs: [test]
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+      - run: npm ci
+      - run: npm run db:generate
+      - run: npm run build -w @mll/shared && npm run build -w @mll/logging
+      - name: Mutation testing (critical modules)
+        # stryker.config.mjs thresholds.break = 80 — job fails if score drops.
+        run: npm run test:mutation
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mutation-reports
+          path: |
+            reports/mutation/**
+            reports/mutation-report.md
+          if-no-files-found: ignore
+          retention-days: 14
+
+  e2e:
+    runs-on: ubuntu-latest
+    needs: [test, test-contracts]
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: mll_e2e
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis:7
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/mll_e2e
+      REDIS_URL: redis://localhost:6379/3
+      JWT_SECRET: test-jwt-secret-with-at-least-32-characters!!
+      CORS_ORIGINS: http://127.0.0.1:5173
+      WEB_URL: http://127.0.0.1:5173
+      LOG_MONGO_ENABLED: 'false'
+      LOG_LEVEL: silent
+      SMTP_HOST: localhost
+      SMTP_PORT: 1025
+      CI: true
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+      - run: npm ci
+      - run: npm run db:generate
+      - run: npm run db:migrate
+      - run: npm run build -w @mll/shared && npm run build -w @mll/logging
+      - run: npx playwright install chromium --with-deps
+      - run: npm run e2e

@@ -1,0 +1,25 @@
+{
+  "title": "SQUAD",
+  "subtitle": "Your player collection",
+  "empty": "No players yet. Go to scout to recruit!",
+  "goScout": "GO TO SCOUT",
+  "mergeHint": "You have {{count}} {{rarity}} players — ready for 5→1 fusion.",
+  "mergeCta": "FUSE",
+  "filters": {
+    "all": "ALL",
+    "rarity": "RARITY",
+    "position": "POSITION",
+    "sort": "SORT",
+    "sortOverwall": "OVERWALL",
+    "sortRecent": "RECENT"
+  },
+  "listed": "FOR SALE",
+  "kind": {
+    "base": "BASE",
+    "nft": "NFT"
+  },
+  "stats": {
+    "total": "TOTAL",
+    "overwall": "OVERWALL"
+  }
+}

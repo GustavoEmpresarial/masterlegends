@@ -1,0 +1,24 @@
+FROM node:20-alpine
+RUN apk add --no-cache libc6-compat openssl wget
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 appuser
+WORKDIR /app
+COPY package.json package-lock.json ./
+COPY packages/shared/package.json packages/shared/
+COPY packages/logging/package.json packages/logging/
+COPY apps/api/package.json apps/api/
+RUN npm install -w @mll/api -w @mll/shared -w @mll/logging dotenv --ignore-scripts
+COPY packages/shared/dist packages/shared/dist
+COPY packages/logging/dist packages/logging/dist
+COPY apps/api/dist apps/api/dist
+COPY apps/api/assets/boneco-card.jpg apps/api/assets/boneco-card.jpg
+COPY apps/api/prisma apps/api/prisma
+COPY apps/api/docker-entrypoint.sh apps/api/docker-entrypoint.sh
+WORKDIR /app/apps/api
+RUN npx prisma generate
+RUN chmod +x docker-entrypoint.sh
+# node_modules is huge — chown only app-owned paths (full /app chown hangs on VM)
+RUN chown -R appuser:nodejs /app/apps /app/packages /app/package.json /app/package-lock.json
+USER appuser
+EXPOSE 3001
+ENTRYPOINT ["./docker-entrypoint.sh"]

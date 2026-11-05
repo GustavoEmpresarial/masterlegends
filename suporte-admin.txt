@@ -1,0 +1,19 @@
+Master Legends League — Admin (perfil normal, não-super)
+
+Login: suporte
+E-mail: suporte@noobdoscrypto.games
+Senha: HDSmFxPK46qGH451
+
+Role: ops (permissões customizadas)
+Permissões concedidas:
+- view_users, manage_users (ver/editar jogadores: perfil, saldo GMT/USDC/USDT, inventário)
+- manage_items (upload fotos de itens)
+- manage_stadiums (upload fotos de estádio/vestiário/escritório)
+- manage_social (upload fotos redes sociais/YouTube)
+- manage_announcements (upload fotos de comunicados)
+- manage_pass (upload fotos do passe)
+- manage_events (upload fotos de eventos)
+
+SEM acesso a: saques, configuração de wallet, outros admins, relatórios financeiros, auditoria, fila de jobs.
+
+Senha alterada em: 11/08/2026

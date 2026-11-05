@@ -1,0 +1,25 @@
+{
+  "title": "ELENCO",
+  "subtitle": "Sua coleção de jogadores",
+  "empty": "Nenhum jogador ainda. Vá ao olheiro recrutar!",
+  "goScout": "IR AO OLHEIRO",
+  "mergeHint": "Você tem {{count}} jogadores {{rarity}} — pronto para fusão 5→1.",
+  "mergeCta": "FUSIONAR",
+  "filters": {
+    "all": "TODOS",
+    "rarity": "RARIDADE",
+    "position": "POSIÇÃO",
+    "sort": "ORDENAR",
+    "sortOverwall": "OVERWALL",
+    "sortRecent": "RECENTES"
+  },
+  "listed": "À VENDA",
+  "kind": {
+    "base": "BASE",
+    "nft": "Jogador"
+  },
+  "stats": {
+    "total": "TOTAL",
+    "overwall": "OVERWALL DO ELENCO"
+  }
+}

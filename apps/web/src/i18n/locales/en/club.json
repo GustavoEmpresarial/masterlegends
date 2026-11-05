@@ -1,0 +1,396 @@
+{
+  "title": "MY CLUB",
+  "create": {
+    "title": "CREATE YOUR CLUB",
+    "subtitle": "Name your club to start playing.",
+    "placeholder": "FC Legends",
+    "submit": "CREATE CLUB"
+  },
+  "stats": {
+    "mgt": "USDC",
+    "nfts": "NFTs",
+    "base": "BASE",
+    "overwall": "OVERWALL"
+  },
+  "buildings": {
+    "title": "BUILDINGS",
+    "stadium": {
+      "name": "STADIUM",
+      "description": "Shop and field maintenance",
+      "bonus": "+{{value}}% squad earnings"
+    },
+    "vestiario": {
+      "name": "LOCKER ROOM",
+      "description": "Lineup, stamina and daily rest",
+      "bonus": "1 rest/day"
+    },
+    "ct": {
+      "name": "TRAINING",
+      "description": "Recovers stamina",
+      "bonus": "+{{value}} st/h"
+    },
+    "treasurer": {
+      "name": "TREASURER",
+      "description": "Boosts staking APR",
+      "bonus": "+{{value}}% APR"
+    },
+    "trophies": {
+      "name": "TROPHIES",
+      "description": "Tracks achievements",
+      "bonus": "Cosmetics"
+    },
+    "upgrade": "UPGRADE"
+  },
+  "quickActions": {
+    "title": "QUICK ACTIONS",
+    "pvp": { "label": "PVP ARENA", "desc": "Challenge other clubs" },
+    "minigames": { "label": "MINIGAMES", "desc": "Play and earn USDC" },
+    "pass": { "label": "PASS", "desc": "Complete missions" }
+  },
+  "dailyFarm": {
+    "title": "LEAGUE SPONSORSHIPS",
+    "subtitle": "USDC quota every 10 min — proportional to lineup OW on the field.",
+    "stadium": "STADIUM",
+    "totalOverwall": "FIELD OW",
+    "usdcPerRound": "USDC/ROUND",
+    "usdcPerHour": "USDC/HOUR",
+    "pending": "accrued (USDC in vault)",
+    "hintUsdc": "Paid in USDC (vault balance), not GMT.",
+    "hintFormula": "Your share = field OW ÷ network OW × round quota.",
+    "hintAccum": "Credited automatically each round (~10 min).",
+    "hintNotMining": "Does not depend on stamina or coach — only lined-up players count.",
+    "sponsorshipLink": "View sponsorships →"
+  },
+  "header": {
+    "squad": "SQUAD",
+    "scout": "SCOUT"
+  },
+  "stadium": {
+    "dragHint": "Drag players from your squad onto the field slots",
+    "benchHint": "Drag from the squad to place players",
+    "selectHint": "Click a player on the field to view or remove",
+    "save": "SAVE LINEUP",
+    "saved": "Lineup saved!",
+    "removeFromField": "REMOVE FROM FIELD",
+    "editLineup": "SET LINEUP",
+    "openLive": "LIVE",
+    "openLiveHint": "Open live widget (pitch + players)",
+    "backToStadium": "STADIUM",
+    "liveUnavailable": "Could not load the live pitch.",
+    "incomeNowFull": "RIGHT NOW YOU EARN 100%",
+    "incomeNowReduced": "RIGHT NOW YOU EARN 70%",
+    "incomeLiveFull": "Online · 100% of income",
+    "incomeLiveReduced": "Offline · 70% of income",
+    "incomeRuleOpen": "Stadium tab open and online: you earn 100% of the income.",
+    "incomeRuleClosed": "Site closed or offline: you lose 30% and keep 70%.",
+    "installTitle": "INSTALL STADIUM LIVE",
+    "installSubtitle": "Download the live pitch app for your system",
+    "downloadLinux": "LINUX",
+    "downloadLinuxHint": "Download .deb package for Ubuntu/Debian",
+    "downloadWindows": "WINDOWS",
+    "downloadWindowsHint": "Download the Windows .exe",
+    "downloadAndroid": "ANDROID",
+    "downloadAndroidHint": "Download APK for Android",
+    "liveRetry": "TRY AGAIN",
+    "liveRefresh": "REFRESH",
+    "liveRefreshHint": "Reload live lineup",
+    "titlebar": "LIVE · STADIUM",
+    "titleMin": "Minimize",
+    "titleMax": "Maximize",
+    "titleClose": "Close",
+    "livePin": "PIN",
+    "livePinHint": "Keep window always on top",
+    "noLineupShort": "No starters",
+    "noLineupHintWidget": "No starters — set lineup in the game (browser) then refresh here",
+    "widgetLoginHint": "Stadium Live — pitch only",
+    "widgetAuthorizeTitle": "AUTHORIZE IN THE BROWSER",
+    "widgetAuthorizeBody": "Login opens on the website. Sign in and authorize this device.",
+    "widgetAuthorizeWaiting": "Waiting for authorization…",
+    "widgetAuthorizeRetry": "OPEN AGAIN",
+    "widgetAuthorizeError": "Could not open authorization.",
+    "authorizeTitle": "AUTHORIZE STADIUM LIVE",
+    "authorizeBody": "This device wants to show only your club's live pitch.",
+    "authorizeButton": "AUTHORIZE",
+    "authorizeDone": "Authorized. You can return to the Stadium Live app.",
+    "lineupOnField": "{{count}} starter(s) on field — stamina does not block lineup",
+    "noLineupHint": "No starters yet — set your lineup in the locker room"
+  },
+  "vestiario": {
+    "title": "LOCKER ROOM",
+    "subtitle": "Set your lineup and manage squad stamina",
+    "bench": "SQUAD",
+    "benchEmpty": "No players in squad",
+    "benchHint": "Drag or tap + on the field to assign",
+    "pickPlayerTitle": "CHOOSE PLAYER",
+    "pickPlayerSlot": "Position: {{slot}}",
+    "pickPlayerEmpty": "All players are already in the lineup",
+    "tapToAssign": "Tap to assign to this slot",
+    "alreadyAssigned": "Already in lineup",
+    "stamina": "STAMINA",
+    "rest": "REST",
+    "restUsed": "REST USED",
+    "restDone": "{{count}} players recovered {{points}} stamina.",
+    "ctHint": "Training center recovers {{rate}} stamina/h passively"
+  },
+  "shop": {
+    "title": "STADIUM SHOP",
+    "subtitle": "Gear, stamina and affiliate products — all in one place",
+    "maintenanceHint": "Maintenance crew preparing the pitch",
+    "pickPlayer": "Choose the player to receive the item",
+    "buy": "BUY",
+    "buyGear": "BUY → BAG",
+    "gearBought": "Item in your bag! Equip it in the Squad.",
+    "goElenco": "Open Squad",
+    "gearSection": "GEAR",
+    "staminaSection": "STAMINA",
+    "affiliateSection": "AFFILIATES",
+    "bought": "Stamina: {{before}}% → {{after}}%",
+    "effectFlat": "+{{value}} stamina",
+    "effectFull": "Restore 100% stamina",
+    "staminaFull": "Stamina is already at 100%",
+    "staminaFullShort": "Stamina full",
+    "staminaFullHint": "Only players below 100% stamina can receive this item.",
+    "currencyGmt": "GMT",
+    "emptyGear": "No gear for sale right now",
+    "emptyStamina": "No stamina items available",
+    "emptyAffiliate": "No affiliate products right now",
+    "openAffiliate": "OPEN STORE",
+    "affiliateMeta": "Partner product",
+    "affiliateFree": "View offer",
+    "noPlayers": "No players in your squad",
+    "items": {
+      "energyDrink": "Energy Drink",
+      "fullRestore": "Recovery Kit"
+    }
+  },
+  "gear": {
+    "boots": "Boots",
+    "gloves": "Gloves",
+    "shinguards": "Shinguards",
+    "empty": "No boots",
+    "emptySlot": "empty",
+    "equip": "Equip",
+    "unequip": "Remove",
+    "bag": "Bag",
+    "bagEmpty": "Bag empty — buy gear in the Stadium Shop",
+    "bonus": "Bonus: +{{ow}}{{unit}} to player power",
+    "bonusTotal": "Player power bonus",
+    "bonusCompact": "Bonus: +{{ow}}{{unit}}",
+    "powerTarget": "Player power",
+    "equipped": "Equipped",
+    "inventory": "Inventory",
+    "hint": "Click or drag items from the bag → slots",
+    "filterAll": "All",
+    "clickToEquip": "Click to equip on this slot",
+    "clickToUnequip": "Click to remove from loadout",
+    "dropHere": "Drop item here",
+    "selectedHint": "Item selected — click the matching slot or click the bag item again",
+    "slotMismatch": "That item does not fit this slot",
+    "inLoadout": "In loadout",
+    "onOther": "On another player",
+    "discard": "Discard",
+    "save": "Save",
+    "saving": "Saving…",
+    "saved": "Saved!",
+    "tabEquip": "EQUIPMENT",
+    "tabInfo": "INFO",
+    "equippedList": "EQUIPPED GEAR",
+    "noneEquipped": "No gear equipped — drag from the bag",
+    "sellMarketplace": "Sell on Marketplace",
+    "inLineup": "In lineup",
+    "infoKind": "Kind",
+    "infoPosition": "Position",
+    "infoBaseOw": "Base OW",
+    "infoGearOw": "Gear OW",
+    "infoTotalOw": "Total OW",
+    "infoCreated": "Created",
+    "tapOrDrop": "Tap or drop",
+    "removeSlot": "Remove",
+    "oneClickHint": "Tap an item to equip",
+    "goShop": "Go to Stadium Shop"
+  },
+  "tutorial": {
+    "badge": "Tutorial",
+    "stepOf": "Step {{current}} of {{total}}",
+    "prev": "Back",
+    "next": "Continue",
+    "finish": "Start playing",
+    "finishing": "Saving…",
+    "closeReplay": "Close",
+    "skip": "Skip tutorial",
+    "mandatoryHint": "You can skip the tutorial and watch it again in Settings.",
+    "replay": "Watch tutorial again",
+    "email": {
+      "pending": "Confirm your email via the link we sent. Without it, withdrawals and some actions stay locked.",
+      "verified": "Email confirmed ✓",
+      "resend": "RESEND CONFIRMATION EMAIL",
+      "resending": "SENDING...",
+      "resent": "New email sent. Check inbox and spam.",
+      "alreadyVerified": "Your email is already confirmed."
+    },
+    "steps": {
+      "freeStart": {
+        "title": "Free rewards when you start",
+        "where": "New account → Squad · then My Club",
+        "body": "Before spending anything: creating an account already gives you 1 Common athlete in your Squad. Then create your club.",
+        "bullets": [
+          "On signup the game grants 1 free Common (FT) athlete",
+          "Find them under My Club → Squad — ready to field",
+          "No club yet? Open My Club, type a name and click CREATE CLUB",
+          "Only after the club can you use Locker Room, Daily Presence and Sponsorships"
+        ]
+      },
+      "lineup": {
+        "title": "Field your free athlete",
+        "where": "Menu → My Club → Locker Room",
+        "body": "Put your starter athlete on the pitch. On-field overwall drives earnings — no GMT required.",
+        "bullets": [
+          "Open Locker Room under My Club",
+          "Drag or tap the free athlete into a pitch slot",
+          "Save with SAVE LINEUP (or wait for auto-save)",
+          "Use REST once per day (UTC) to refill squad stamina for free"
+        ]
+      },
+      "checkin": {
+        "title": "Daily Presence (free every day)",
+        "where": "Menu → My Club → Daily Presence",
+        "body": "Check in every day: +100 overwall for 7 days. After 7 days in a row you get 1 temporary player.",
+        "bullets": [
+          "Open Daily Presence (also from the My Club hub card)",
+          "Click ✅ Check in today — once per day (UTC)",
+          "Each check-in grants +100 OW for 7 days (stacks up to 700 OW)",
+          "Complete 7 days in a row for 1 temporary player (streak). Miss a day and the streak resets"
+        ]
+      },
+      "patrocinios": {
+        "title": "Sponsorships: automatic earnings",
+        "where": "Menu → Economy → Sponsorships",
+        "body": "With an athlete on the pitch + presence bonus, Sponsorships credit on their own. You can earn before minting.",
+        "bullets": [
+          "Confirm lineup in the Locker Room and that you checked in",
+          "Open Sponsorships under Economy",
+          "Watch on-field overwall (lineup + presence bonus)",
+          "Credits arrive automatically — no need to click to “mine”"
+        ]
+      },
+      "wallet": {
+        "title": "Want to speed up? Use the Wallet",
+        "where": "Menu → Economy → Wallet",
+        "body": "The free path already works. When you want more athletes or staff, deposit and swap to GMT.",
+        "bullets": [
+          "Open Wallet under Economy",
+          "On the DEPOSIT tab, deposit USDC (Polygon)",
+          "On SWAP, exchange USDC → GMT (SWAP NOW)",
+          "Check GMT before spending in Scout or Office"
+        ]
+      },
+      "scout": {
+        "title": "Scout: recruit with GMT",
+        "where": "Menu → Market → Scout",
+        "body": "With GMT you mint more NFT athletes to raise team overwall.",
+        "bullets": [
+          "Open Scout (Market) or SCOUT on the hub",
+          "Pick 1×, 3×, 5× or 10×",
+          "Click MINT — cost comes from GMT",
+          "New athletes show under My Club → Squad"
+        ]
+      },
+      "office": {
+        "title": "Hire the Coach",
+        "where": "Menu → My Club → Office",
+        "body": "Without a Coach the bench barely recovers stamina. Hire in the Office when you have balance.",
+        "bullets": [
+          "Open Office under My Club (not on the hub grid)",
+          "On the COACH card, click HIRE",
+          "● HIRED means staff is active",
+          "Also check My Club → Training Center"
+        ]
+      },
+      "economy": {
+        "title": "USDC, GMT and USDT",
+        "where": "Menu → Economy → Wallet",
+        "body": "From August 1st the economy works like this:",
+        "bullets": [
+          "Deposits: USDC in Wallet",
+          "Internal economy (mint, staff, etc.): GMT",
+          "Sponsorships / mining and withdrawals: USDT",
+          "Always check Wallet balances and history"
+        ]
+      },
+      "referrals": {
+        "title": "Referrals",
+        "where": "Menu → Economy → Referrals",
+        "body": "Share your link: when someone signs up with it, you can earn a referral reward (e.g. a temporary player).",
+        "bullets": [
+          "Open Referrals under Economy",
+          "Copy your link or code and send it to friends",
+          "Each valid referral counts toward your progress",
+          "Pairs with presence and lineup — it does not replace daily check-in"
+        ]
+      },
+      "ready": {
+        "title": "Day-1 checklist",
+        "where": "Free first, paid later",
+        "body": "Recommended order: earn free first, then accelerate:",
+        "bullets": [
+          "Account (free athlete) → create club → field in Locker Room",
+          "Daily Presence every day (+ streak → temp player)",
+          "Check Sponsorships (automatic earnings)",
+          "When ready: Wallet → Scout → Coach in Office"
+        ]
+      }
+    }
+  },
+  "checkin": {
+    "building": {
+      "description": "Check in daily for +100 overwall for 7 days",
+      "bonus": "Up to 700 OW stacked"
+    },
+    "popup": {
+      "title": "DAILY PRESENCE!",
+      "bonusAmount": "+100 OW",
+      "notCheckedIn": "You haven't checked in today.",
+      "description": "Earn +100 overwall for 7 days (stacks up to 700). Active bonus now: {{amount}} OW.",
+      "claiming": "CHECKING IN...",
+      "claim": "✅ CHECK IN",
+      "later": "LATER"
+    },
+    "page": {
+      "backToClub": "← Club",
+      "subtitle": "+{{amount}} overwall per day · lasts {{days}} days · stacks up to {{max}} OW",
+      "activeBonus": "ACTIVE BONUS",
+      "max": "max.",
+      "lineup": "LINEUP",
+      "totalSponsorships": "TOTAL (SPONSORSHIPS)",
+      "activeGrants": "Active grants ({{count}}/{{total}})",
+      "daysLeft": "{{count}}d left",
+      "claimToday": "✅ Check in today",
+      "alreadyClaimed": "Already checked in today",
+      "nextCheckIn": "Next check-in in {{countdown}} (UTC)",
+      "claimSuccess": "Checked in! +{{amount}} overwall for {{days}} days.",
+      "streakTitle": "STREAK",
+      "streakCount": "{{streak}}/{{target}} days",
+      "streakReady": "Streak reward available on this check-in!",
+      "streakNext": "{{count}} day(s) left to earn 1 temporary player.",
+      "streakNextNamed": "{{count}} day(s) left to receive {{name}}.",
+      "streakRewardBadge": "STREAK REWARD",
+      "streakPrizeLabel": "You earn when you complete",
+      "streakDuration": "{{days}} days",
+      "streakReward": "{{streak}}-day streak! You got {{name}} (temporary).",
+      "info": "Daily presence bonus adds to lineup overwall and counts toward sponsorships and ranking. Each +100 OW expires individually after 7 days. Complete 7 consecutive days to earn 1 admin-configured temporary player. Miss one day and the streak resets.",
+      "viewSponsorships": "View sponsorships →",
+      "tryAgain": "Try again"
+    }
+  },
+  "freeField": {
+    "title": "FREE PITCH",
+    "body": "Without a stake, the player stays on the pitch for 5 minutes. They can return only after 24 hours.",
+    "player": "Player",
+    "playing": "{{name}} on the pitch · {{time}}",
+    "confirmTitle": "PUT ON THE PITCH",
+    "confirmBody": "{{name}} comes on without a stake for 5 minutes. The pitch then closes for 24 hours.",
+    "confirmYes": "PUT ON",
+    "confirmNo": "CANCEL",
+    "locked": "Free pitch is locked. Back in {{time}}."
+  }
+}

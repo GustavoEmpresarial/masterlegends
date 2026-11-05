@@ -1,0 +1,35 @@
+{
+  "title": "PASE DE TEMPORADA",
+  "subtitle": "Completa misiones y desbloquea recompensas",
+  "pickSubtitle": "Elige un pase para abrir",
+  "openPass": "Entrar",
+  "backToPasses": "Pases",
+  "daysLeft": "{{days}}d restantes",
+  "totalXp": "XP TOTAL",
+  "progress": "PROGRESO",
+  "xpRemaining": "Próximo nivel: {{xp}} XP restantes",
+  "premium": "PREMIUM",
+  "missions": "MISIONES DIARIAS",
+  "rewards": "RECOMPENSAS",
+  "xpRequired": "{{xp}} XP necesario",
+  "missionHint": "Completa la acción en el juego para ganar XP",
+  "inactiveTitle": "Sin pase activo",
+  "inactiveDescription": "No hay pase de temporada disponible en este momento. ¡Vuelve pronto!",
+  "missionsList": {
+    "pvp": "Juega 3 partidas PvP",
+    "scout": "Hacer 1 mint en Scout",
+    "minigames": "Completa 5 minijuegos",
+    "market": "Lista 1 NFT en el Mercado",
+    "marketSell": "Vende 1 NFT en el Mercado"
+  },
+  "pricing": {
+    "title": "Descuento por progreso",
+    "base": "Precio base",
+    "discount": "Descuento obtenido",
+    "payNow": "Precio para comprar ahora",
+    "levels": "{{completed}} de {{total}} niveles desbloqueados ({{percent}}%)",
+    "milestones": "Hitos de descuento acumulado",
+    "levelTarget": "Desbloquea {{count}} niveles",
+    "rewardHint": "El descuento acumulado reduce el importe cobrado al comprar. Las recompensas se reciben por separado y no se descuentan de nuevo del precio."
+  }
+}

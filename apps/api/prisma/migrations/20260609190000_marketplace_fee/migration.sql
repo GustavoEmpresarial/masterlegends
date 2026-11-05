@@ -1,0 +1,2 @@
+ALTER TABLE "PlatformConfig"
+  ADD COLUMN "marketplaceFeeBps" INTEGER NOT NULL DEFAULT 1000;

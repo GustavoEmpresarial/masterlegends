@@ -1,0 +1,38 @@
+{
+  "title": "PASSE DE TEMPORADA",
+  "subtitle": "Complete missões e desbloqueie recompensas",
+  "pickSubtitle": "Escolha um passe para abrir",
+  "openPass": "Entrar",
+  "backToPasses": "Passes",
+  "daysLeft": "{{days}}d restantes",
+  "totalXp": "XP TOTAL",
+  "progress": "PROGRESSO",
+  "xpRemaining": "Próximo nível: {{xp}} XP restantes",
+  "passComplete": "Passe completo",
+  "premium": "PREMIUM",
+  "missions": "MISSÕES DIÁRIAS",
+  "rewards": "RECOMPENSAS",
+  "xpRequired": "{{xp}} XP necessário",
+  "xpShort": "Faltam {{xp}} XP para coletar",
+  "premiumOpen": "Passe ativo. Os prêmios estão liberados para coletar.",
+  "missionHint": "Complete a ação no jogo para ganhar XP",
+  "inactiveTitle": "Nenhum passe ativo",
+  "inactiveDescription": "Não há temporada de passe disponível no momento. Volte em breve!",
+  "missionsList": {
+    "pvp": "Jogue 3 partidas PvP",
+    "scout": "Faça 1 mint no Scout",
+    "minigames": "Complete 5 minigames",
+    "market": "Liste 1 atleta no Market",
+    "marketSell": "Venda 1 atleta no Market"
+  },
+  "pricing": {
+    "title": "Desconto por progresso",
+    "base": "Preço base",
+    "discount": "Desconto conquistado",
+    "payNow": "Preço para comprar agora",
+    "levels": "{{completed}} de {{total}} níveis liberados ({{percent}}%)",
+    "milestones": "Marcos de desconto acumulado",
+    "levelTarget": "Ao liberar {{count}} níveis",
+    "rewardHint": "O desconto acumulado reduz o valor cobrado na compra. As recompensas do passe são recebidas separadamente e não são descontadas novamente do preço."
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "title": "REFERIDOS",
+  "subtitle": "¡Invita amigos y gana 5% de sus depósitos para siempre!",
+  "yourLink": "TU ENLACE",
+  "code": "CÓDIGO",
+  "stats": {
+    "total": "REFERIDOS",
+    "active": "ACTIVOS",
+    "totalEarned": "TOTAL GANADO",
+    "thisMonth": "ESTE MES"
+  },
+  "howItWorks": "CÓMO FUNCIONA",
+  "steps": {
+    "1": { "title": "COMPARTE", "desc": "Envía tu enlace a amigos" },
+    "2": { "title": "AMIGO SE REGISTRA", "desc": "Usando tu enlace" },
+    "3": { "title": "GANA SIEMPRE", "desc": "5% de sus depósitos" }
+  },
+  "recent": "REFERIDOS RECIENTES",
+  "earned": "GANADO"
+}

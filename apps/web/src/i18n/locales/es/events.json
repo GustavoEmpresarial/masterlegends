@@ -1,0 +1,24 @@
+{
+  "title": "Eventos",
+  "subtitle": "Campañas, tasks y achievements — separado del Pase.",
+  "tabs": {
+    "events": "Eventos",
+    "tasks": "Tasks",
+    "achievements": "Achievements",
+    "history": "Historial"
+  },
+  "claim": "Canjear",
+  "claimed": "Canjeado",
+  "progress": "Progreso",
+  "badges": "Badges",
+  "reward": {
+    "overwallDuration": "{{days}} días · cuenta en minería",
+    "overwallHint": "Boost temporal: vale {{days}} días tras canjear y cuenta en la disputa de minería."
+  },
+  "empty": {
+    "events": "No hay eventos activos.",
+    "tasks": "No hay tasks activas.",
+    "achievements": "No hay achievements activos.",
+    "history": "Ningún achievement cobrado todavía."
+  }
+}

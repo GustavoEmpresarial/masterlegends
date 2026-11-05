@@ -1,0 +1,35 @@
+{
+  "title": "SEASON PASS",
+  "subtitle": "Complete missions and unlock rewards",
+  "pickSubtitle": "Choose a pass to open",
+  "openPass": "Enter",
+  "backToPasses": "Passes",
+  "daysLeft": "{{days}}d left",
+  "totalXp": "TOTAL XP",
+  "progress": "PROGRESS",
+  "xpRemaining": "Next level: {{xp}} XP remaining",
+  "premium": "PREMIUM",
+  "missions": "DAILY MISSIONS",
+  "rewards": "REWARDS",
+  "xpRequired": "{{xp}} XP required",
+  "missionHint": "Complete the in-game action to earn XP",
+  "inactiveTitle": "No active pass",
+  "inactiveDescription": "There is no season pass available right now. Check back soon!",
+  "missionsList": {
+    "pvp": "Play 3 PvP matches",
+    "scout": "Mint 1 in Scout",
+    "minigames": "Complete 5 minigames",
+    "market": "List 1 NFT on Market",
+    "marketSell": "Sell 1 NFT on Market"
+  },
+  "pricing": {
+    "title": "Progress discount",
+    "base": "Base price",
+    "discount": "Earned discount",
+    "payNow": "Price to buy now",
+    "levels": "{{completed}} of {{total}} levels unlocked ({{percent}}%)",
+    "milestones": "Cumulative discount milestones",
+    "levelTarget": "Unlock {{count}} levels",
+    "rewardHint": "The cumulative discount reduces the purchase charge. Pass rewards are received separately and are not deducted from the price again."
+  }
+}

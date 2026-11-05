@@ -1,0 +1,13 @@
+# Infra MLL na VM — sem portas no host (só rede Docker interna).
+services:
+  postgres:
+    ports: !reset []
+    container_name: mll-postgres
+    environment:
+      POSTGRES_DB: mll
+  redis:
+    ports: !reset []
+    container_name: mll-redis
+  mongo-logs:
+    ports: !reset []
+    container_name: mll-mongo-logs

@@ -1,0 +1,189 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: mll-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: mll
+    # Sem porta no host — acesso via rede interna Docker
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: mll-redis
+    restart: unless-stopped
+    # Sem porta no host — api/worker usam redis:6379 na rede interna
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mongo-logs:
+    image: mongo:7
+    container_name: mll-mongo-logs
+    restart: unless-stopped
+    command: ["mongod", "--bind_ip_all", "--auth", "--wiredTigerCacheSizeGB", "0.5"]
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mll_mongo
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:?Set MONGO_PASSWORD in .env}
+      MONGO_INITDB_DATABASE: mll_logs
+    # Sem porta no host — acesso via rede interna Docker
+    volumes:
+      - mongo_logs_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "-u", "mll_mongo", "-p", "${MONGO_PASSWORD}", "--authenticationDatabase", "admin", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1g
+
+  api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.api-runtime
+    container_name: mll-api
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./.cursor:/debug-logs
+      - ./apps/api/uploads:/app/apps/api/uploads
+      - ./apps/api/private-uploads:/app/apps/api/private-uploads
+    environment:
+      NODE_ENV: production
+      PORT: 3001
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/mll
+      REDIS_URL: redis://redis:6379
+      MONGODB_URI: mongodb://mll_mongo:${MONGO_PASSWORD}@mongo-logs:27017/mll_logs?authSource=admin
+      LOG_MONGO_ENABLED: "true"
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in .env (min 32 chars)}
+      ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET:?Set ADMIN_JWT_SECRET in .env (min 32 chars)}
+      COOKIE_SECRET: ${COOKIE_SECRET:?Set COOKIE_SECRET in .env (min 32 chars)}
+      WEB_URL: http://localhost:3000
+      CORS_ORIGINS: http://localhost:3000,http://127.0.0.1:3000,http://localhost:5173,http://127.0.0.1:5173
+      POLYGON_RPC_URL: ${POLYGON_RPC_URL:-https://polygon-bor-rpc.publicnode.com}
+      POLYGONSCAN_API_KEY: ${POLYGONSCAN_API_KEY:-}
+      CONTRACT_USDC_VAULT: ${CONTRACT_USDC_VAULT:-0x967659a8Fe5C15728eD900eF9a90c44bE20190f3}
+      USDC_ADDRESS: ${USDC_ADDRESS:-0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359}
+      CHAIN_ID: ${CHAIN_ID:-137}
+      TELEGRAM_ENABLED: ${TELEGRAM_ENABLED:-false}
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-}
+      TELEGRAM_BOT_USERNAME: ${TELEGRAM_BOT_USERNAME:-}
+      TELEGRAM_WEBHOOK_SECRET: ${TELEGRAM_WEBHOOK_SECRET:-}
+      TELEGRAM_GLOBAL_CHAT_ID: ${TELEGRAM_GLOBAL_CHAT_ID:-}
+      TELEGRAM_GLOBAL_THREAD_ID: ${TELEGRAM_GLOBAL_THREAD_ID:-}
+      TELEGRAM_UPDATES_MODE: ${TELEGRAM_UPDATES_MODE:-polling}
+      OFFERWALL_ZERADS_ENABLED: ${OFFERWALL_ZERADS_ENABLED:-false}
+      OFFERWALL_ZERADS_API_KEY: ${OFFERWALL_ZERADS_API_KEY:-}
+      OFFERWALL_ZERADS_SECRET_KEY: ${OFFERWALL_ZERADS_SECRET_KEY:-}
+      OFFERWALL_ZERADS_SITE_ID: ${OFFERWALL_ZERADS_SITE_ID:-11807}
+      OFFERWALL_ZERADS_PTC_PASSWORD: ${OFFERWALL_ZERADS_PTC_PASSWORD:-}
+      OFFERWALL_ZERADS_ZER_TO_OW: ${OFFERWALL_ZERADS_ZER_TO_OW:-500}
+      OFFERWALL_ZERADS_OW_TTL_HOURS: ${OFFERWALL_ZERADS_OW_TTL_HOURS:-24}
+      SMTP_HOST: ${SMTP_HOST:-localhost}
+      SMTP_PORT: ${SMTP_PORT:-1025}
+      SMTP_SECURE: ${SMTP_SECURE:-false}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASS: ${SMTP_PASS:-}
+      SMTP_FROM: ${SMTP_FROM:-Master Legends League <no-reply@mll.local>}
+      EMAIL_MARKETING_DAILY_LIMIT: ${EMAIL_MARKETING_DAILY_LIMIT:-250}
+      EMAIL_MARKETING_PER_MINUTE: ${EMAIL_MARKETING_PER_MINUTE:-8}
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://127.0.0.1:3001/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      mongo-logs:
+        condition: service_healthy
+
+  worker:
+    build:
+      context: .
+      dockerfile: apps/worker/Dockerfile
+    container_name: mll-worker
+    restart: unless-stopped
+    volumes:
+      - ./.cursor:/debug-logs
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/mll
+      REDIS_URL: redis://redis:6379
+      MONGODB_URI: mongodb://mll_mongo:${MONGO_PASSWORD}@mongo-logs:27017/mll_logs?authSource=admin
+      LOG_MONGO_ENABLED: "true"
+      POLYGON_RPC_URL: ${POLYGON_RPC_URL:-https://polygon-bor-rpc.publicnode.com}
+      POLYGONSCAN_API_KEY: ${POLYGONSCAN_API_KEY:-}
+      CONTRACT_USDC_VAULT: ${CONTRACT_USDC_VAULT:-0x967659a8Fe5C15728eD900eF9a90c44bE20190f3}
+      USDC_ADDRESS: ${USDC_ADDRESS:-0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359}
+      CHAIN_ID: ${CHAIN_ID:-137}
+      SMTP_HOST: ${SMTP_HOST:-localhost}
+      SMTP_PORT: ${SMTP_PORT:-1025}
+      SMTP_SECURE: ${SMTP_SECURE:-false}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASS: ${SMTP_PASS:-}
+      SMTP_FROM: ${SMTP_FROM:-Master Legends League <no-reply@mll.local>}
+      EMAIL_MARKETING_DAILY_LIMIT: ${EMAIL_MARKETING_DAILY_LIMIT:-250}
+      EMAIL_MARKETING_PER_MINUTE: ${EMAIL_MARKETING_PER_MINUTE:-8}
+      TELEGRAM_ENABLED: ${TELEGRAM_ENABLED:-false}
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-}
+    healthcheck:
+      test: ["CMD-SHELL", "pgrep -f 'node dist/main.js' > /dev/null || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      mongo-logs:
+        condition: service_healthy
+      api:
+        condition: service_healthy
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      args:
+        VITE_API_URL: ""
+        VITE_CHAIN_ID: "137"
+        VITE_RPC_URL: ${POLYGON_RPC_URL:-https://polygon-bor-rpc.publicnode.com}
+        VITE_USDC: ${USDC_ADDRESS:-0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359}
+        VITE_CONTRACT_USDC_VAULT: ${CONTRACT_USDC_VAULT:-0x967659a8Fe5C15728eD900eF9a90c44bE20190f3}
+    container_name: mll-web
+    restart: unless-stopped
+    ports:
+      - "3000:15000"
+    volumes:
+      # Instaladores do Stadium Live (Linux / Windows / Android)
+      - ./clients/stadium-live/release:/usr/share/nginx/html/downloads/stadium-live:ro
+    depends_on:
+      api:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+  redis_data:
+  mongo_logs_data:

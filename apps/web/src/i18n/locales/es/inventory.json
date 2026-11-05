@@ -1,0 +1,25 @@
+{
+  "title": "PLANTILLA",
+  "subtitle": "Tu colección de jugadores",
+  "empty": "Aún no hay jugadores. ¡Ve al ojeador!",
+  "goScout": "IR AL OJeador",
+  "mergeHint": "Tienes {{count}} jugadores {{rarity}} — listos para fusión 5→1.",
+  "mergeCta": "FUSIONAR",
+  "filters": {
+    "all": "TODOS",
+    "rarity": "RAREZA",
+    "position": "POSICIÓN",
+    "sort": "ORDENAR",
+    "sortOverwall": "OVERWALL",
+    "sortRecent": "RECIENTES"
+  },
+  "listed": "EN VENTA",
+  "kind": {
+    "base": "BASE",
+    "nft": "NFT"
+  },
+  "stats": {
+    "total": "TOTAL",
+    "overwall": "OVERWALL"
+  }
+}

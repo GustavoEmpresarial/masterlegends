@@ -1,0 +1,80 @@
+{
+  "name": "master-legends-league",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Master Legends League - Play-and-Earn football ecosystem",
+  "workspaces": [
+    "packages/*",
+    "apps/*",
+    "e2e"
+  ],
+  "scripts": {
+    "build:shared": "npm run build -w @mll/shared",
+    "build:logging": "npm run build -w @mll/logging",
+    "build:worker": "npm run build -w @mll/worker",
+    "db:generate": "prisma generate --schema apps/api/prisma/schema.prisma",
+    "db:migrate": "prisma migrate deploy --schema apps/api/prisma/schema.prisma",
+    "db:migrate:dev": "prisma migrate dev --schema apps/api/prisma/schema.prisma",
+    "db:seed": "npm run db:seed -w @mll/api",
+    "db:studio": "prisma studio --schema apps/api/prisma/schema.prisma",
+    "predev": "npm run db:generate && npm run build:shared && npm run build:logging",
+    "prebuild": "npm run db:generate",
+    "dev": "concurrently \"npm run dev:api\" \"npm run dev:worker\" \"npm run dev:web\" \"npm run dev:contracts\"",
+    "dev:api": "npm run dev -w @mll/api",
+    "dev:worker": "npm run dev -w @mll/worker",
+    "dev:web": "npm run dev -w @mll/web",
+    "dev:contracts": "npm run dev -w @mll/contracts",
+    "build": "npm run build:shared && npm run build:logging && npm run build:contracts && npm run build:api && npm run build:worker && npm run build:web",
+    "build:contracts": "npm run build -w @mll/contracts",
+    "build:api": "npm run build -w @mll/api",
+    "build:web": "npm run build -w @mll/web",
+    "sync:contracts:env": "npm run sync:env -w @mll/contracts",
+    "test": "vitest run --no-file-parallelism",
+    "test:coverage": "vitest run --coverage --no-file-parallelism",
+    "test:ci": "npm run db:generate && npm run build:shared && npm run build:logging && vitest run --coverage --no-file-parallelism",
+    "test:smoke": "vitest run packages/shared/tests/schemas/gear-events-url.test.ts apps/api/tests/unit/events apps/api/tests/unit/stadium-shop/gear.service.test.ts apps/api/tests/unit/security apps/web/tests/security",
+    "test:regression": "npm run test:ci",
+    "test:flaky": "node scripts/test-flaky.mjs",
+    "test:mutation": "stryker run && node scripts/mutation-report.mjs",
+    "test:perf:smoke": "bash scripts/perf-smoke.sh",
+    "test:report": "node scripts/test-observability.mjs",
+    "test:api": "vitest run --project @mll/api --no-file-parallelism --maxWorkers=1",
+    "test:worker": "vitest run --project @mll/worker",
+    "test:web": "vitest run --project @mll/web",
+    "test:contracts": "npm test -w @mll/contracts",
+    "lint": "eslint . --ext .ts,.tsx",
+    "type-check": "npm run typecheck -w @mll/shared && npm run typecheck -w @mll/logging && npm run typecheck -w @mll/api && npm run typecheck -w @mll/worker && npm run typecheck -w @mll/web",
+    "e2e": "npm run e2e -w @mll/e2e",
+    "e2e:install": "npm run e2e:install -w @mll/e2e",
+    "stadium-live:linux": "npm --prefix clients/stadium-live run pack:linux",
+    "stadium-live:win": "npm --prefix clients/stadium-live run pack:win",
+    "stadium-live:android": "bash clients/stadium-live/scripts/build-android.sh",
+    "postinstall": "npm run db:generate",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "@stryker-mutator/core": "^8.7.1",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "@vitest/coverage-v8": "^1.6.0",
+    "concurrently": "^8.2.2",
+    "eslint": "^8.56.0",
+    "husky": "^9.0.0",
+    "lint-staged": "^15.2.0",
+    "prettier": "^3.2.0",
+    "prisma": "^5.9.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "typescript": "^5.3.0",
+    "vitest": "^1.6.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.json": [
+      "prettier --write"
+    ]
+  }
+}

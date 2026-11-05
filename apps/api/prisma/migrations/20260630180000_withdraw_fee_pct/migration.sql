@@ -1,0 +1,1 @@
+ALTER TABLE "PlatformConfig" ADD COLUMN "withdrawFeePct" DECIMAL(8,4) NOT NULL DEFAULT 0.05;

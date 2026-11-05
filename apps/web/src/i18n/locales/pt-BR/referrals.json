@@ -1,0 +1,20 @@
+{
+  "title": "INDICAÇÕES",
+  "subtitle": "Indique amigos e ganhe 5% dos depósitos deles para sempre!",
+  "yourLink": "SEU LINK",
+  "code": "CÓDIGO",
+  "stats": {
+    "total": "INDICADOS",
+    "active": "ATIVOS",
+    "totalEarned": "TOTAL GANHO",
+    "thisMonth": "ESTE MÊS"
+  },
+  "howItWorks": "COMO FUNCIONA",
+  "steps": {
+    "1": { "title": "COMPARTILHE", "desc": "Envie seu link para amigos" },
+    "2": { "title": "AMIGO SE CADASTRA", "desc": "Usando seu link" },
+    "3": { "title": "GANHE PARA SEMPRE", "desc": "5% dos depósitos deles" }
+  },
+  "recent": "INDICAÇÕES RECENTES",
+  "earned": "GANHO"
+}

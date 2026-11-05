@@ -1,0 +1,35 @@
+# Override para deploy na VM compartilhada (84.54.23.199).
+# Expõe somente a porta 8000 (web); API fica interna na rede Docker.
+services:
+  postgres:
+    ports: !reset []
+  redis:
+    ports: !reset []
+  mongo-logs:
+    ports: !reset []
+  api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.api-runtime
+    ports: !reset []
+    volumes:
+      - ./apps/api/uploads:/app/apps/api/uploads
+      - ./apps/api/private-uploads:/app/apps/api/private-uploads
+    environment:
+      WEB_URL: http://84.54.23.199:8000
+      CORS_ORIGINS: http://84.54.23.199:8000
+      JWT_SECRET: ${JWT_SECRET}
+      ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET}
+      COOKIE_SECRET: ${COOKIE_SECRET}
+      TURNSTILE_SECRET_KEY: ${TURNSTILE_SECRET_KEY}
+      ADMIN_ALLOW_PLAINTEXT_PASSWORDS: ${ADMIN_ALLOW_PLAINTEXT_PASSWORDS:-true}
+      ADMIN_2FA_DISABLED: ${ADMIN_2FA_DISABLED:-false}
+      ADMIN_USERS: ${ADMIN_USERS:-[]}
+      CONTRACT_USDC_VAULT: ${CONTRACT_USDC_VAULT:-}
+      CHAIN_ID: ${CHAIN_ID:-137}
+  web:
+    ports:
+      - "8000:15000"
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.web-runtime

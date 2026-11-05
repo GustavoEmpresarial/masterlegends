@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Background -->
+  <rect width="32" height="32" fill="#0f0f23"/>
+  
+  <!-- Border -->
+  <rect x="2" y="2" width="28" height="28" fill="none" stroke="#00ff88" stroke-width="2"/>
+  
+  <!-- M letter -->
+  <text x="16" y="22" font-family="monospace" font-size="16" font-weight="bold" fill="#00ff88" text-anchor="middle">M</text>
+  
+  <!-- Corner decorations -->
+  <rect x="4" y="4" width="4" height="4" fill="#00ff88" opacity="0.5"/>
+  <rect x="24" y="4" width="4" height="4" fill="#00ff88" opacity="0.5"/>
+  <rect x="4" y="24" width="4" height="4" fill="#00ff88" opacity="0.5"/>
+  <rect x="24" y="24" width="4" height="4" fill="#00ff88" opacity="0.5"/>
+</svg>

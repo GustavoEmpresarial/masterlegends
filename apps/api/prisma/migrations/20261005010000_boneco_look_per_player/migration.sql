@@ -1,0 +1,10 @@
+ALTER TABLE "BonecoLook" DROP CONSTRAINT "BonecoLook_pkey";
+ALTER TABLE "BonecoLook" ADD COLUMN "id" TEXT;
+UPDATE "BonecoLook" SET "id" = gen_random_uuid()::text WHERE "id" IS NULL;
+ALTER TABLE "BonecoLook" ALTER COLUMN "id" SET NOT NULL;
+ALTER TABLE "BonecoLook" ADD CONSTRAINT "BonecoLook_pkey" PRIMARY KEY ("id");
+ALTER TABLE "BonecoLook" ADD COLUMN "playerId" VARCHAR(64) NOT NULL DEFAULT '';
+ALTER TABLE "BonecoLook" ADD COLUMN "playerKind" VARCHAR(8) NOT NULL DEFAULT 'base';
+ALTER TABLE "BonecoLook" ADD COLUMN "note" VARCHAR(400) NOT NULL DEFAULT '';
+CREATE UNIQUE INDEX "BonecoLook_userId_playerKind_playerId_key" ON "BonecoLook"("userId", "playerKind", "playerId");
+CREATE INDEX "BonecoLook_userId_idx" ON "BonecoLook"("userId");

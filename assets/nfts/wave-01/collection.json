@@ -1,0 +1,125 @@
+{
+  "collection": "MLL — Master Legends League",
+  "wave": "01",
+  "principle": "Original MLL identities only. No real player names, nicknames, national kits, or federation crests. Overwall is unique inside the official rarity band.",
+  "scale": {
+    "comum": [1, 10],
+    "incomum": [20, 40],
+    "raro": [80, 160],
+    "super_raro": [320, 640],
+    "epico": [1280, 2560],
+    "lendario": [5120, 10240]
+  },
+  "nfts": [
+    {
+      "id": "mll-001",
+      "file": "mll-nft-01-reydo-lendario.png",
+      "name": "Reydo Costa",
+      "nickname": "O Monarca",
+      "cardName": "REYDO",
+      "kit": "branco-ouro",
+      "position": "ATA",
+      "rarity": "lendario",
+      "overwall": 10240
+    },
+    {
+      "id": "mll-002",
+      "file": "mll-nft-02-ronez-lendario.png",
+      "name": "Ronez Vasto",
+      "nickname": "O Impacto",
+      "cardName": "RONEZ",
+      "kit": "teal",
+      "position": "ATA",
+      "rarity": "lendario",
+      "overwall": 9600
+    },
+    {
+      "id": "mll-003",
+      "file": "mll-nft-03-rondi-lendario.png",
+      "name": "Rondi Magus",
+      "nickname": "O Ilusionista",
+      "cardName": "RONDI",
+      "kit": "roxo-ouro",
+      "position": "MEI",
+      "rarity": "lendario",
+      "overwall": 8320
+    },
+    {
+      "id": "mll-004",
+      "file": "mll-nft-04-dago-lendario.png",
+      "name": "Dago Nardo",
+      "nickname": "El Duende",
+      "cardName": "DAGO",
+      "kit": "preto-prata",
+      "position": "MEI",
+      "rarity": "lendario",
+      "overwall": 10240
+    },
+    {
+      "id": "mll-005",
+      "file": "mll-nft-05-leni-lendario.png",
+      "name": "Leni Rosa",
+      "nickname": "O Drible",
+      "cardName": "LENI",
+      "kit": "marinho-ciano",
+      "position": "ATA",
+      "rarity": "lendario",
+      "overwall": 9600
+    },
+    {
+      "id": "mll-006",
+      "file": "mll-nft-06-kris-lendario.png",
+      "name": "Kris Romano",
+      "nickname": "O Canhão",
+      "cardName": "KRIS",
+      "kit": "vinho-ouro",
+      "position": "ATA",
+      "rarity": "lendario",
+      "overwall": 8960
+    },
+    {
+      "id": "mll-007",
+      "file": "mll-nft-07-zino-lendario.png",
+      "name": "Zino Vidal",
+      "nickname": "O Arquiteto",
+      "cardName": "ZINO",
+      "kit": "carvao-gelo",
+      "position": "MEI",
+      "rarity": "lendario",
+      "overwall": 8320
+    },
+    {
+      "id": "mll-008",
+      "file": "mll-nft-08-nayo-epico.png",
+      "name": "Nayo Prado",
+      "nickname": "O Malabarista",
+      "cardName": "NAYO",
+      "kit": "magenta",
+      "position": "ATA",
+      "rarity": "epico",
+      "overwall": 2560
+    },
+    {
+      "id": "mll-009",
+      "file": "mll-nft-09-roge-lendario.png",
+      "name": "Roge Valen",
+      "nickname": "O Canhão da Meta",
+      "cardName": "ROGE",
+      "kit": "lima-preto",
+      "position": "GOL",
+      "rarity": "lendario",
+      "overwall": 7040
+    },
+    {
+      "id": "mll-010",
+      "file": "mll-nft-10-jorvan-lendario.png",
+      "name": "Jorvan Cruys",
+      "nickname": "O Jogo Total",
+      "cardName": "JORVAN",
+      "kit": "creme-verde",
+      "position": "ATA",
+      "rarity": "lendario",
+      "overwall": 8960
+    }
+  ]
+}

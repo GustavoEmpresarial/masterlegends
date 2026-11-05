@@ -1,0 +1,105 @@
+DEEP DIG — COLETA AUTOMÁTICA 1.4.1
+
+ATUALIZAR A EXTENSÃO JÁ INSTALADA:
+1. Abra chrome://extensions e localize Deep Dig.
+2. Clique no botão de recarregar da extensão.
+3. Se o Chrome pedir para reativar ou aceitar a nova permissão, revise o aviso.
+4. Recarregue a página do jogo.
+5. Comece uma rodada do Hook Rush.
+6. Clique no ícone da extensão e em "Iniciar coleta automática".
+
+Se a extensão não estiver instalada:
+- Abra chrome://extensions e ative "Modo do desenvolvedor".
+- Clique em "Carregar sem compactação".
+- Selecione a pasta Deep-Dig-Mira que contém manifest.json, em Documentos.
+
+O AUTOMÁTICO:
+- Estratégia padrão: "Priorizar a meta da fase". Lê a meta, o cronômetro,
+  a fase e os bônus visíveis. Compara pequenas rotas de coleta, incluindo
+  remover obstáculos, para tentar atingir a meta antes do prazo.
+- Estima o tempo de puxar cada item e evita lançamentos cuja entrega
+  provavelmente ocorreria depois do fim da fase.
+- Todos os tipos continuam elegíveis. Quando faltar pouco para a meta,
+  uma pedra ou cobre próximo pode ser melhor que uma gema distante.
+- No popup, "Coletar tudo na ordem da mira" preserva a coleta sem
+  preferência por valor. Esse modo pode gastar o tempo em pedras pesadas.
+- O próprio jogo encerra a fase ao atingir a meta, mesmo sobrando itens.
+- Desacelerar as animações da página não aumenta o tempo online. O
+  servidor valida os lançamentos usando o tempo da partida no servidor.
+- Sincroniza o movimento visível da garra e agenda o clique no centro da
+  janela de lançamento. Descarta o clique se ele chegar atrasado.
+- Considera a trajetória em passos e os obstáculos antes de lançar.
+- Lê somente a região da garra a cada quadro; examina o campo completo
+  no máximo cinco vezes por segundo enquanto o gancho está parado.
+- Clica em PRÓXIMA FASE depois de completar a meta.
+- Para ao esgotar o tempo, encerrar a rodada, ocultar o jogo, trocar de aba,
+  recarregar a página, clicar em Parar ou pressionar Esc.
+- Você inicia a rodada. Ele não compra rodadas, não paga para reviver,
+  não conecta carteiras e não realiza depósitos ou saques.
+
+PERMISSÃO DE DEPURAÇÃO:
+- A versão 1.4.1 exige a permissão debugger do Chrome para enviar cliques.
+- Essa permissão é poderosa: a API pode controlar páginas e ler seus dados.
+  Este código restringe o uso à aba selecionada de https://deep-dig.xyz/,
+  apenas com o automático ativado por você.
+- O Chrome exibe um aviso de depuração enquanto o controle está conectado.
+- O botão Parar desconecta o controle. Nenhuma porta remota é aberta.
+- Armazena a opção da mira e o estado temporário da automação no navegador.
+- Não faz requisições de rede próprias nem acessa APIs internas do jogo.
+
+LIMITAÇÕES:
+- O site verifica automação no servidor: pode rejeitar resultados e limitar
+  a conta. Não há garantia de aceitação nem de passar todas as fases.
+- A mira vem de pixels, não do estado interno. Partículas, sacos, itens
+  móveis, oclusão e novas versões do site podem prejudicar as escolhas.
+- O modo automático requer que o jogo esteja visível na aba selecionada.
+- O código não muda pontos, velocidade, tempo ou verificações do servidor.
+- Testado em simulação local com as regras e a renderização pública da
+  garra, incluindo coleta, próxima fase e interrupção. Não validado numa
+  rodada online da sua conta.
+
+REGRESSÃO LOCAL:
+- Os testes de relógio verificam os 72 pontos de partida do pêndulo.
+- Os testes do controlador verificam lançamento agendado, cancelamento,
+  descarte de clique atrasado e rejeição de scripts antigos sem agenda.
+- Para rodar os testes sem navegador (Node.js):
+  node tests/scheduler.test.cjs
+  node tests/background.test.cjs
+
+Resultado de regressão da versão 1.2.0:
+- Quatro tabuleiros concluídos com 11 lançamentos, sem volta vazia.
+- Maior espera observada com o gancho parado: 1,47 segundo.
+- Testes em tempo real via CDP, com as regras e sprites públicos, em
+  perfil temporário. Isso não garante o mesmo desempenho na conta online.
+
+Resultado de regressão da versão 1.3.0:
+- Pedra, cobre, saco e ouro coletados na mesma cena, com quatro lançamentos.
+- Os testes verificam elegibilidade de todos os oito tipos reconhecidos e
+  a escolha do primeiro alvo seguro em vez do minério mais valioso.
+
+Resultado de regressão da versão 1.4.0:
+- Planejador avaliado em 15 tabuleiros das fases 4, 8 e 12 com regras e
+  sprites públicos, valor de mineiro comum e relógio de simulação conhecido.
+- Os 15 foram concluídos nessa simulação. Esse teste não equivale a
+  completar 15 rodadas online nem garante aprovação do servidor.
+- Novos testes cobrem meta quase completa, tempo insuficiente para trazer
+  um item pesado, preferência por completar a fase e remoção de obstáculos.
+- A extensão completa também foi testada em tempo real via CDP no cenário
+  difícil da fase 12: meta atingida em 48,4 s, com 15 lançamentos sem volta
+  vazia. Controles de parada e avanço de fase também foram verificados.
+
+Correção da versão 1.4.1 — alinhamento da linha:
+- A linha acompanha cada quadro da garra; a atualização do texto do painel
+  continua limitada para evitar trabalho desnecessário.
+- A leitura de pixels é agendada depois do desenho do jogo. Isso também
+  evita usar a imagem do quadro anterior para sincronizar o lançamento.
+- Quando a garra está em movimento e não é reconhecida no topo, a linha
+  anterior é apagada imediatamente. Posição e escala acompanham o canvas.
+- Regressão visual: 304 quadros corrigidos sem atraso de quadro, direção
+  com diferença máxima de 0,3 grau em relação à renderização de referência.
+- Coleta, avanço de fase, Esc, tempo esgotado e troca de aba foram testados.
+- O teste visual pode ser reproduzido no ambiente de desenvolvimento com
+  Playwright: node tests/overlay.browser.cjs. Requer os scripts públicos
+  deep-dig-hookrush.js e deep-dig-mgcore.js em DEEP_DIG_GAME_SOURCES
+  (padrão: pasta temporária do sistema). CHROMIUM_BIN pode indicar um
+  executável Chromium já instalado. Esse teste não usa conta online.

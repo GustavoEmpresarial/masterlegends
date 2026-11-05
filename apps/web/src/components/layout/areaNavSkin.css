@@ -1,0 +1,137 @@
+/* The desktop rail keeps its original width, item order and navigation. */
+.area-nav__icon-frame { display: contents; }
+
+@media (min-width: 1024px) {
+  .area-nav--side {
+    background:
+      radial-gradient(ellipse at 50% 0, #c7a5550b, transparent 36%),
+      repeating-linear-gradient(135deg, transparent 0 5px, #ffffff02 5px 6px),
+      linear-gradient(90deg, #2b2c35, #24252d);
+    border-right-color: #15161c;
+    box-shadow: inset -1px 0 #8b785d55, inset 1px 0 #ffffff0b;
+    scrollbar-width: thin;
+    scrollbar-color: #766548 #202129;
+  }
+
+  .area-nav--side .area-nav__btn {
+    --nav-accent: #b9c3d4;
+    position: relative;
+    isolation: isolate;
+    border-color: #41434e;
+    border-top-color: #5b5d68;
+    border-radius: 6px;
+    background: linear-gradient(145deg, #353640, #25262e 80%);
+    box-shadow: inset 0 1px #ffffff0b, inset 0 -2px #0003, 0 2px 0 #11121877;
+    text-shadow: 0 1px 2px #0008;
+    transition: background .15s, border-color .15s, box-shadow .15s;
+  }
+
+  .area-nav--side [data-nav-area="inicio"] { --nav-accent: #e7c45f; }
+  .area-nav--side [data-nav-area="clube"] { --nav-accent: #74b98b; }
+  .area-nav--side [data-nav-area="vestiario"] { --nav-accent: #7da9e0; }
+  .area-nav--side [data-nav-area="stake"] { --nav-accent: #c3a6e3; }
+  .area-nav--side [data-nav-area="ct"] { --nav-accent: #6cbfc4; }
+  .area-nav--side [data-nav-area="mercado"] { --nav-accent: #dba36f; }
+  .area-nav--side [data-nav-area="temporada"] { --nav-accent: #be9bdc; }
+  .area-nav--side [data-nav-area="inventario"] { --nav-accent: #79b4a6; }
+  .area-nav--side [data-nav-area="economia"] { --nav-accent: #d5bd7e; }
+
+  .area-nav--side .area-nav__btn::before {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    border: 1px solid #ffffff06;
+    border-radius: 2px;
+    background: radial-gradient(#ffffff12 .55px, transparent .8px) 0 0 / 4px 4px;
+    opacity: .35;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .area-nav--side .area-nav__btn::after {
+    content: '';
+    position: absolute;
+    right: 4px;
+    bottom: 4px;
+    width: 6px;
+    height: 6px;
+    border-right: 1px solid var(--nav-accent);
+    border-bottom: 1px solid var(--nav-accent);
+    opacity: .4;
+    pointer-events: none;
+  }
+
+  .area-nav--side .area-nav__icon-frame {
+    display: grid;
+    place-items: center;
+    flex: 0 0 36px;
+    width: 36px;
+    height: 36px;
+    border: 1px solid color-mix(in srgb, var(--nav-accent) 42%, #424550);
+    border-radius: 4px;
+    background: linear-gradient(145deg, #ffffff0a, #0002);
+    box-shadow: inset 1px 1px #ffffff0b, inset -1px -1px #0003, 1px 1px 0 #0003;
+    color: color-mix(in srgb, var(--nav-accent) 28%, #f5f4ed);
+  }
+
+  .area-nav--side .area-nav__icon-frame svg {
+    width: 28px;
+    height: 28px;
+    filter: drop-shadow(0 2px 0 #0005);
+  }
+
+  .area-nav--side .area-nav__label { color: #e1e1e9; }
+
+  .area-nav--side [data-nav-area="temporada"] .area-nav__label {
+    font-size: 11px;
+    letter-spacing: 0;
+  }
+
+  .area-nav--side .area-nav__btn:hover {
+    border-color: color-mix(in srgb, var(--nav-accent) 65%, #454750);
+    background: linear-gradient(145deg, #41424d, #2b2d37);
+    box-shadow: inset 0 1px #ffffff15, inset 0 -2px #0003, 0 2px 0 #11121877;
+  }
+
+  .area-nav--side .area-nav__btn.is-active,
+  .area-nav--side .area-nav__btn.is-active:hover {
+    border-color: #a58c48;
+    border-top-color: #e4c76e;
+    background: radial-gradient(ellipse at 50% 0, #d8b64e1c, transparent 85%), linear-gradient(145deg, #3c392e, #27272d);
+    box-shadow: inset 0 1px #f9e7a52b, inset 0 -2px #0004, 0 2px 0 #11121899;
+  }
+
+  .area-nav--side .is-active .area-nav__icon-frame {
+    color: #ffe5a0;
+    border-color: #b59a52;
+    background: linear-gradient(145deg, #e3c46721, #0002);
+    box-shadow: inset 1px 1px #fae3a224, inset -1px -1px #0004, 0 0 9px #e3bd4f15;
+  }
+
+  .area-nav--side .is-active .area-nav__label { color: #ffe5a0; }
+
+  .area-nav--side .area-nav__btn.is-active::after {
+    top: 50%;
+    bottom: auto;
+    left: -2px;
+    right: auto;
+    width: 3px;
+    height: 22px;
+    border: 0;
+    transform: translateY(-50%);
+    background: #eed17b;
+    box-shadow: 0 0 6px #e5c26044;
+    opacity: 1;
+  }
+
+  .area-nav--side .area-nav__btn:focus-visible {
+    outline: 2px solid #f2d780;
+    outline-offset: -4px;
+  }
+
+  .area-nav--side .area-nav__btn:active { box-shadow: inset 0 2px 5px #0005; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .area-nav--side .area-nav__btn { transition: none; }
+}

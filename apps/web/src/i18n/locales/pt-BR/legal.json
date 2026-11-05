@@ -1,0 +1,318 @@
+{
+  "footer": {
+    "tagline": "Simulador Web3 de futebol play-and-earn com economia USDC, scout de atletas, PvP e progressão no ecossistema Genesis.",
+    "platformsTitle": "PLATAFORMAS DO GAME",
+    "legalTitle": "LEGAL",
+    "termsOfUse": "Termos de Uso",
+    "termsAndConditions": "Termos e Condições",
+    "privacyPolicy": "Política de Privacidade",
+    "cookiePolicy": "Política de Cookies",
+    "web3Risk": "Aviso de Risco Web3",
+    "communityContent": "Conteúdo e Comunidade",
+    "developedBy": "Desenvolvido e gerido pela",
+    "discord": "Discord",
+    "telegram": "Telegram",
+    "copyright": "© {{year}} Master Legends League. Todos os direitos reservados."
+  },
+  "lastUpdatedLabel": "Última atualização: {{date}}",
+  "cookieBanner": {
+    "title": "Cookies e privacidade",
+    "description": "Utilizamos cookies essenciais para autenticação e segurança. Com seu consentimento, também usamos cookies de analytics (Google Analytics) para melhorar a experiência. Consulte nossa Política de Privacidade.",
+    "acceptAll": "Aceitar todos",
+    "essentialOnly": "Apenas essenciais",
+    "privacyLink": "Política de Privacidade"
+  },
+  "termsOfUse": {
+    "title": "Termos de Uso",
+    "lastUpdated": "4 de junho de 2026",
+    "sections": [
+      {
+        "title": "1. Aceitação",
+        "paragraphs": [
+          "Ao acessar ou utilizar a plataforma Master Legends League (\"MLL\"), você concorda com estes Termos de Uso. Se não concordar, não utilize o serviço.",
+          "O uso da plataforma também está sujeito aos Termos e Condições e à Política de Privacidade."
+        ]
+      },
+      {
+        "title": "2. Elegibilidade",
+        "paragraphs": [
+          "Você deve ter pelo menos 18 anos ou a maioridade legal em sua jurisdição para criar uma conta e participar de funcionalidades play-and-earn.",
+          "É sua responsabilidade garantir que o uso da MLL seja permitido nas leis aplicáveis ao seu país ou região."
+        ]
+      },
+      {
+        "title": "3. Conta e conduta",
+        "paragraphs": [
+          "Você é responsável por manter a confidencialidade de suas credenciais e por todas as atividades realizadas em sua conta.",
+          "É proibido usar bots, exploits, automação não autorizada, fraude, assédio ou qualquer conduta que prejudique outros jogadores ou a integridade do jogo."
+        ]
+      },
+      {
+        "title": "4. Propriedade intelectual",
+        "paragraphs": [
+          "Todo o conteúdo da MLL — incluindo arte pixel, interface, marcas, código e mecânicas — pertence aos seus respectivos titulares e é protegido por lei.",
+          "Você recebe uma licença limitada, não exclusiva e revogável para uso pessoal da plataforma conforme estes termos."
+        ]
+      },
+      {
+        "title": "5. Suspensão e encerramento",
+        "paragraphs": [
+          "Podemos suspender ou encerrar contas que violem estes termos, sem prejuízo de outras medidas legais.",
+          "Você pode encerrar sua conta a qualquer momento entrando em contato com o suporte."
+        ]
+      },
+      {
+        "title": "6. Contato",
+        "paragraphs": [
+          "Dúvidas sobre estes Termos de Uso: privacidade@mll.local"
+        ]
+      }
+    ]
+  },
+  "termsAndConditions": {
+    "title": "Termos e Condições",
+    "lastUpdated": "4 de junho de 2026",
+    "sections": [
+      {
+        "title": "1. Serviço",
+        "paragraphs": [
+          "A MLL é um ecossistema de futebol play-and-earn com elementos digitais, incluindo atletas digitais, tokens e marketplace, sujeito a disponibilidade e manutenção contínua.",
+          "Funcionalidades podem ser alteradas, limitadas ou descontinuadas com aviso razoável quando possível."
+        ]
+      },
+      {
+        "title": "2. Conta e registro",
+        "paragraphs": [
+          "O registro exige aceite expresso destes termos e da Política de Privacidade.",
+          "Informações fornecidas devem ser verdadeiras. Contas duplicadas ou fraudulentas podem ser encerradas."
+        ]
+      },
+      {
+        "title": "3. Economia do jogo e ativos digitais",
+        "paragraphs": [
+          "Itens, moedas virtuais (ex.: USDC), atletas digitais e recompensas possuem regras específicas do jogo e não constituem garantia de valor financeiro.",
+          "Transações on-chain estão sujeitas às regras da rede blockchain utilizada; taxas de gas e confirmações são de responsabilidade do usuário.",
+          "A MLL não se responsabiliza por perdas decorrentes de volatilidade de mercado, falhas de rede ou carteiras de terceiros."
+        ]
+      },
+      {
+        "title": "4. Pagamentos e reembolsos",
+        "paragraphs": [
+          "Compras de itens digitais ou passes, quando disponíveis, são geralmente finais, salvo exigência legal em contrário.",
+          "Reembolsos seguem a legislação brasileira aplicável e políticas específicas divulgadas no momento da compra."
+        ]
+      },
+      {
+        "title": "5. Limitação de responsabilidade",
+        "paragraphs": [
+          "A plataforma é fornecida \"como está\", dentro dos limites permitidos pela lei.",
+          "Não garantimos disponibilidade ininterrupta, ausência de bugs ou resultados específicos em competições ou mercado."
+        ]
+      },
+      {
+        "title": "6. Lei aplicável",
+        "paragraphs": [
+          "Estes Termos e Condições são regidos pelas leis da República Federativa do Brasil.",
+          "Foro: comarca do domicílio do consumidor, quando aplicável o Código de Defesa do Consumidor."
+        ]
+      }
+    ]
+  },
+  "privacy": {
+    "title": "Política de Privacidade",
+    "lastUpdated": "4 de junho de 2026",
+    "sections": [
+      {
+        "title": "1. Controlador e encarregado (DPO)",
+        "paragraphs": [
+          "Controlador: Master Legends League.",
+          "Encarregado de proteção de dados (DPO): privacidade@mll.local"
+        ]
+      },
+      {
+        "title": "2. Dados que coletamos",
+        "paragraphs": [
+          "Dados de cadastro: e-mail, username, senha (armazenada com hash), código de indicação.",
+          "Dados de uso: logs de acesso, IP, user-agent, ações no jogo e auditoria de segurança.",
+          "Dados de carteira Web3 (quando habilitado): endereço público da carteira.",
+          "Dados de analytics (com consentimento): páginas visitadas, eventos de navegação via Google Analytics."
+        ]
+      },
+      {
+        "title": "3. Bases legais (LGPD)",
+        "paragraphs": [
+          "Execução de contrato: criação de conta, autenticação e prestação do serviço.",
+          "Legítimo interesse: segurança, prevenção a fraudes e melhoria do produto.",
+          "Consentimento: cookies de analytics e comunicações de marketing, quando aplicável.",
+          "Cumprimento de obrigação legal: registros exigidos por lei."
+        ]
+      },
+      {
+        "title": "4. Cookies e tecnologias similares",
+        "paragraphs": [
+          "Cookies essenciais: tokens de sessão/refresh (httpOnly), CSRF e preferência de idioma — necessários para o funcionamento.",
+          "Cookies de analytics: Google Analytics, carregado somente após seu consentimento no banner de cookies.",
+          "Cloudflare Turnstile: usado em login e registro para verificação anti-bot; pode processar dados técnicos conforme política da Cloudflare."
+        ]
+      },
+      {
+        "title": "5. Compartilhamento",
+        "paragraphs": [
+          "Podemos compartilhar dados com provedores de infraestrutura (hospedagem, e-mail, Redis, banco de dados), sempre sob contratos de tratamento.",
+          "Google Analytics (Google LLC) recebe dados anonimizados de navegação quando você aceita cookies de analytics.",
+          "Não vendemos seus dados pessoais."
+        ]
+      },
+      {
+        "title": "6. Retenção",
+        "paragraphs": [
+          "Dados de conta: enquanto a conta estiver ativa e pelo prazo necessário após encerramento para obrigações legais.",
+          "Logs operacionais: conforme política interna (ex.: 90 dias em MongoDB para logs de alto volume).",
+          "Tokens de verificação e reset: expiram automaticamente conforme configurado no sistema."
+        ]
+      },
+      {
+        "title": "7. Seus direitos (titular)",
+        "paragraphs": [
+          "Você pode solicitar: confirmação de tratamento, acesso, correção, anonimização, portabilidade, eliminação e revogação de consentimento.",
+          "Envie pedidos para privacidade@mll.local. Responderemos nos prazos da LGPD.",
+          "Você também pode apresentar reclamação à ANPD."
+        ]
+      },
+      {
+        "title": "8. Segurança",
+        "paragraphs": [
+          "Adotamos medidas técnicas e organizacionais: HTTPS, tokens JWT, cookies httpOnly, rate limiting, auditoria e hash de senhas.",
+          "Nenhum sistema é 100% seguro; notifique-nos imediatamente em caso de suspeita de comprometimento."
+        ]
+      },
+      {
+        "title": "9. Alterações",
+        "paragraphs": [
+          "Esta política pode ser atualizada. A data da última revisão será indicada no topo da página.",
+          "Mudanças relevantes serão comunicadas por meios razoáveis (ex.: aviso no site ou e-mail)."
+        ]
+      }
+    ]
+  },
+  "cookiePolicy": {
+    "title": "Política de Cookies",
+    "lastUpdated": "5 de junho de 2026",
+    "sections": [
+      {
+        "title": "1. O que são cookies",
+        "paragraphs": [
+          "Cookies são pequenos arquivos armazenados no seu navegador para lembrar preferências, manter sessões e medir uso do site.",
+          "Utilizamos cookies e tecnologias similares conforme descrito nesta política e na Política de Privacidade."
+        ]
+      },
+      {
+        "title": "2. Cookies essenciais",
+        "paragraphs": [
+          "Necessários para login, refresh token (httpOnly), proteção CSRF, idioma e segurança básica.",
+          "Não exigem consentimento porque são indispensáveis ao funcionamento da plataforma."
+        ]
+      },
+      {
+        "title": "3. Cookies de analytics",
+        "paragraphs": [
+          "Google Analytics é carregado somente após você aceitar cookies no banner de consentimento.",
+          "Esses cookies ajudam a entender páginas visitadas e melhorar a experiência, sem venda de dados pessoais."
+        ]
+      },
+      {
+        "title": "4. Cloudflare Turnstile",
+        "paragraphs": [
+          "Usamos Turnstile em login e registro para reduzir bots. A Cloudflare pode processar dados técnicos conforme sua política."
+        ]
+      },
+      {
+        "title": "5. Como gerenciar",
+        "paragraphs": [
+          "Você pode recusar cookies de analytics no banner ou limpar cookies nas configurações do navegador.",
+          "Recusar cookies essenciais pode impedir login e uso de funcionalidades protegidas."
+        ]
+      }
+    ]
+  },
+  "web3Risk": {
+    "title": "Aviso de Risco Web3",
+    "lastUpdated": "5 de junho de 2026",
+    "sections": [
+      {
+        "title": "1. Natureza dos ativos digitais",
+        "paragraphs": [
+          "Atletas digitais, tokens (ex.: USDC) e recompensas on-chain podem perder valor rapidamente. Não há garantia de retorno financeiro.",
+          "Participar da MLL é entretenimento e progressão de jogo; não constitui aconselhamento de investimento."
+        ]
+      },
+      {
+        "title": "2. Riscos de blockchain",
+        "paragraphs": [
+          "Transações são irreversíveis após confirmação na rede. Taxas de gas, congestionamento e forks são riscos do usuário.",
+          "Endereços de carteira incorretos podem resultar em perda permanente de ativos."
+        ]
+      },
+      {
+        "title": "3. Carteiras e custódia",
+        "paragraphs": [
+          "Você é responsável por chaves privadas, seed phrases e segurança do dispositivo.",
+          "A MLL não recupera ativos perdidos por phishing, malware ou compartilhamento de credenciais."
+        ]
+      },
+      {
+        "title": "4. Smart contracts",
+        "paragraphs": [
+          "Contratos inteligentes podem conter bugs ou ser alvo de exploits, apesar de auditorias e testes.",
+          "Funcionalidades Web3 podem estar em fase experimental ou indisponíveis em determinadas redes."
+        ]
+      },
+      {
+        "title": "5. Regulação",
+        "paragraphs": [
+          "Leis sobre criptoativos variam por país e podem mudar. Verifique se o uso da plataforma é permitido na sua jurisdição."
+        ]
+      }
+    ]
+  },
+  "communityContent": {
+    "title": "Conteúdo e Comunidade",
+    "lastUpdated": "5 de junho de 2026",
+    "sections": [
+      {
+        "title": "1. Conduta esperada",
+        "paragraphs": [
+          "Trate outros jogadores com respeito em chat, Discord, Telegram e canais oficiais.",
+          "Assédio, discurso de ódio, spam, golpes e conteúdo ilegal são proibidos."
+        ]
+      },
+      {
+        "title": "2. Conteúdo gerado pelo usuário",
+        "paragraphs": [
+          "Você mantém direitos sobre o que publica, mas concede à MLL licença limitada para exibir e moderar conteúdo relacionado ao serviço.",
+          "Não publique dados pessoais de terceiros sem consentimento."
+        ]
+      },
+      {
+        "title": "3. Moderação",
+        "paragraphs": [
+          "Podemos remover conteúdo, silenciar ou banir contas que violem estes termos ou prejudiquem a comunidade.",
+          "Decisões de moderação visam proteger jogadores e a integridade do jogo."
+        ]
+      },
+      {
+        "title": "4. Canais oficiais",
+        "paragraphs": [
+          "Links oficiais de Discord e Telegram serão divulgados no site quando disponíveis.",
+          "Desconfie de perfis que pedem senha, seed phrase ou pagamentos fora dos canais oficiais."
+        ]
+      },
+      {
+        "title": "5. Denúncias",
+        "paragraphs": [
+          "Reporte abusos para privacidade@mll.local ou moderadores nos canais oficiais, com evidências quando possível."
+        ]
+      }
+    ]
+  }
+}

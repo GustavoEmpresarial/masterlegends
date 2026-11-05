@@ -1,0 +1,46 @@
+{
+  "version": "1.4.1",
+  "environment": "Teste local quadro a quadro com a renderização pública da garra; inclui as duas ordens de início dos loops e redimensionamento",
+  "results": [
+    {
+      "version": "old",
+      "order": "game-first",
+      "frames": 152,
+      "staleFrames": 122,
+      "maxAngleDegrees": 25.628382558511653,
+      "hiddenRayFrames": 2,
+      "misplacedFrames": 2,
+      "pageErrors": []
+    },
+    {
+      "version": "old",
+      "order": "helper-first",
+      "frames": 152,
+      "staleFrames": 152,
+      "maxAngleDegrees": 31.974812437548,
+      "hiddenRayFrames": 4,
+      "misplacedFrames": 4,
+      "pageErrors": []
+    },
+    {
+      "version": "fixed",
+      "order": "game-first",
+      "frames": 152,
+      "staleFrames": 0,
+      "maxAngleDegrees": 0.29993052583187907,
+      "hiddenRayFrames": 0,
+      "misplacedFrames": 0,
+      "pageErrors": []
+    },
+    {
+      "version": "fixed",
+      "order": "helper-first",
+      "frames": 152,
+      "staleFrames": 0,
+      "maxAngleDegrees": 0.29993052583187907,
+      "hiddenRayFrames": 0,
+      "misplacedFrames": 0,
+      "pageErrors": []
+    }
+  ]
+}

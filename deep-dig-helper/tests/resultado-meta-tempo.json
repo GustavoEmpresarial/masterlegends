@@ -1,0 +1,150 @@
+{
+  "version": "1.4.0",
+  "environment": "Somente testes locais, sem uso de conta online",
+  "plannerBenchmark": {
+    "cases": [
+      {
+        "seed": 1,
+        "phase": 4,
+        "cleared": true,
+        "throws": 5,
+        "misses": 0,
+        "seconds": 16.6
+      },
+      {
+        "seed": 2,
+        "phase": 4,
+        "cleared": true,
+        "throws": 5,
+        "misses": 0,
+        "seconds": 11.566666666666666
+      },
+      {
+        "seed": 3,
+        "phase": 4,
+        "cleared": true,
+        "throws": 4,
+        "misses": 0,
+        "seconds": 9.466666666666667
+      },
+      {
+        "seed": 4,
+        "phase": 4,
+        "cleared": true,
+        "throws": 4,
+        "misses": 0,
+        "seconds": 10.033333333333333
+      },
+      {
+        "seed": 5,
+        "phase": 4,
+        "cleared": true,
+        "throws": 3,
+        "misses": 0,
+        "seconds": 8.666666666666666
+      },
+      {
+        "seed": 1,
+        "phase": 8,
+        "cleared": true,
+        "throws": 9,
+        "misses": 0,
+        "seconds": 26.233333333333334
+      },
+      {
+        "seed": 2,
+        "phase": 8,
+        "cleared": true,
+        "throws": 6,
+        "misses": 0,
+        "seconds": 18.5
+      },
+      {
+        "seed": 3,
+        "phase": 8,
+        "cleared": true,
+        "throws": 4,
+        "misses": 0,
+        "seconds": 8.1
+      },
+      {
+        "seed": 4,
+        "phase": 8,
+        "cleared": true,
+        "throws": 6,
+        "misses": 0,
+        "seconds": 17.166666666666668
+      },
+      {
+        "seed": 5,
+        "phase": 8,
+        "cleared": true,
+        "throws": 10,
+        "misses": 0,
+        "seconds": 30.8
+      },
+      {
+        "seed": 1,
+        "phase": 12,
+        "cleared": true,
+        "throws": 13,
+        "misses": 0,
+        "seconds": 42.86666666666667
+      },
+      {
+        "seed": 2,
+        "phase": 12,
+        "cleared": true,
+        "throws": 7,
+        "misses": 0,
+        "seconds": 19.566666666666666
+      },
+      {
+        "seed": 3,
+        "phase": 12,
+        "cleared": true,
+        "throws": 17,
+        "misses": 0,
+        "seconds": 54.733333333333334
+      },
+      {
+        "seed": 4,
+        "phase": 12,
+        "cleared": true,
+        "throws": 8,
+        "misses": 0,
+        "seconds": 25.433333333333334
+      },
+      {
+        "seed": 5,
+        "phase": 12,
+        "cleared": true,
+        "throws": 13,
+        "misses": 0,
+        "seconds": 41.266666666666666
+      }
+    ],
+    "averageScanMs": 0.5894736843020246,
+    "averagePlanMs": 3.218421052291728,
+    "maxPlanMs": 14.199999995529652,
+    "scans": 114
+  },
+  "extensionRealtimeCDP": {
+    "phase": 2,
+    "trustedShots": 15,
+    "untrustedShots": 0,
+    "nextClicks": 1,
+    "otherClicks": 0,
+    "results": [
+      {
+        "seed": 3,
+        "n": 12,
+        "cleared": true,
+        "seconds": 48.36666666666667,
+        "shots": 15,
+        "misses": 0,
+        "maxIdleSeconds": 1.6
+      }
+    ]
+  }
+}

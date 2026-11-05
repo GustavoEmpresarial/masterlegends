@@ -1,0 +1,37 @@
+Zerads PTC — configuração de produção
+======================================
+
+Site ID: 11807
+Site: https://masterlegends.online
+
+Callback Target (configurar no painel Zerads > Publisher PTC > API URL Callback):
+https://masterlegends.online/zeradsptc.php?pwd=1fe1e0e59c72ace966b3137b34d9d94197ba4b3ef6280ac9&user=user&amount=amount&clicks=clicks
+
+Senha do callback (pwd):
+1fe1e0e59c72ace966b3137b34d9d94197ba4b3ef6280ac9
+
+Link PTC do jogador (gerado dinamicamente por usuário na página /offerwall):
+https://zerads.com/ptc.php?ref=11807&user=<userId>
+
+Conversão (base):
+1 ZER = 500 Overwall temporário (24h de duração)
+Configurável via env: OFFERWALL_ZERADS_ZER_TO_OW e OFFERWALL_ZERADS_OW_TTL_HOURS
+
+Env vars relevantes (apps/api, produção em /opt/mll/.env):
+OFFERWALL_ZERADS_ENABLED=true
+OFFERWALL_ZERADS_SITE_ID=11807
+OFFERWALL_ZERADS_PTC_PASSWORD=1fe1e0e59c72ace966b3137b34d9d94197ba4b3ef6280ac9
+OFFERWALL_ZERADS_ZER_TO_OW=500
+OFFERWALL_ZERADS_OW_TTL_HOURS=24
+
+Rotas da API:
+GET  /api/offerwall/zerads/ptc    — callback público (Zerads -> nosso servidor)
+GET  /api/offerwall/zerads/link   — link PTC do usuário logado
+GET  /api/offerwall/zerads/stats  — estatísticas diárias do usuário logado
+
+Segurança:
+- Única defesa é o "pwd" (comparação em tempo constante) — não valida por IP de origem,
+  pois o site fica atrás da Cloudflare e o IP que chega no servidor é sempre o dela, não
+  o IP real do Zerads.
+- Anti-flood/duplicata: idempotência garantida por constraint única no banco
+  (userId + janela de 5 minutos) — callback repetido não credita duas vezes.

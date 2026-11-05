@@ -1,0 +1,1391 @@
+// Prisma Schema for Master Legends League
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String    @id @default(uuid())
+  email            String?   @unique @db.VarChar(255)
+  username         String?   @unique @db.VarChar(20)
+  password         String?   @db.VarChar(255)
+  wallet           String?   @unique @db.VarChar(42)
+  avatarUrl        String?   @db.VarChar(512)
+  referralCode     String    @unique @db.VarChar(8)
+  referredBy       String?   @db.VarChar(42)
+  nonce            String?   @db.VarChar(64)
+  emailVerifiedAt       DateTime?
+  tutorialCompletedAt   DateTime?
+  // Telegram bot link (Genesis DAO / MLL notifications)
+  telegramChatId          String?   @unique @db.VarChar(64)
+  telegramLinkedAt        DateTime?
+  telegramNotifyEnabled   Boolean   @default(true)
+  failedLoginCount Int       @default(0)
+  lockedUntil      DateTime?
+  bannedAt         DateTime?
+  banReason        String?   @db.VarChar(255)
+  bannedBy         String?   @db.VarChar(64)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  club                   Club?
+  passProgress           PassProgress[]
+  missionProgress        MissionProgress[]
+  mgtBalance             MGTBalance?
+  basePlayers            BasePlayer[]
+  referralsMade          Referral[]                  @relation("referrer")
+  referralsGot           Referral[]                  @relation("referred")
+  commissionsMade        ReferralCommission[]        @relation("commissionReferrer")
+  commissionsGot         ReferralCommission[]        @relation("commissionReferred")
+  listings               Listing[]
+  stakes                 Stake[]
+  playerStakes           PlayerStake[]
+  playerFieldTrials      PlayerFieldTrial[]
+  emailTokens            EmailVerificationToken[]
+  resetTokens            PasswordResetToken[]
+  auditLogs              AuditLog[]
+  walletTransactions     WalletTransaction[]
+  depositClaims          DepositClaim[]
+  mgtTransactions        MGTTransaction[]
+  minigamePlays          MinigamePlay[]
+  withdrawalRequests     WithdrawalRequest[]
+  supportTickets         SupportTicket[]
+  announcementDismissals UserAnnouncementDismissal[]
+  miningBalance          MiningBalance?
+  miningRewards          MiningReward[]
+  youtubeCreator         YoutubeCreator?
+  ipEvents               UserIpEvent[]
+  afflictions            Affliction[]
+  checkInGrants          CheckInGrant[]
+  checkInStreakRewards   CheckInStreakReward[]
+  questProgress          QuestProgress[]
+  questClaims            QuestClaim[]
+  questClaimLogs         QuestClaimLog[]
+  userBadges             UserBadge[]
+  eventOverwallGrants    EventOverwallGrant[]
+  eventTriggerCooldowns  EventTriggerCooldown[]
+  userGears              UserGear[]
+  playerGearEquips       PlayerGearEquip[]
+  warehouseItems         WarehouseItem[]
+  offerwallRewards       OfferwallReward[]
+  zeradsPtcCallbacks     ZeradsPtcCallback[]
+  staminaLedger          StaminaLedger[]
+  ctRecords              CtRecord[]
+  mintRecords            MintRecord[]
+  mergeRecords           MergeRecord[]
+  bonecoLooks            BonecoLook[]
+  pvpListingsHosted      PvpListing[] @relation("pvpHost")
+  pvpListingsJoined      PvpListing[] @relation("pvpChallenger")
+}
+
+model BonecoLook {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  playerId   String   @db.VarChar(64)
+  playerKind String   @db.VarChar(8)
+  imageUrl   String   @db.VarChar(512)
+  position   String   @db.VarChar(8)
+  kit        String   @db.VarChar(16)
+  trim       String   @db.VarChar(16)
+  pose       String   @db.VarChar(24)
+  note       String   @default("") @db.VarChar(400)
+  updatedAt  DateTime @updatedAt
+
+  @@unique([userId, playerKind, playerId])
+  @@index([userId])
+}
+
+model Affliction {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  targetKind String   @db.VarChar(16)
+  targetId   String?  @db.VarChar(64)
+  code       String   @db.VarChar(64)
+  note       String?  @db.VarChar(255)
+  startedAt  DateTime @default(now())
+  expiresAt  DateTime
+  createdBy  String?  @db.VarChar(64)
+
+  @@index([userId, targetKind, expiresAt])
+  @@index([expiresAt])
+}
+
+model UserIpEvent {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ip         String   @db.VarChar(64)
+  userAgent  String?  @db.VarChar(512)
+  fingerprint String? @db.VarChar(128)
+  action     String   @db.VarChar(20)
+  createdAt  DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@index([ip])
+}
+
+model CheckInGrant {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  amount     Int      @default(1)
+  checkInDay DateTime @db.Date
+  grantedAt  DateTime @default(now())
+  expiresAt  DateTime
+
+  @@unique([userId, checkInDay])
+  @@index([userId, expiresAt])
+}
+
+model CheckInStreakReward {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  milestone  Int
+  checkInDay DateTime @db.Date
+  playerId   String?
+  createdAt  DateTime @default(now())
+
+  @@unique([userId, milestone])
+  @@index([userId, createdAt])
+}
+
+model EmailVerificationToken {
+  id         String    @id @default(uuid())
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash  String    @unique @db.VarChar(128)
+  expiresAt  DateTime
+  consumedAt DateTime?
+  createdAt  DateTime  @default(now())
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model EmailCampaign {
+  id               String   @id @default(cuid())
+  subject          String   @db.VarChar(200)
+  body             String   @db.Text
+  audience         String   @db.VarChar(16)
+  targetUsername   String?  @db.VarChar(64)
+  queuedCount      Int      @default(0)
+  createdByAdminId String?  @db.VarChar(64)
+  createdAt        DateTime @default(now())
+
+  @@index([createdAt])
+}
+
+model PasswordResetToken {
+  id         String    @id @default(uuid())
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash  String    @unique @db.VarChar(128)
+  expiresAt  DateTime
+  consumedAt DateTime?
+  ip         String?   @db.VarChar(45)
+  createdAt  DateTime  @default(now())
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action    String   @db.VarChar(64)
+  severity  String   @default("info") @db.VarChar(16)
+  ip        String?  @db.VarChar(45)
+  userAgent String?  @db.VarChar(255)
+  meta      Json?
+  createdAt DateTime @default(now())
+
+  @@index([userId, action])
+  @@index([action, createdAt])
+}
+
+model Club {
+  id            String   @id @default(uuid())
+  userId        String   @unique
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name          String   @unique @db.VarChar(32)
+  stadiumLvl    Int      @default(1)
+  ctLvl         Int      @default(1)
+  treasurerLvl  Int      @default(1)
+  trophyRoomLvl Int      @default(1)
+  totalOverwall    Int       @default(0)
+  lastFarmAt       DateTime  @default(now())
+  lastDailyRestAt  DateTime?
+  treasurerHiredAt  DateTime?
+  treasurerLastBilledAt DateTime?
+  coachHiredAt      DateTime?
+  coachLastBilledAt DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  homePvpMatches PvPMatch[] @relation("clubA")
+  awayPvpMatches PvPMatch[] @relation("clubB")
+  lineup         ClubLineup?
+  trophies       ClubTrophy[]
+  stadiumLicenses ClubStadiumLicense[]
+}
+
+model PlayerCache {
+  tokenId          BigInt   @id
+  ownerWallet      String   @db.VarChar(42)
+  rarity           Int
+  overwall         Int
+  stamina          Int
+  position         Int
+  attributes       Json?
+  traitsHash       String?  @db.VarChar(66)
+  staminaUpdatedAt DateTime
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([ownerWallet])
+  @@index([rarity])
+  @@index([position])
+}
+
+model BasePlayer {
+  id         String        @id @default(uuid())
+  userId     String
+  user       User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  rarity     Int           @default(0)
+  overwall   Int
+  position   Int
+  attributes Json?
+  name       String?       @db.VarChar(64)
+  imageUrl   String?       @db.VarChar(512)
+  templateId String?
+  template   ItemTemplate? @relation(fields: [templateId], references: [id], onDelete: SetNull)
+  listed             Boolean       @default(false)
+  stamina            Int           @default(100)
+  staminaUpdatedAt   DateTime      @default(now())
+  createdAt          DateTime      @default(now())
+  source             String        @default("scout") @db.VarChar(32)
+  fieldedAt          DateTime?
+  expiresAt          DateTime?
+  retiredAt          DateTime?
+  /// Acquisition cost in USDC-equivalent (GMT ~ USDC). 0 = no ROI career cycle.
+  costBasisUsdc      Decimal       @default(0) @db.Decimal(36, 6)
+  /// Cumulative mining USDC attributed while on the XI.
+  lifetimeEarnedUsdc Decimal       @default(0) @db.Decimal(36, 6)
+  listing            Listing?
+
+  @@index([userId])
+  @@index([templateId])
+  @@index([userId, stamina])
+  @@index([expiresAt])
+}
+
+model StaminaLedger {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  playerKind String   @db.VarChar(8)
+  playerId   String   @db.VarChar(64)
+  reason     String   @db.VarChar(16)
+  delta      Int
+  before     Int
+  after      Int
+  createdAt  DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@index([playerKind, playerId, createdAt])
+}
+
+model CtRecord {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  playerKind String?  @db.VarChar(8)
+  playerId   String?  @db.VarChar(64)
+  kind       String   @db.VarChar(16)
+  before     Int?
+  after      Int?
+  detail     String?  @db.VarChar(64)
+  createdAt  DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@index([playerKind, playerId, createdAt])
+}
+
+model MinigamePlay {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  minigameId String   @db.VarChar(32)
+  playedAt   DateTime @default(now())
+
+  @@index([userId, minigameId, playedAt])
+}
+
+model StadiumShopItem {
+  id               String   @id @default(uuid())
+  slug             String   @unique @db.VarChar(64)
+  nameKey          String   @db.VarChar(128)
+  effectType       String   @db.VarChar(20)
+  effectValue      Int      @default(0)
+  priceUsdc        Decimal  @db.Decimal(18, 6)
+  active           Boolean  @default(true)
+  sortOrder        Int      @default(0)
+  // affiliate / external product fields
+  imageUrl         String?  @db.VarChar(512)
+  affiliateUrl     String?  @db.VarChar(1024)
+  description      String?  @db.VarChar(512)
+  externalPlatform String?  @db.VarChar(32)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([active, sortOrder])
+}
+
+/// Catalog of wearable gear (boots, etc.) sold in the stadium shop.
+model GearCatalogItem {
+  id          String   @id @default(uuid())
+  slug        String   @unique @db.VarChar(64)
+  nameKey     String   @db.VarChar(128)
+  slot        String   @db.VarChar(32) // boots | gloves | shinguards…
+  rarity      Int      @default(0) // 0–5, same scale as player cards
+  owBonus     Int      @default(0)
+  priceGmt    Decimal  @db.Decimal(18, 6)
+  imageUrl    String?  @db.VarChar(512)
+  description String?  @db.VarChar(512)
+  active      Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  ownerships UserGear[]
+
+  @@index([active, slot, sortOrder])
+  @@index([active, rarity])
+}
+
+/// Owned gear instance in a user's bag.
+model UserGear {
+  id            String   @id @default(uuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  catalogItemId String
+  catalogItem   GearCatalogItem @relation(fields: [catalogItemId], references: [id], onDelete: Restrict)
+  source        String   @default("shop") @db.VarChar(32) // shop | admin | event
+  acquiredAt    DateTime @default(now())
+
+  equip PlayerGearEquip?
+
+  @@index([userId])
+  @@index([catalogItemId])
+}
+
+/// Equipped gear on a specific player (one item per slot).
+model PlayerGearEquip {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  playerId   String   @db.VarChar(64)
+  playerKind String   @db.VarChar(8) // base | nft
+  slot       String   @db.VarChar(32)
+  userGearId String   @unique
+  userGear   UserGear @relation(fields: [userGearId], references: [id], onDelete: Cascade)
+  equippedAt DateTime @default(now())
+
+  @@unique([userId, playerId, playerKind, slot])
+  @@index([userId, playerId])
+}
+
+model ItemTemplate {
+  id        String   @id @default(uuid())
+  name      String   @db.VarChar(64)
+  imageUrl  String   @db.VarChar(512)
+  rarity    Int
+  position  Int
+  overwall  Int
+  weight    Int      @default(1)
+  active    Boolean  @default(true)
+  createdBy String?  @db.VarChar(64)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  basePlayers BasePlayer[]
+  marketSupply MarketSupply?
+
+  @@index([active, rarity])
+}
+
+/// Estoque oficial da liga no marketplace. Cada compra entrega uma cópia e baixa `remaining`.
+model MarketSupply {
+  id         String       @id
+  templateId String       @unique
+  template   ItemTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  initialQty Int
+  remaining  Int
+  priceGmt   Decimal      @db.Decimal(36, 6)
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+
+  @@index([remaining])
+}
+
+model StadiumTemplate {
+  id        String   @id @default(uuid())
+  name      String   @db.VarChar(64)
+  imageUrl  String   @db.VarChar(512)
+  slots     Json
+  priceUsdc Decimal? @db.Decimal(18, 6)
+  active    Boolean  @default(false)
+  isDefault Boolean  @default(false)
+  sortOrder Int      @default(0)
+  farmBonusPct Decimal @default(0.05) @db.Decimal(8, 4)
+  /// Quantidade mínima de jogadores Rare+ no elenco para comprar/ativar (0 = sem requisito)
+  requireRareStarters Int @default(11)
+  /// Overwall mínimo (escalação + bônus) para comprar/ativar (0 = sem requisito)
+  requireMinOverwall  Int @default(0)
+  /// Precisa já ter licença assinada deste outro estádio
+  requireOwnedTemplateId String?
+  requireOwnedTemplate   StadiumTemplate?  @relation("StadiumUnlockPrereq", fields: [requireOwnedTemplateId], references: [id], onDelete: SetNull)
+  unlocksFor             StadiumTemplate[] @relation("StadiumUnlockPrereq")
+  /// Texto opcional exibido ao jogador (ex: "Só após Campo da 4ª Divisão")
+  requirementNote String? @db.VarChar(280)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  lineups  ClubLineup[]
+  licenses ClubStadiumLicense[]
+
+  @@index([active, sortOrder])
+}
+
+/// Licença de uso do campo — compra USDC + assinatura de contrato no Escritório.
+model ClubStadiumLicense {
+  id                String   @id @default(uuid())
+  clubId            String
+  club              Club     @relation(fields: [clubId], references: [id], onDelete: Cascade)
+  stadiumTemplateId String
+  stadiumTemplate   StadiumTemplate @relation(fields: [stadiumTemplateId], references: [id], onDelete: Restrict)
+  /// purchased = pago aguardando assinatura | signed = licenciado (pode ativar)
+  status            String   @db.VarChar(16)
+  pricePaidUsdc     Decimal? @db.Decimal(18, 6)
+  purchasedAt       DateTime?
+  signedAt          DateTime?
+  contractVersion   String?  @db.VarChar(32)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@unique([clubId, stadiumTemplateId])
+  @@index([clubId, status])
+}
+
+model VestiarioTemplate {
+  id             String   @id @default(uuid())
+  name           String   @default("Vestiário Padrão") @db.VarChar(64)
+  imageUrl       String   @db.VarChar(512)
+  backgroundType String   @default("image") @db.VarChar(8)
+  slots          Json
+  active         Boolean  @default(true)
+  isDefault      Boolean  @default(false)
+  sortOrder      Int      @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([active, sortOrder])
+}
+
+model ClubLineup {
+  clubId            String          @id
+  club              Club            @relation(fields: [clubId], references: [id], onDelete: Cascade)
+  stadiumTemplateId String
+  stadiumTemplate   StadiumTemplate @relation(fields: [stadiumTemplateId], references: [id], onDelete: Restrict)
+  assignments       Json
+  updatedAt         DateTime        @updatedAt
+
+  @@index([stadiumTemplateId])
+}
+
+model MGTBalance {
+  userId           String   @id
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  amount           Decimal  @default(0) @db.Decimal(36, 18) // GMT disponível
+  lockedAmount     Decimal  @default(0) @db.Decimal(36, 18) // GMT bloqueado
+  usdcAmount       Decimal  @default(0) @db.Decimal(36, 18) // USDC — depósito / swap pool (→ GMT)
+  usdtAmount       Decimal  @default(0) @db.Decimal(36, 18) // USDT disponível
+  usdtLockedAmount Decimal  @default(0) @db.Decimal(36, 18) // USDT bloqueado em saque pendente
+  updatedAt        DateTime @updatedAt
+}
+
+model WalletTransaction {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type        String   @db.VarChar(32)
+  amount      Decimal  @db.Decimal(36, 6)
+  txHash      String   @unique @db.VarChar(66)
+  blockNumber BigInt?
+  status      String   @default("confirmed") @db.VarChar(16)
+  createdAt   DateTime @default(now())
+
+  @@index([userId, createdAt])
+}
+
+model DepositClaim {
+  id            String    @id @default(uuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  txHash        String    @unique @db.VarChar(66)
+  status        String    @default("pending") @db.VarChar(16) // pending | queued | credited | failed | rejected
+  failReason    String?   @db.VarChar(64)
+  attemptCount  Int       @default(0)
+  lastCheckedAt DateTime?
+  creditedAt    DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([status, lastCheckedAt])
+  @@index([userId, createdAt])
+}
+
+model RoadmapPhase {
+  id        String        @id @default(uuid())
+  order     Int           @default(0)
+  status    String        @db.VarChar(16) // done | active | upcoming
+  color     String        @db.VarChar(32)
+  visible   Boolean       @default(true)
+  i18n      Json
+  items     RoadmapItem[]
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  @@index([order])
+}
+
+model RoadmapItem {
+  id        String       @id @default(uuid())
+  phaseId   String
+  phase     RoadmapPhase @relation(fields: [phaseId], references: [id], onDelete: Cascade)
+  order     Int          @default(0)
+  done      Boolean      @default(false)
+  visible   Boolean      @default(true)
+  i18n      Json
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  @@index([phaseId, order])
+}
+
+model MGTTransaction {
+  id           String   @id @default(uuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type         String   @db.VarChar(32)
+  amount       Decimal  @db.Decimal(36, 18)
+  balanceAfter Decimal  @db.Decimal(36, 18)
+  meta         Json?
+  createdAt    DateTime @default(now())
+  mintRecords  MintRecord[]
+  mergeRecords MergeRecord[]
+
+  @@index([userId, createdAt])
+}
+
+model MergeRecord {
+  id               String         @id @default(uuid())
+  userId           String
+  user             User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  wallet           String?        @db.VarChar(42)
+  cost             Decimal        @db.Decimal(36, 6)
+  sources          Json
+  overwallBefore   Int
+  resultPlayerId   String         @db.VarChar(64)
+  overwallAfter    Int
+  mgtTransactionId String
+  mgtTransaction   MGTTransaction @relation(fields: [mgtTransactionId], references: [id], onDelete: Cascade)
+  createdAt        DateTime       @default(now())
+
+  @@index([userId, createdAt])
+  @@index([mgtTransactionId])
+  @@index([resultPlayerId])
+}
+
+model MintRecord {
+  id               String         @id @default(uuid())
+  userId           String
+  user             User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  wallet           String?        @db.VarChar(42)
+  cost             Decimal        @db.Decimal(36, 6)
+  basePlayerId     String         @db.VarChar(64)
+  rarity           Int
+  attributes       Json
+  mgtTransactionId String
+  mgtTransaction   MGTTransaction @relation(fields: [mgtTransactionId], references: [id], onDelete: Cascade)
+  createdAt        DateTime       @default(now())
+
+  @@index([userId, createdAt])
+  @@index([mgtTransactionId])
+  @@index([basePlayerId])
+}
+
+model Stake {
+  id                String    @id @default(uuid())
+  userId            String
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  amount            Decimal   @db.Decimal(36, 18)
+  stakedAt          DateTime  @default(now())
+  lastRewardAt      DateTime
+  accumulatedReward Decimal   @default(0) @db.Decimal(36, 18)
+  status            String    @default("active") // active, unstaked
+  unstakedAt        DateTime?
+  createdAt         DateTime  @default(now())
+
+  @@index([userId, status])
+}
+
+// GMT locked on a base/NFT player so they can enter the XI.
+model PlayerStake {
+  id         String    @id @default(uuid())
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  kind       String    @db.VarChar(8) // base | nft
+  playerId   String    @db.VarChar(64)
+  amount     Decimal   @db.Decimal(36, 8)
+  status     String    @default("active") @db.VarChar(16) // active | unstaked
+  stakedAt   DateTime  @default(now())
+  unstakedAt DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@unique([kind, playerId])
+  @@index([userId, status])
+}
+
+// Unstaked pitch window. Starts when the player enters; 5 minutes on, then locked until 24h.
+model PlayerFieldTrial {
+  id              String   @id @default(uuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  kind            String   @db.VarChar(8) // base | nft
+  playerId        String   @db.VarChar(64)
+  windowStartedAt DateTime
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([kind, playerId])
+  @@index([userId])
+}
+
+model PvpListing {
+  id                   String    @id @default(uuid())
+  hostUserId           String
+  host                 User      @relation("pvpHost", fields: [hostUserId], references: [id], onDelete: Cascade)
+  hostClubName         String    @db.VarChar(32)
+  tierId               String    @db.VarChar(16)
+  stakeGmt             Decimal   @db.Decimal(36, 6)
+  hostOverwall         Decimal   @db.Decimal(18, 4)
+  status               String    @default("open") @db.VarChar(16)
+  challengerUserId     String?
+  challenger           User?     @relation("pvpChallenger", fields: [challengerUserId], references: [id], onDelete: SetNull)
+  challengerClubName   String?   @db.VarChar(32)
+  challengerOverwall   Decimal?  @db.Decimal(18, 4)
+  winnerUserId         String?
+  result               String?   @db.VarChar(16)
+  createdAt            DateTime  @default(now())
+  settledAt            DateTime?
+
+  @@index([status, tierId])
+  @@index([hostUserId, status])
+}
+
+model PvPMatch {
+  id         String   @id @default(uuid())
+  clubAId    String
+  clubBId    String
+  clubA      Club     @relation("clubA", fields: [clubAId], references: [id])
+  clubB      Club     @relation("clubB", fields: [clubBId], references: [id])
+  resultJson Json
+  winner     String
+  seasonId   Int
+  season     Season   @relation(fields: [seasonId], references: [id])
+  playedAt   DateTime @default(now())
+
+  @@index([clubAId])
+  @@index([clubBId])
+  @@index([seasonId])
+}
+
+model Season {
+  id                 Int                @id @default(autoincrement())
+  name               String             @default("Season") @db.VarChar(64)
+  startsAt           DateTime
+  endsAt             DateTime
+  active             Boolean            @default(false)
+  premiumPriceUsdc   Decimal            @default(500) @db.Decimal(18, 6)
+  levels             Json               @default("[]")
+  missions           Json               @default("[]")
+  rewardBlocks       Json               @default("[]")
+  matches            PvPMatch[]
+  passProgress       PassProgress[]
+  missionProgress    MissionProgress[]
+
+  @@index([active])
+}
+
+model MissionProgress {
+  id        String    @id @default(uuid())
+  userId    String
+  seasonId  Int
+  missionId String    @db.VarChar(64)
+  period    String    @db.VarChar(32)
+  count     Int       @default(0)
+  target    Int
+  claimedAt DateTime?
+  expiresAt DateTime
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  season Season @relation(fields: [seasonId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, seasonId, missionId, period])
+  @@index([userId, expiresAt])
+  @@index([expiresAt])
+}
+
+model PassProgress {
+  userId        String
+  seasonId      Int
+  xp            Int      @default(0)
+  premium       Boolean  @default(false)
+  claimedLevels Int[]    @default([])
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  season Season @relation(fields: [seasonId], references: [id])
+
+  @@id([userId, seasonId])
+}
+
+model Referral {
+  referrerId     String
+  referredId     String   @unique
+  totalEarnedMGT Decimal  @default(0) @db.Decimal(36, 18)
+  createdAt      DateTime @default(now())
+
+  referrer User @relation("referrer", fields: [referrerId], references: [id])
+  referred User @relation("referred", fields: [referredId], references: [id])
+
+  @@index([referrerId])
+}
+
+model ReferralCommission {
+  id               String   @id @default(uuid())
+  referrerId       String
+  referredId       String
+  purchaseType     String   @db.VarChar(32)
+  purchaseRef      String   @db.VarChar(80)
+  grossAmount      Decimal  @default(0) @db.Decimal(36, 6)
+  rate             Decimal  @default(0) @db.Decimal(8, 4)
+  commissionAmount Decimal  @default(0) @db.Decimal(36, 6)
+  currency         String   @default("usdc") @db.VarChar(8)
+  status           String   @db.VarChar(16)
+  history          Json     @default("[]")
+  createdAt        DateTime @default(now())
+
+  referrer User @relation("commissionReferrer", fields: [referrerId], references: [id], onDelete: Cascade)
+  referred User @relation("commissionReferred", fields: [referredId], references: [id], onDelete: Cascade)
+
+  @@unique([purchaseType, purchaseRef])
+  @@index([referrerId, createdAt])
+  @@index([referredId, createdAt])
+}
+
+model ClubTrophy {
+  id          String   @id @default(uuid())
+  clubId      String
+  club        Club     @relation(fields: [clubId], references: [id], onDelete: Cascade)
+  name        String   @db.VarChar(128)
+  description String?  @db.VarChar(512)
+  imageUrl    String?  @db.VarChar(512)
+  wonAt       DateTime
+  grantedBy   String?  @db.VarChar(64)
+  createdAt   DateTime @default(now())
+
+  @@index([clubId])
+}
+
+model Listing {
+  id           String      @id @default(uuid())
+  tokenId      BigInt?     @unique
+  basePlayerId String?     @unique
+  basePlayer   BasePlayer? @relation(fields: [basePlayerId], references: [id])
+  sellerId     String
+  seller       User        @relation(fields: [sellerId], references: [id])
+  price        Decimal     @db.Decimal(36, 6)
+  rarity       Int
+  overwall     Int
+  position     Int         @default(0)
+  name         String?     @db.VarChar(64)
+  imageUrl     String?     @db.VarChar(512)
+  active       Boolean     @default(true)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  @@index([active, rarity])
+  @@index([sellerId])
+  @@index([price])
+}
+
+model WithdrawalRequest {
+  id            String    @id @default(uuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  wallet        String    @db.VarChar(42)
+  requestedUsdc Decimal   @default(0) @db.Decimal(36, 6) // valor bruto (moeda em `currency`)
+  feeUsdc       Decimal   @default(0) @db.Decimal(36, 6) // taxa (moeda em `currency`)
+  amountUsdc    Decimal   @db.Decimal(36, 6)             // valor líquido (moeda em `currency`)
+  currency      String    @default("usdt") @db.VarChar(8) // usdt (padrão a partir de 01/08/2026) | usdc (legado)
+  status        String    @default("pending") @db.VarChar(16)
+  adminNote     String?   @db.VarChar(512)
+  reviewedBy    String?   @db.VarChar(64)
+  reviewedAt    DateTime?
+  txHash        String?   @db.VarChar(66)
+  /// E-mail da conta SatsPay que recebe. Vazio nos saques on-chain antigos.
+  satspayEmail  String?   @db.VarChar(254)
+  /// metamask | manual | satspay
+  paymentMethod String?   @db.VarChar(16)
+  notes         String?   @db.VarChar(512)
+  requestIp     String?   @db.VarChar(64)
+  userAgent     String?   @db.VarChar(512)
+  browser       String?   @db.VarChar(64)
+  os            String?   @db.VarChar(64)
+  device        String?   @db.VarChar(32)
+  metadata      Json?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([status, createdAt])
+  @@index([userId, createdAt])
+  @@index([wallet])
+  @@index([txHash])
+  @@index([paymentMethod, createdAt])
+}
+
+model PlatformConfig {
+  id                     String   @id @default("default")
+  minDepositUsdc         Decimal  @default(1) @db.Decimal(36, 6)
+  minWithdrawUsdc        Decimal  @default(1) @db.Decimal(36, 6)
+  withdrawFeePct         Decimal  @default(0.05) @db.Decimal(8, 4)
+  withdrawalsPaused      Boolean  @default(false)
+  vaultAddress           String?  @db.VarChar(42)
+  miningBlockRewardUsdc  Decimal  @default(0.1) @db.Decimal(36, 6)
+  miningBlockIntervalMin Int      @default(10)
+  miningPaused           Boolean  @default(false)
+  registrationOpen       Boolean  @default(true)
+  maintenanceMode        Boolean  @default(false)
+  maintenanceMessage     String?  @db.VarChar(500)
+  referralBonusPct       Decimal  @default(0.05) @db.Decimal(8, 4)
+  treasurerWeeklyUsdc    Decimal  @default(0) @db.Decimal(36, 6)
+  coachWeeklyUsdc        Decimal  @default(0) @db.Decimal(36, 6)
+  coachMiningFeePct      Decimal  @default(0.02) @db.Decimal(8, 4)
+  treasurerEnabled       Boolean  @default(true)
+  coachEnabled           Boolean  @default(true)
+  treasurerName          String   @default("Tesoureiro") @db.VarChar(64)
+  treasurerRoleLabel     String   @default("Diretor financeiro do clube") @db.VarChar(128)
+  treasurerAvatar        String   @default("💼") @db.VarChar(512)
+  treasurerAccent        String   @default("var(--blue)") @db.VarChar(32)
+  treasurerPerks         Json     @default("[{\"icon\":\"◆\",\"text\":\"Cargo simbólico — funções financeiras serão liberadas em breve.\"},{\"icon\":\"◆\",\"text\":\"Mantenha contratado para garantir o cargo antes dos benefícios chegarem.\"}]")
+  coachName              String   @default("Treinador") @db.VarChar(64)
+  coachRoleLabel         String   @default("Comandante técnico e fisioterapeuta") @db.VarChar(128)
+  coachAvatar            String   @default("🎽") @db.VarChar(512)
+  coachAccent            String   @default("var(--gold)") @db.VarChar(32)
+  coachPerks             Json     @default("[{\"icon\":\"⚡\",\"text\":\"Ativa a recuperação passiva de stamina no CT ({recoveryPerHour}+ por hora).\"},{\"icon\":\"⚠\",\"text\":\"Cobra {miningFeePct}% sobre cada coleta de mineração/farm enquanto contratado.\"}]")
+  coachStaminaRecoveryPerHour Int @default(24)
+  dailyRestStamina            Int @default(100)
+  matchStaminaCost            Int @default(20)
+  matchCooldownSec            Int @default(60)
+  trainingStaminaCost         Int @default(8)
+  specialStaminaCost          Int @default(5)
+  marketplaceFeeBps      Int      @default(1000)
+  mergeDiscountPct       Decimal  @default(0) @db.Decimal(5,4)
+  scoutDiscountPct       Decimal  @default(0) @db.Decimal(5,4)
+  scoutRarityWeights     Json     @default("{\"common\":50,\"uncommon\":30,\"rare\":10,\"super-rare\":6,\"epic\":3,\"legendary\":1}")
+  passRankConfig         Json     @default("[{\"rank\":\"bronze\",\"minLevel\":1,\"maxLevel\":10,\"bonusPct\":0},{\"rank\":\"prata\",\"minLevel\":11,\"maxLevel\":25,\"bonusPct\":0.05},{\"rank\":\"ouro\",\"minLevel\":26,\"maxLevel\":50,\"bonusPct\":0.1},{\"rank\":\"diamante\",\"minLevel\":51,\"maxLevel\":80,\"bonusPct\":0.15},{\"rank\":\"lendario\",\"minLevel\":81,\"maxLevel\":100,\"bonusPct\":0.2}]")
+  referralNftName         String   @default("Craque Indicação") @db.VarChar(64)
+  referralNftImageUrl     String?  @db.VarChar(512)
+  referralNftOverwall     Int      @default(100)
+  referralNftPosition     Int      @default(2)
+  referralNftDurationDays Int      @default(30)
+  referralGiftNftName     String   @default("Craque Indicação") @db.VarChar(64)
+  referralGiftNftImageUrl String?  @db.VarChar(512)
+  referralGiftNftOverwall Int      @default(100)
+  referralGiftNftPosition Int      @default(2)
+  socialRewardNftName     String   @default("Craque Criador") @db.VarChar(64)
+  socialRewardNftImageUrl String?  @db.VarChar(512)
+  socialRewardNftOverwall Int      @default(100)
+  socialRewardNftPosition Int      @default(2)
+  socialRewardNftDays     Int      @default(30)
+  checkInStreakPlayerName     String   @default("Comum 1") @db.VarChar(64)
+  checkInStreakPlayerImageUrl String?  @db.VarChar(512)
+  checkInStreakPlayerOverwall Int      @default(5)
+  checkInStreakPlayerPosition Int      @default(0)
+  checkInStreakPlayerDays     Int      @default(30)
+  checkInStreakThreshold      Int      @default(7)
+  allocationJson         Json     @default("[{\"label\":\"Saques de jogadores\",\"pct\":83,\"color\":\"#22c55e\"},{\"label\":\"Bônus de indicação\",\"pct\":5,\"color\":\"#a78bfa\"},{\"label\":\"Coaches & mineração\",\"pct\":2,\"color\":\"#38bdf8\"},{\"label\":\"Taxa de marketplace\",\"pct\":10,\"color\":\"#fb923c\"}]")
+  updatedBy              String?  @db.VarChar(64)
+  updatedAt              DateTime @updatedAt
+}
+
+model MiningBlock {
+  id               String   @id @default(uuid())
+  blockNumber      BigInt   @unique
+  minedAt          DateTime @default(now())
+  totalOverwall    BigInt
+  rewardUsdc       Decimal  @db.Decimal(36, 6)
+  residualUsdt     Decimal  @default(0) @db.Decimal(36, 6)
+  participantCount Int
+
+  rewards MiningReward[]
+
+  @@index([minedAt])
+}
+
+model MiningReward {
+  id               String      @id @default(uuid())
+  blockId          String
+  block            MiningBlock @relation(fields: [blockId], references: [id], onDelete: Cascade)
+  userId           String
+  user             User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  overwallSnapshot Int
+  share            Decimal     @db.Decimal(20, 18)
+  amountUsdc       Decimal     @db.Decimal(36, 6)          // valor do bloco (moeda em `currency`)
+  currency         String      @default("usdt") @db.VarChar(8) // usdt (padrão a partir de 01/08/2026) | usdc (legado)
+  createdAt        DateTime    @default(now())
+
+  @@unique([blockId, userId])
+  @@index([userId, createdAt])
+}
+
+model MiningBalance {
+  userId         String   @id
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  pending        Decimal  @default(0) @db.Decimal(36, 6)
+  lifetimeEarned Decimal  @default(0) @db.Decimal(36, 6)
+  updatedAt      DateTime @updatedAt
+}
+
+model SiteAnnouncement {
+  id          String    @id @default(uuid())
+  title       String    @db.VarChar(120)
+  body        String    @db.Text
+  active      Boolean   @default(false)
+  dismissible Boolean   @default(true)
+  startsAt    DateTime?
+  endsAt      DateTime?
+  createdBy   String    @db.VarChar(64)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  dismissals UserAnnouncementDismissal[]
+
+  @@index([active, startsAt])
+}
+
+model UserAnnouncementDismissal {
+  userId         String
+  announcementId String
+  dismissedAt    DateTime @default(now())
+
+  user         User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  announcement SiteAnnouncement @relation(fields: [announcementId], references: [id], onDelete: Cascade)
+
+  @@id([userId, announcementId])
+}
+
+model SupportTicket {
+  id                   String   @id @default(uuid())
+  userId               String
+  user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subject              String   @db.VarChar(200)
+  category             String   @default("general") @db.VarChar(32)
+  status               String   @default("open") @db.VarChar(16)
+  priority             String   @default("normal") @db.VarChar(16)
+  assignedTo           String?  @db.VarChar(64)
+  // True after an admin reply until the user opens the ticket.
+  hasUnreadAdminReply  Boolean  @default(false)
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  messages SupportMessage[]
+
+  @@index([status, createdAt])
+  @@index([userId, createdAt])
+  @@index([userId, hasUnreadAdminReply])
+}
+
+model SupportMessage {
+  id         String        @id @default(uuid())
+  ticketId   String
+  ticket     SupportTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  authorType String        @db.VarChar(8)
+  authorId   String        @db.VarChar(64)
+  body       String        @db.Text
+  createdAt  DateTime      @default(now())
+
+  attachments SupportAttachment[]
+
+  @@index([ticketId, createdAt])
+}
+
+model SupportAttachment {
+  id         String         @id @default(uuid())
+  messageId  String
+  message    SupportMessage @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  storageKey String         @db.VarChar(128)
+  mimeType   String         @db.VarChar(32)
+  sizeBytes  Int
+  width      Int
+  height     Int
+  createdAt  DateTime       @default(now())
+
+  @@index([messageId])
+}
+
+model YoutubeCreator {
+  id              String   @id @default(uuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  channelName     String   @db.VarChar(64)
+  channelUrl      String   @db.VarChar(255)
+  description     String   @db.VarChar(512)
+  photoUrl        String   @db.VarChar(512)
+  status          String   @default("pending") @db.VarChar(16)
+  rejectionReason String?  @db.VarChar(512)
+  reviewedBy      String?  @db.VarChar(64)
+  reviewedAt      DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  videos YoutubeVideo[]
+
+  @@index([status, createdAt])
+}
+
+model YoutubeVideo {
+  id              String         @id @default(uuid())
+  creatorId       String
+  creator         YoutubeCreator @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  videoUrl        String         @db.VarChar(255)
+  videoId         String         @db.VarChar(16)
+  status          String         @default("pending") @db.VarChar(16)
+  weekStart       DateTime       @db.Date
+  rejectionReason String?        @db.VarChar(512)
+  reviewedBy      String?        @db.VarChar(64)
+  reviewedAt      DateTime?
+  nftGrantedAt    DateTime?
+  createdAt       DateTime       @default(now())
+
+  @@unique([creatorId, videoId])
+  @@index([creatorId, weekStart])
+  @@index([status, createdAt])
+}
+
+model AdminPermissionConfig {
+  adminId     String   @id @db.VarChar(64)
+  permissions String[]
+  updatedBy   String?  @db.VarChar(64)
+  updatedAt   DateTime @updatedAt
+}
+
+model BlogPost {
+  id           String    @id @default(uuid())
+  slug         String    @unique @db.VarChar(160)
+  title        String    @db.VarChar(200)
+  excerpt      String    @db.VarChar(500)
+  content      String    @db.Text
+  coverImage   String?   @db.VarChar(512)
+  tags         String[]
+  published    Boolean   @default(false)
+  publishedAt  DateTime?
+  createdBy    String    @db.VarChar(64)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@index([published, publishedAt(sort: Desc)])
+  @@index([slug])
+}
+
+model TransparencySection {
+  id        String   @id @default(uuid())
+  title     String   @db.VarChar(200)
+  body      String   @db.Text
+  imageUrl  String?  @db.VarChar(512)
+  order     Int      @default(0)
+  visible   Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([order])
+}
+
+model FinancialRecord {
+  id              String   @id @default(uuid())
+  type            String   @db.VarChar(16)  // 'receita' | 'despesa'
+  label           String   @db.VarChar(200)
+  description     String?  @db.Text
+  amount          Decimal  @db.Decimal(18, 2)
+  currency        String   @default("usdc") @db.VarChar(8)
+  recurring       Boolean  @default(false)
+  recurringPeriod String?  @db.VarChar(16)  // 'monthly' | 'yearly' | null
+  source          String?  @db.VarChar(200)
+  referenceUrl    String?  @db.VarChar(1024)
+  imageUrl        String?  @db.VarChar(512)
+  date            DateTime @default(now())
+  visible         Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([type, date])
+  @@index([visible, date])
+}
+
+model Notice {
+  id               String   @id @default(uuid())
+  title            String   @db.VarChar(200)
+  body             String   @db.Text
+  category         String   @db.VarChar(20)
+  priority         String   @default("normal") @db.VarChar(16)
+  imageUrl         String?  @db.VarChar(512)
+  active           Boolean  @default(true)
+  showAsPopup      Boolean  @default(false)
+  /// When true, popup can reappear once per calendar day (local) after dismiss.
+  popupRepeatDaily Boolean  @default(false)
+  startsAt         DateTime?
+  endsAt           DateTime?
+  createdBy        String?  @db.VarChar(64)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([active, createdAt])
+  @@index([category])
+  @@index([showAsPopup, active])
+}
+
+/// Timed event campaign (independent from battle pass).
+model EventCampaign {
+  id        String   @id @default(uuid())
+  slug      String   @unique @db.VarChar(64)
+  title     String   @db.VarChar(200)
+  body      String   @db.Text
+  imageUrl  String?  @db.VarChar(512)
+  startsAt  DateTime
+  endsAt    DateTime
+  active    Boolean  @default(true)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  quests QuestDefinition[]
+
+  @@index([active, startsAt, endsAt])
+  @@index([sortOrder])
+}
+
+/// Quest / task / achievement definition (admin-configurable).
+model QuestDefinition {
+  id                    String    @id @default(uuid())
+  kind                  String    @db.VarChar(32) // event_task | daily_task | weekly_task | achievement
+  campaignId            String?
+  campaign              EventCampaign? @relation(fields: [campaignId], references: [id], onDelete: SetNull)
+  title                 String    @db.VarChar(200)
+  description           String    @db.Text
+  trigger               String    @db.VarChar(64)
+  target                Int       @default(1)
+  rewards               Json
+  active                Boolean   @default(true)
+  startsAt              DateTime?
+  endsAt                DateTime?
+  maxClaimsPerUser      Int       @default(1)
+  maxGlobalClaims       Int?
+  requireEmailVerified  Boolean   @default(true)
+  period                String    @default("none") @db.VarChar(16) // none | daily | weekly
+  sortOrder             Int       @default(0)
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  progress QuestProgress[]
+  claims   QuestClaim[]
+  logs     QuestClaimLog[]
+
+  @@index([active, kind, sortOrder])
+  @@index([trigger, active])
+  @@index([campaignId])
+}
+
+model QuestProgress {
+  id          String    @id @default(uuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  questId     String
+  quest       QuestDefinition @relation(fields: [questId], references: [id], onDelete: Cascade)
+  periodKey   String    @db.VarChar(32)
+  count       Int       @default(0)
+  target      Int
+  completedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@unique([userId, questId, periodKey])
+  @@index([userId, questId])
+}
+
+model QuestClaim {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  questId   String
+  quest     QuestDefinition @relation(fields: [questId], references: [id], onDelete: Cascade)
+  periodKey String   @db.VarChar(32)
+  claimedAt DateTime @default(now())
+
+  @@unique([userId, questId, periodKey])
+  @@index([questId, claimedAt])
+}
+
+model QuestClaimLog {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  questId   String
+  quest     QuestDefinition @relation(fields: [questId], references: [id], onDelete: Cascade)
+  periodKey String   @db.VarChar(32)
+  rewards   Json
+  ip        String?  @db.VarChar(64)
+  userAgent String?  @db.VarChar(512)
+  createdAt DateTime @default(now())
+
+  @@index([questId, createdAt])
+  @@index([userId, createdAt])
+}
+
+model EventBadge {
+  id        String   @id @default(uuid())
+  code      String   @unique @db.VarChar(64)
+  title     String   @db.VarChar(120)
+  iconUrl   String?  @db.VarChar(512)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users UserBadge[]
+}
+
+model UserBadge {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  badgeId    String
+  badge      EventBadge @relation(fields: [badgeId], references: [id], onDelete: Cascade)
+  unlockedAt DateTime @default(now())
+
+  @@unique([userId, badgeId])
+  @@index([userId])
+}
+
+/// Temporary overwall from event/quest rewards (not check-in).
+model EventOverwallGrant {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  questId   String
+  periodKey String   @db.VarChar(32)
+  lineIndex Int
+  amount    Int
+  grantedAt DateTime @default(now())
+  expiresAt DateTime
+
+  @@unique([userId, questId, periodKey, lineIndex])
+  @@index([userId, expiresAt])
+  @@index([expiresAt])
+}
+
+/// Soft-trigger cooldown (e.g. market_visit once per UTC day).
+model EventTriggerCooldown {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  trigger   String   @db.VarChar(64)
+  dayKey    String   @db.VarChar(10)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, trigger, dayKey])
+  @@index([userId, trigger])
+}
+
+/// Almoxarifado — área de recebimento de itens comprados no mercado e recebidos de tasks.
+/// O jogador resgata (claim) o item para movê-lo ao inventário principal.
+model WarehouseItem {
+  id          String    @id @default(uuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  itemType    String    @db.VarChar(32) // player_card | consumable | stamina_boost | gmt_pack | scout_ticket
+  name        String    @db.VarChar(128)
+  description String?   @db.VarChar(512)
+  imageUrl    String?   @db.VarChar(512)
+  rarity      Int       @default(0)
+  quantity    Int       @default(1)
+  data        Json      @default("{}")
+  source      String    @db.VarChar(32) // marketplace | quest_reward | checkin | admin | offerwall
+  sourceRef   String?   @db.VarChar(128)
+  claimed     Boolean   @default(false)
+  claimedAt   DateTime?
+  expiresAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([userId, claimed])
+  @@index([userId, source])
+  @@index([expiresAt])
+}
+
+/// Recompensas de offerwall (Zerads) creditadas ao usuário.
+model OfferwallReward {
+  id           String    @id @default(uuid())
+  userId       String
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  provider     String    @db.VarChar(32) // zerads
+  transactionId String   @unique @db.VarChar(128)
+  amount       Decimal   @db.Decimal(18, 6)
+  currency     String    @db.VarChar(8) // GMT | USDC
+  status       String    @default("completed") @db.VarChar(16) // completed | reversed
+  userIp       String?   @db.VarChar(45)
+  callbackRaw  Json?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@index([userId, provider])
+  @@index([transactionId])
+}
+
+/// Log bruto de cada callback PTC do Zerads (~5 min) — guarda o `clicks` real que eles
+/// enviam, separado do EventOverwallGrant (que só cuida do crédito de Overwall).
+model ZeradsPtcCallback {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  periodKey  String   @db.VarChar(32)
+  zerAmount  Decimal  @db.Decimal(18, 6)
+  clicks     Int      @default(0)
+  overwall   Int      @default(0)
+  createdAt  DateTime @default(now())
+
+  @@unique([userId, periodKey])
+  @@index([userId, createdAt])
+}

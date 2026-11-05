@@ -1,0 +1,80 @@
+{
+  "title": "SCOUT",
+  "subtitle": "Recruit new legendary athletes for your club",
+  "pack": "ATHLETE PACK",
+  "packDesc": "Each scout = 1 random athlete",
+  "info": {
+    "price": "PRICE",
+    "rarities": "RARITIES",
+    "fiveTypes": "5 TYPES",
+    "legendary": "LEGENDARY"
+  },
+  "quantity": "QUANTITY",
+  "total": "TOTAL",
+  "from": "from",
+  "mint_one": "SCOUT {{count}} ATHLETE",
+  "mint_other": "SCOUT {{count}} ATHLETEs",
+  "revealing": "REVEALING...",
+  "chances": "CHANCES",
+  "overwallTitle": "OVERWALL",
+  "overwall": "OVERWALL",
+  "staminaTitle": "STAMINA",
+  "staminaHint": "The rarer the player, the more stamina they use per hour on the pitch.",
+  "recruited": "ATHLETES RECRUITED!",
+  "rulesTitle": "RULES",
+  "rules": {
+    "attributes": "Attributes are rolled inside the OVERWALL band of the drawn rarity.",
+    "lateral": "{{pct}}% chance the position becomes LAT.",
+    "payment": "Each card costs 1 GMT, any rarity. No refund.",
+    "inventory": "The card enters your inventory as a base player."
+  },
+  "confirm": {
+    "title": "CONFIRM MINT",
+    "cost": "COST",
+    "pay": "PAY AND MINT",
+    "cancel": "CANCEL"
+  },
+  "attrs": {
+    "ataque": "Attack",
+    "defesa": "Defense",
+    "passe": "Passing",
+    "velocidade": "Speed",
+    "finalizacao": "Finishing",
+    "forca": "Strength",
+    "resistencia": "Endurance",
+    "tecnica": "Technique",
+    "inteligencia": "Intelligence",
+    "goleiro": "Goalkeeping"
+  },
+  "stamina": "STAMINA",
+  "scoutAnimation": {
+    "searching": "SCOUT IN FLIGHT...",
+    "flight": "FLIGHT {{current}} OF {{total}}",
+    "landing": "ATHLETE FOUND!",
+    "landing_many": "{{count}} ATHLETES RECRUITED!",
+    "revealTitle": "REVEAL",
+    "revealSubtitle": "A new talent joins your club",
+    "continue": "CONTINUE",
+    "skip": "SKIP",
+    "skipOpen": "SKIP AND OPEN ALL",
+    "skipOpening": "OPENING...",
+    "retry": "TRY AGAIN",
+    "close": "CLOSE",
+    "emailHint": "Open the verification link sent to your email, then try again."
+  },
+  "emailVerificationRequired": "Verify your email to mint athletes. Check your inbox.",
+  "rarities": {
+    "common": "COMMON",
+    "rare": "RARE",
+    "super-rare": "SUPER RARE",
+    "epic": "EPIC",
+    "legendary": "LEGENDARY",
+    "mythic": "EXTRA",
+    "commonShort": "COMMON",
+    "rareShort": "RARE",
+    "superRareShort": "S.RARE",
+    "epicShort": "EPIC",
+    "legendaryShort": "LEGENDARY",
+    "mythicShort": "EXTRA"
+  }
+}
