@@ -19,6 +19,8 @@ coverage/
 .env.admin.literal
 *.bak.*
 vm-credentials.txt
+suporte-admin.txt
+zerads-ptc.txt
 
 # IDE
 .vscode/
