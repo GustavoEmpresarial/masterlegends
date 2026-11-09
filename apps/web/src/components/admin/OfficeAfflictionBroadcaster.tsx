@@ -198,8 +198,7 @@ export function OfficeAfflictionBroadcaster() {
         </h2>
         <p className="text-sm text-slate-400 leading-relaxed max-w-3xl">
           Indisposições e eventos catastróficos no Treinador / Tesoureiro. Enquanto ativos, o staff
-          <strong className="text-slate-300"> não cumpre funções passivas</strong> — o jogador
-          precisa usar minigames. Cada aplicação dispara alerta no Telegram.
+          <strong className="text-slate-300"> não cumpre funções passivas</strong>. Cada aplicação dispara alerta no Telegram.
         </p>
       </header>
 

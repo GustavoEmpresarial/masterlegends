@@ -180,8 +180,6 @@ export function App() {
         </Route>
         <Route element={<AreaShell area="ct" />}>
           <Route path="club/ct" element={<ProtectedRoute><CtPage /></ProtectedRoute>} />
-          <Route path="minigames" element={<Navigate to="/club/ct" replace />} />
-          <Route path="minigames/penalty" element={<Navigate to="/club/ct" replace />} />
         </Route>
         <Route element={<AreaShell area="mercado" />}>
           <Route path="club/shop" element={<ProtectedRoute><ShopPage /></ProtectedRoute>} />

@@ -27,8 +27,8 @@ describe('scout economy', () => {
     });
   });
 
-  it('cobra 1 GMT no mint e a tabela no marketplace', () => {
-    expect(SCOUT_COST_GMT).toBe(1);
+  it('cobra 0.25 GMT no mint e a tabela no marketplace', () => {
+    expect(SCOUT_COST_GMT).toBe(0.25);
     expect(mintGmtForRarityIndex(0)).toBe(0.25);
     expect(mintGmtForRarityIndex(1)).toBe(1.25);
     expect(mintGmtForRarityIndex(2)).toBe(6.35);
@@ -43,11 +43,11 @@ describe('scout economy', () => {
       epic: 156.25,
       legendary: 750,
     });
-    expect(careerCostBasisForRarity(5, SCOUT_COST_GMT, 0)).toBe(1);
-    expect(careerCostBasisForRarity(1, SCOUT_COST_GMT, 1.8)).toBe(2.8);
+    expect(careerCostBasisForRarity(5, SCOUT_COST_GMT, 0)).toBe(0.25);
+    expect(careerCostBasisForRarity(1, SCOUT_COST_GMT, 1.8)).toBe(2.05);
     const rules = buildScoutRules();
-    expect(rules.rarities.map((rule) => rule.mintCostGmt)).toEqual([1, 1, 1, 1, 1, 1]);
-    expect(rules.effectiveCostUsdc).toBe(1);
+    expect(rules.rarities.map((rule) => rule.mintCostGmt)).toEqual([0.25, 0.25, 0.25, 0.25, 0.25, 0.25]);
+    expect(rules.effectiveCostUsdc).toBe(0.25);
   });
 
   it('buildScoutRules exposes the renormalized legendary chance', () => {

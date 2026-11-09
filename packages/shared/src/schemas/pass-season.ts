@@ -12,7 +12,6 @@ export const passMissionEventSchema = z.enum([
   'pvp_match_played',
   'pvp_match_won',
   'pvp_goals',
-  'penalty_goals',
   'tournament_knockout',
   'evolve_player',
   'trade_player',
@@ -31,9 +30,7 @@ function validateCatalogReward(value: { rewardType: string; rewardItemId?: strin
   }
 }
 
-export const passLevelConfigSchema = z.object({
-  level: z.number().int().min(1).max(100),
-  xpRequired: z.number().int().min(0),
+export const passRewardBodySchema = z.object({
   rewardType: passRewardTypeSchema,
   rewardLabel: z.string().min(1).max(128),
   usdcAmount: z.number().nonnegative().optional(),
@@ -42,6 +39,13 @@ export const passLevelConfigSchema = z.object({
   quantity: z.number().int().min(1).max(100).optional(),
   rewardImageUrl: z.string().max(512).nullable().optional(),
 }).superRefine(validateCatalogReward);
+
+export const passLevelConfigSchema = passRewardBodySchema.extend({
+  level: z.number().int().min(1).max(100),
+  xpRequired: z.number().int().min(0),
+  /** Paid column. The fields above are the free column. */
+  goldReward: passRewardBodySchema.optional(),
+});
 
 export const passMissionConfigSchema = z.object({
   id: z.string().min(1).max(32),

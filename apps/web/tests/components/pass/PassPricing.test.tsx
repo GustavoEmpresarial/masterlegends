@@ -7,6 +7,7 @@ import pt from '../../../src/i18n/locales/pt-BR/pass.json';
 const fixture=vi.hoisted(()=>({progress:{} as any,buy:vi.fn()}));
 vi.mock('../../../src/hooks/useApi',()=>({usePassProgress:()=>({data:fixture.progress,isLoading:false}),useClaimPassLevel:()=>({mutateAsync:vi.fn()}),useBuyPassPremium:()=>({mutateAsync:fixture.buy,isPending:false}),useWalletSummary:()=>({data:{gmtBalance:1000}})}));
 vi.mock('../../../src/lib/apiError',()=>({translateError:()=> 'Erro'}));
+vi.mock('../../../src/app/pass/passMaintenance', () => ({ PASS_MAINTENANCE: false }));
 vi.mock('react-i18next',()=>({useTranslation:()=>({i18n:{language:'pt-BR'},t:translate})}));
 function translate(key:string,opts?:Record<string,unknown>){const value=key.replace('pass:','').split('.').reduce<any>((o,k)=>o?.[k],pt);return typeof value==='string'?value.replace(/\{\{(\w+)\}\}/g,(_,k)=>String(opts?.[k]??'')):key;}
 const pricing={currency:'GMT',basePriceGmt:99,discountGmt:20,priceGmt:79,completedLevels:20,totalLevels:20,completionPct:100,milestones:[25,50,75,100].map((percent,i)=>({completionPct:percent,requiredLevels:(i+1)*5,discountGmt:(i+1)*5,reached:true}))};
@@ -16,7 +17,7 @@ function renderPass(path = '/pass'){render(<MemoryRouter initialEntries={[path]}
 describe('Pass discounted purchase UI',()=>{
   it('uses the authoritative discounted price in the purchase button and shows the breakdown',()=>{
     renderPass();
-    const button=screen.getByRole('button',{name:'⭐ PREMIUM (79 GMT)'});
+    const button=screen.getByRole('button',{name:'⭐ COMPRAR PASSE DE OURO (79 GMT)'});
     expect(screen.getByRole('region',{name:'Desconto por progresso'})).toBeTruthy();
     expect(screen.getByText('99 GMT')).toBeTruthy();expect(screen.getAllByText('−20 GMT').length).toBeGreaterThan(0);
     expect(screen.getByText('20 de 20 níveis liberados (100%)')).toBeTruthy();
@@ -30,7 +31,7 @@ describe('Pass discounted purchase UI',()=>{
   });
   it('keeps the legacy base price while rolling out before the server provides the breakdown',()=>{
     fixture.progress.premiumPricing=undefined;renderPass();
-    expect(screen.getByRole('button',{name:'⭐ PREMIUM (99 GMT)'})).toBeTruthy();
+    expect(screen.getByRole('button',{name:'⭐ COMPRAR PASSE DE OURO (99 GMT)'})).toBeTruthy();
   });
   it('opens a chooser with one card per pass before the detail',()=>{
     const mini={...fixture.progress,seasonId:2,seasonName:'Mini passe Master',premiumPriceUsdc:29.9,premiumPricing:{...pricing,priceGmt:29.9,basePriceGmt:29.9}};

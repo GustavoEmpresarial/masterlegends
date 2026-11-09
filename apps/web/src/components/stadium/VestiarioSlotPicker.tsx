@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import type { InventoryPlayerDTO } from '@mll/shared';
@@ -74,7 +75,9 @@ export function VestiarioSlotPicker({
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [open, onClose]);
 
-  return (
+  if (typeof document === 'undefined') return null;
+
+  return createPortal(
     <AnimatePresence>
       {open && (
         <motion.div
@@ -82,7 +85,7 @@ export function VestiarioSlotPicker({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[98] flex items-end sm:items-center justify-center p-0 sm:p-4"
+          className="mobile-sheet flex items-end justify-center sm:items-center sm:p-4"
           style={{ background: 'rgba(0, 0, 0, 0.72)' }}
           onClick={onClose}
           role="dialog"
@@ -94,7 +97,7 @@ export function VestiarioSlotPicker({
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: '100%', opacity: 0.9 }}
             transition={{ type: 'spring', stiffness: 320, damping: 32 }}
-            className="w-full sm:max-w-md pixel-card rounded-t-lg sm:rounded-lg max-h-[min(85dvh,640px)] flex flex-col"
+            className="flex h-full min-h-0 w-full max-h-full flex-col pixel-card rounded-t-lg sm:h-auto sm:max-w-md sm:rounded-lg"
             style={{ borderColor: 'var(--blue)' }}
             onClick={(e) => e.stopPropagation()}
           >
@@ -124,7 +127,7 @@ export function VestiarioSlotPicker({
               </button>
             </div>
 
-            <div className="overflow-y-auto px-3 py-3 space-y-2 flex-1 min-h-0">
+            <div className="touch-scroll min-h-0 flex-1 space-y-2 overflow-y-auto px-3 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
               <p className="retro-text text-sm text-center" style={{ color: 'var(--gold)' }}>
                 {t('club:freeField.body')}
               </p>
@@ -154,7 +157,8 @@ export function VestiarioSlotPicker({
           </motion.div>
         </motion.div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body,
   );
 }
 

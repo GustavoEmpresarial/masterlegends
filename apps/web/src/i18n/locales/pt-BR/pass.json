@@ -10,11 +10,15 @@
   "xpRemaining": "Próximo nível: {{xp}} XP restantes",
   "passComplete": "Passe completo",
   "premium": "PREMIUM",
+  "buyGold": "COMPRAR PASSE DE OURO",
+  "goldColumn": "Passe de ouro",
+  "freeColumn": "Grátis",
+  "claimAll": "Resgatar tudo",
   "missions": "MISSÕES DIÁRIAS",
   "rewards": "RECOMPENSAS",
   "xpRequired": "{{xp}} XP necessário",
   "xpShort": "Faltam {{xp}} XP para coletar",
-  "premiumOpen": "Passe ativo. Os prêmios estão liberados para coletar.",
+  "premiumOpen": "Passe de ouro ativo. A coluna paga já pode ser coletada. O XP só deixa a compra mais barata.",
   "missionHint": "Complete a ação no jogo para ganhar XP",
   "inactiveTitle": "Nenhum passe ativo",
   "inactiveDescription": "Não há temporada de passe disponível no momento. Volte em breve!",
@@ -33,6 +37,6 @@
     "levels": "{{completed}} de {{total}} níveis liberados ({{percent}}%)",
     "milestones": "Marcos de desconto acumulado",
     "levelTarget": "Ao liberar {{count}} níveis",
-    "rewardHint": "O desconto acumulado reduz o valor cobrado na compra. As recompensas do passe são recebidas separadamente e não são descontadas novamente do preço."
+    "rewardHint": "O passe de ouro libera a coluna paga na hora da compra, sem precisar de XP. Conforme você junta XP, o preço para comprar fica mais barato."
   }
 }

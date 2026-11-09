@@ -22,7 +22,6 @@ export const EVENT_TYPE_OPTIONS: { value: PassMissionEvent; label: string }[] = 
   { value: 'pvp_match_played', label: 'Partida PvP jogada' },
   { value: 'pvp_match_won', label: 'Partida PvP vencida' },
   { value: 'pvp_goals', label: 'Gols em PvP' },
-  { value: 'penalty_goals', label: 'Gols no pênalti' },
   { value: 'tournament_knockout', label: 'Torneio / mata-mata' },
   { value: 'evolve_player', label: 'Evoluir jogador (merge)' },
   { value: 'trade_player', label: 'Negociar atleta' },

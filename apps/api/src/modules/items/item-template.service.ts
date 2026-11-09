@@ -164,9 +164,22 @@ export class ItemTemplateService {
   }
 
   async setActive(id: string, active: boolean): Promise<ItemTemplateDTO> {
-    const row = await this.prisma.itemTemplate.update({
-      where: { id },
-      data: { active },
+    const row = await this.prisma.$transaction(async (tx) => {
+      const updated = await tx.itemTemplate.update({
+        where: { id },
+        data: { active },
+      });
+      if (!active) {
+        await tx.listing.updateMany({
+          where: { active: true, basePlayer: { templateId: id } },
+          data: { active: false },
+        });
+        await tx.basePlayer.updateMany({
+          where: { templateId: id, listed: true },
+          data: { listed: false },
+        });
+      }
+      return updated;
     });
     return toDTO(row);
   }

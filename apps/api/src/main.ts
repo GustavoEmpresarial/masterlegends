@@ -5,10 +5,11 @@ import { setupSocketGateway } from './gateway/socket.js';
 import { TelegramService } from './modules/telegram/telegram.service.js';
 import { startTelegramPoller } from './modules/telegram/telegram.poller.js';
 import { repriceActivePlayerStakes } from './modules/player-stake/player-stake.service.js';
+import { runWithSystemContext } from './common/lib/prisma-context.js';
 
 async function main() {
   const app = await buildApp();
-  const reprice = await repriceActivePlayerStakes(app.prisma);
+  const reprice = await runWithSystemContext(() => repriceActivePlayerStakes(app.prisma));
   app.log.info(reprice, 'Active player stakes repriced to the current table');
   let stopTelegramPoller: (() => void) | undefined;
 

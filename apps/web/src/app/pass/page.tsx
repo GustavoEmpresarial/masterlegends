@@ -14,6 +14,7 @@ import {
 } from '../../hooks/useApi';
 import { translateError } from '../../lib/apiError';
 import { PageContentShell } from '../../components/content';
+import { PASS_MAINTENANCE } from './passMaintenance';
 
 const REWARD_ICONS: Record<string, string> = {
   usdc: 'bi-cash-stack',
@@ -47,10 +48,66 @@ const MISSION_ICONS: Record<string, string> = {
   marketSell: 'bi-cash-stack',
 };
 
+function RewardTile({
+  label,
+  imageUrl,
+  rewardType,
+  claimed,
+  locked,
+  pending,
+  claimLabel,
+  lockedLabel,
+  claimedLabel,
+  onClaim,
+}: {
+  label?: string | null;
+  imageUrl?: string | null;
+  rewardType?: string | null;
+  claimed: boolean;
+  locked: boolean;
+  pending: boolean;
+  claimLabel: string;
+  lockedLabel: string;
+  claimedLabel: string;
+  onClaim: () => void;
+}) {
+  if (!label) {
+    return <div className="pixel-box-light min-h-[7.5rem] opacity-40 sm:min-h-[9rem]" />;
+  }
+  return (
+    <div
+      className="pixel-box-light flex min-h-[7.5rem] items-center gap-3 p-3 sm:min-h-[9rem] sm:gap-4 sm:p-4"
+      style={{ borderColor: claimed ? 'var(--green)' : locked ? 'var(--bg-lighter)' : 'var(--gold)', opacity: locked ? 0.72 : 1 }}
+    >
+      <div className="flex h-20 w-20 shrink-0 items-center justify-center sm:h-28 sm:w-28">
+        {imageUrl ? (
+          <img src={resolveUploadUrl(imageUrl)} alt="" className="h-full w-full object-contain" />
+        ) : (
+          <i className={`bi ${REWARD_ICONS[rewardType ?? ''] ?? 'bi-gift-fill'} text-4xl sm:text-5xl`} style={{ color: REWARD_COLORS[rewardType ?? ''] ?? 'var(--gold)' }} aria-hidden />
+        )}
+      </div>
+      <div className="flex min-w-0 flex-1 flex-col items-start gap-2">
+        <span className="retro-text text-base leading-snug sm:text-xl" style={{ color: REWARD_COLORS[rewardType ?? ''] ?? 'var(--text-primary)' }}>{label}</span>
+        {claimed ? (
+          <span className="pixel-badge text-sm" style={{ color: 'var(--green)', borderColor: 'var(--green)' }}><i className="bi bi-check-lg" aria-hidden /> {claimedLabel}</span>
+        ) : locked ? (
+          <span className="pixel-badge text-sm" style={{ color: 'var(--text-muted)', borderColor: 'var(--text-muted)' }}><i className="bi bi-lock-fill" aria-hidden /> {lockedLabel}</span>
+        ) : (
+          <button type="button" className="pixel-btn pixel-btn-gold pixel-btn-md" disabled={pending} onClick={onClaim}>{claimLabel}</button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function isMiniPass(name: string | null | undefined): boolean {
+  return (name ?? '').toLowerCase().includes('mini');
+}
+
 function passCover(name: string | null | undefined): string | null {
   const n = (name ?? '').toLowerCase();
   if (n.includes('mini')) return '/ui/pass/mini.png?v=2';
-  if (n.includes('campeonato') || n.includes('legend')) return '/ui/pass/campeonato.png?v=2';
+  if (n.includes('campeonato') || n.includes('legend')) return '/ui/pass/campeonato.png?v=3';
   return null;
 }
 
@@ -102,10 +159,26 @@ export function PassPage() {
     );
   }
 
-  const handleClaim = async (seasonId: number, level: number) => {
+  const handleClaim = async (seasonId: number, level: number, track: 'free' | 'gold' = 'free') => {
     setError('');
     try {
-      await claimLevel.mutateAsync({ level, seasonId });
+      await claimLevel.mutateAsync({ level, seasonId, track });
+    } catch (err) {
+      setError(translateError(err, 'PASS_CLAIM_FAILED'));
+    }
+  };
+
+  const claimReady = async (board: PassProgressDTO) => {
+    setError('');
+    try {
+      for (const level of board.levels) {
+        if (level.goldRewardLabel && !level.goldLocked && !level.goldClaimed) {
+          await claimLevel.mutateAsync({ level: level.level, seasonId: board.seasonId ?? 0, track: 'gold' });
+        }
+        if (!level.locked && !level.claimed) {
+          await claimLevel.mutateAsync({ level: level.level, seasonId: board.seasonId ?? 0, track: 'free' });
+        }
+      }
     } catch (err) {
       setError(translateError(err, 'PASS_CLAIM_FAILED'));
     }
@@ -127,6 +200,31 @@ export function PassPage() {
   const requestedId = Number(seasonParam);
   const selected = boards.find((board) => board.seasonId === requestedId);
   const visibleBoards = selected ? [selected] : boards.length === 1 ? boards : [];
+  const championshipClosed = PASS_MAINTENANCE && visibleBoards.some((board) => !isMiniPass(board.seasonName));
+
+  if (championshipClosed) {
+    return (
+      <PageContentShell>
+        <div className="pixel-card mx-auto max-w-lg p-6 text-center sm:p-8">
+          <i className="bi bi-tools text-4xl" style={{ color: 'var(--gold)' }} aria-hidden />
+          <h1 className="pixel-text mt-4 text-xl sm:text-2xl" style={{ color: 'var(--gold)' }}>
+            PASSE EM MANUTENÇÃO
+          </h1>
+          <p className="retro-text mt-4 text-base" style={{ color: '#fff' }}>
+            O Campeonato está em manutenção. O Mini Passe está liberado.
+          </p>
+          {boards.some((board) => isMiniPass(board.seasonName)) && (
+            <Link
+              to={`/pass/${boards.find((board) => isMiniPass(board.seasonName))?.seasonId ?? ''}`}
+              className="pixel-btn pixel-btn-gold pixel-btn-sm mt-6 inline-flex"
+            >
+              Abrir o Mini Passe
+            </Link>
+          )}
+        </div>
+      </PageContentShell>
+    );
+  }
 
   if (boards.length > 1 && !selected) {
     return (
@@ -161,7 +259,7 @@ export function PassPage() {
               >
                 <div className="flex items-start justify-between gap-3 mb-4">
                   {cover && (
-                    <img src={cover} alt="" className="h-28 w-24 shrink-0 object-contain" draggable={false} />
+                    <img src={cover} alt="" className="h-36 w-32 shrink-0 object-contain" draggable={false} />
                   )}
                   <div className="min-w-0 flex-1">
                     <div className="pixel-text text-lg" style={{ color: 'var(--gold)' }}>
@@ -187,7 +285,7 @@ export function PassPage() {
                 </div>
                 <div className="flex items-center justify-between gap-3">
                   <span className="retro-text text-sm" style={{ color: 'var(--text-muted)' }}>
-                    {board.xp.toLocaleString()} / {maxXp.toLocaleString()} XP
+                    {board.xp.toLocaleString('pt-BR')} / {maxXp.toLocaleString('pt-BR')} XP
                   </span>
                   <span className="pixel-btn pixel-btn-gold pixel-btn-sm">{t('pass:openPass')}</span>
                 </div>
@@ -244,7 +342,7 @@ export function PassPage() {
         <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-6">
           <div className="flex items-center gap-4">
             {cover && (
-              <img src={cover} alt="" className="h-32 w-28 shrink-0 object-contain" draggable={false} />
+              <img src={cover} alt="" className="h-44 w-40 shrink-0 object-contain" draggable={false} />
             )}
             <div>
             <div className="pixel-text text-sm" style={{ color: 'var(--text-muted)' }}>
@@ -260,7 +358,7 @@ export function PassPage() {
               {t('pass:totalXp')}
             </div>
             <div className="pixel-text text-3xl" style={{ color: 'var(--gold)' }}>
-              {board.xp.toLocaleString()}
+              {board.xp.toLocaleString('pt-BR')}
             </div>
           </div>
         </div>
@@ -271,7 +369,7 @@ export function PassPage() {
               {t('pass:progress')}
             </span>
             <span className="retro-text text-sm" style={{ color: 'var(--gold)' }}>
-              {board.xp} / {maxXp} XP
+              {board.xp.toLocaleString('pt-BR')} / {maxXp.toLocaleString('pt-BR')} XP
             </span>
           </div>
           <div className="pixel-progress h-6">
@@ -303,7 +401,7 @@ export function PassPage() {
                 setConfirming(board);
               }}
             >
-              ⭐ {t('pass:premium')} ({premiumPriceGmt.toLocaleString(undefined, { maximumFractionDigits: 8 })} GMT)
+              ⭐ {t('pass:buyGold')} ({premiumPriceGmt.toLocaleString('pt-BR', { maximumFractionDigits: 2 })} GMT)
             </motion.button>
           )}
           {board.premium && (
@@ -366,97 +464,56 @@ export function PassPage() {
       </motion.div>
 
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-        <h2 className="pixel-text text-xl mb-4" style={{ color: 'var(--purple)' }}>
-          <i className="bi bi-trophy-fill" aria-hidden /> {t('pass:rewards')}
-        </h2>
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+          <h2 className="pixel-text text-xl" style={{ color: 'var(--purple)' }}>
+            <i className="bi bi-trophy-fill" aria-hidden /> {t('pass:rewards')}
+          </h2>
+          <button
+            type="button"
+            className="pixel-btn pixel-btn-green pixel-btn-sm"
+            disabled={claimLevel.isPending || !board.levels.some((level) => (!level.locked && !level.claimed) || (level.goldRewardLabel && !level.goldLocked && !level.goldClaimed))}
+            onClick={() => void claimReady(board)}
+          >
+            {t('pass:claimAll')}
+          </button>
+        </div>
+        <div className="mb-3 grid grid-cols-[1fr_4.5rem_1fr] items-center gap-3 px-1">
+          <p className="pixel-text text-center text-sm sm:text-lg" style={{ color: 'var(--gold)' }}>{t('pass:goldColumn')}</p>
+          <span />
+          <p className="pixel-text text-center text-sm sm:text-lg" style={{ color: 'var(--green)' }}>{t('pass:freeColumn')}</p>
+        </div>
         <div className="space-y-3">
-          {board.levels.map((level, index) => (
-            <motion.div
-              key={level.level}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: index * 0.05 }}
-              className="pixel-box-light p-4"
-              style={{
-                borderColor: level.claimed
-                  ? 'var(--green)'
-                  : level.locked
-                    ? 'var(--bg-lighter)'
-                    : 'var(--gold)',
-                opacity: level.locked ? 0.5 : 1,
-              }}
-            >
-              <div className="flex items-center gap-4 flex-wrap">
-                <div
-                  className="w-12 h-12 pixel-box flex items-center justify-center shrink-0"
-                  style={{
-                    borderColor: level.claimed ? 'var(--green)' : level.locked ? 'var(--bg-lighter)' : 'var(--gold)',
-                    background: level.claimed ? 'rgba(0, 255, 136, 0.1)' : 'var(--bg-dark)',
-                  }}
-                >
-                  {level.claimed ? (
-                    <span style={{ color: 'var(--green)' }}><i className="bi bi-check-lg" aria-hidden /></span>
-                  ) : (
-                    <span
-                      className="pixel-text text-sm"
-                      style={{ color: level.locked ? 'var(--text-muted)' : 'var(--gold)' }}
-                    >
-                      {level.level}
-                    </span>
-                  )}
-                </div>
-
-                <div className="flex-1 min-w-[120px]">
-                  <div className="pixel-text text-sm" style={{ color: 'var(--text-primary)' }}>
-                    {t('common:labels.level')} {level.level}
-                  </div>
-                  <div className="retro-text text-sm" style={{ color: 'var(--text-muted)' }}>
-                    {t('pass:xpRequired', { xp: level.xpRequired.toLocaleString() })}
-                    {level.locked && (
-                      <>
-                        {' · '}
-                        {t('pass:xpShort', { xp: Math.max(0, level.xpRequired - board.xp).toLocaleString() })}
-                      </>
-                    )}
-                  </div>
-                </div>
-
-                <div
-                  className="pixel-box p-2 flex items-center gap-2"
-                  style={{ borderColor: REWARD_COLORS[level.rewardType] ?? 'var(--gold)' }}
-                >
-                  {level.rewardImageUrl ? <img src={resolveUploadUrl(level.rewardImageUrl)} alt="" className="w-16 h-16 object-contain" /> : <i className={`bi ${REWARD_ICONS[level.rewardType] ?? 'bi-gift-fill'} text-xl`} aria-hidden />}
-                  <span
-                    className="retro-text text-sm"
-                    style={{ color: REWARD_COLORS[level.rewardType] ?? 'var(--gold)' }}
-                  >
-                    {level.rewardLabel}
-                  </span>
-                </div>
-
-                <div>
-                  {level.claimed ? (
-                    <span className="pixel-badge" style={{ color: 'var(--green)', borderColor: 'var(--green)' }}>
-                      <i className="bi bi-check-lg" aria-hidden /> {t('common:labels.status.claimed')}
-                    </span>
-                  ) : level.locked ? (
-                    <span className="pixel-badge" style={{ color: 'var(--text-muted)', borderColor: 'var(--text-muted)' }}>
-                      <i className="bi bi-lock-fill" aria-hidden /> {t('common:labels.status.locked')}
-                    </span>
-                  ) : (
-                    <motion.button
-                      className="pixel-btn pixel-btn-gold pixel-btn-sm"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      disabled={claimLevel.isPending}
-                      onClick={() => handleClaim(board.seasonId ?? 0, level.level)}
-                    >
-                      {t('common:actions.claim')}
-                    </motion.button>
-                  )}
-                </div>
+          {board.levels.map((level) => (
+            <div key={level.level} className="grid grid-cols-[1fr_4.5rem_1fr] items-stretch gap-3">
+              <RewardTile
+                label={level.goldRewardLabel}
+                imageUrl={level.goldRewardImageUrl}
+                rewardType={level.goldRewardType}
+                claimed={Boolean(level.goldClaimed)}
+                locked={level.goldLocked !== false}
+                pending={claimLevel.isPending}
+                claimLabel={t('common:actions.claim')}
+                lockedLabel={t('common:labels.status.locked')}
+                claimedLabel={t('common:labels.status.claimed')}
+                onClaim={() => void handleClaim(board.seasonId ?? 0, level.level, 'gold')}
+              />
+              <div className="flex flex-col items-center justify-center">
+                <span className="pixel-text text-2xl" style={{ color: level.locked && level.goldLocked !== false ? 'var(--text-muted)' : 'var(--gold)' }}>{level.level}</span>
+                <span className="retro-text text-center text-xs leading-tight sm:text-sm" style={{ color: 'var(--text-muted)' }}>{level.xpRequired.toLocaleString('pt-BR')}</span>
               </div>
-            </motion.div>
+              <RewardTile
+                label={level.rewardLabel}
+                imageUrl={level.rewardImageUrl}
+                rewardType={level.rewardType}
+                claimed={level.claimed}
+                locked={level.locked}
+                pending={claimLevel.isPending}
+                claimLabel={t('common:actions.claim')}
+                lockedLabel={t('common:labels.status.locked')}
+                claimedLabel={t('common:labels.status.claimed')}
+                onClaim={() => void handleClaim(board.seasonId ?? 0, level.level, 'free')}
+              />
+            </div>
           ))}
         </div>
       </motion.div>

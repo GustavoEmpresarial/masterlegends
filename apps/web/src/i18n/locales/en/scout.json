@@ -25,7 +25,7 @@
   "rules": {
     "attributes": "Attributes are rolled inside the OVERWALL band of the drawn rarity.",
     "lateral": "{{pct}}% chance the position becomes LAT.",
-    "payment": "Each card costs 1 GMT, any rarity. No refund.",
+    "payment": "Each card costs 0.25 GMT, any rarity. No refund.",
     "inventory": "The card enters your inventory as a base player."
   },
   "confirm": {

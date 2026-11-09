@@ -179,7 +179,7 @@ export function SeasonEditor({
           </h2>
           <p className="text-xs text-slate-500 mt-0.5">
             {levels.length} níveis · {missions.length} missões · {rewardBlocks.length} blocos · XP máx{' '}
-            {totalXpSpan(levels)}
+            {totalXpSpan(levels).toLocaleString('pt-BR')}
           </p>
         </div>
         <div className="flex flex-wrap gap-1.5">

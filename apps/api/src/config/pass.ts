@@ -37,7 +37,7 @@ export const DEFAULT_PASS_MISSIONS: PassMissionConfigDTO[] = [
   { id: 'd_market', label: 'Visitar o mercado', xp: 10, target: 1, category: 'daily', difficulty: 'easy', eventType: 'market_visit' },
   // ===== DAILY MEDIUM (15 XP) =====
   { id: 'd_pvp1', label: 'Disputar 1 partida', xp: 15, target: 1, category: 'daily', difficulty: 'medium', eventType: 'pvp_match_played' },
-  { id: 'd_pen3', label: 'Marcar 3 gols no pênalti', xp: 15, target: 3, category: 'daily', difficulty: 'medium', eventType: 'penalty_goals' },
+  { id: 'd_pen3', label: 'Negociar 1 atleta', xp: 15, target: 1, category: 'daily', difficulty: 'medium', eventType: 'trade_player' },
   { id: 'd_win1', label: 'Vencer 1 partida', xp: 15, target: 1, category: 'daily', difficulty: 'medium', eventType: 'pvp_match_won' },
   { id: 'd_train3', label: 'Completar 3 treinamentos', xp: 15, target: 3, category: 'daily', difficulty: 'medium', eventType: 'training' },
   // ===== DAILY HARD (20 XP) =====

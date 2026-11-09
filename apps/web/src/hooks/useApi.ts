@@ -9,8 +9,6 @@ import type {
   ScoutMintResponse,
   ScoutRulesDTO,
   ScoutPlayerDTO,
-  PenaltyStartResultDTO,
-  PenaltyShootResultDTO,
   StadiumShopBuyResultDTO,
   StadiumShopItemDTO,
   StadiumViewDTO,
@@ -18,8 +16,6 @@ import type {
   CheckInStatusDTO,
   CheckInClaimResultDTO,
   CtViewDTO,
-  MinigamesCatalogDTO,
-  MinigamePlayResultDTO,
   MergeRulesDTO,
   MergeResultDTO,
   PlayerProfileDTO,
@@ -444,53 +440,6 @@ export function useUnequipGear() {
   });
 }
 
-export function useMinigames() {
-  const { user } = useAuth();
-  return useQuery({
-    queryKey: ['minigames', user?.id],
-    queryFn: () => getJson<MinigamesCatalogDTO>('/api/minigames'),
-    enabled: !!user,
-  });
-}
-
-export function usePenaltyStart() {
-  return useMutation({
-    mutationFn: (input: { playerId: string; kind: 'base' | 'nft' }) =>
-      postJson<PenaltyStartResultDTO>('/api/minigames/recovery_penalty/start', input),
-  });
-}
-
-export function usePenaltyShoot() {
-  return useMutation({
-    mutationFn: (input: { sessionId: string; nx: number; ny: number }) =>
-      postJson<PenaltyShootResultDTO>('/api/minigames/recovery_penalty/shoot', input),
-  });
-}
-
-export function usePlayMinigame() {
-  const queryClient = useQueryClient();
-  const { user } = useAuth();
-  return useMutation({
-    mutationFn: (input: {
-      id: string;
-      playerId: string;
-      kind: 'base' | 'nft';
-      sessionId: string;
-    }) =>
-      postJson<MinigamePlayResultDTO>(`/api/minigames/${input.id}/play`, {
-        playerId: input.playerId,
-        kind: input.kind,
-        sessionId: input.sessionId,
-      }),
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ['minigames', user?.id] });
-      void queryClient.invalidateQueries({ queryKey: ['vestiario', user?.id] });
-      void queryClient.invalidateQueries({ queryKey: ['inventory', user?.id] });
-      void queryClient.invalidateQueries({ queryKey: ['ct', user?.id] });
-    },
-  });
-}
-
 // Marketplace
 export function useListings(filters?: Record<string, unknown>) {
   const queryClient = useQueryClient();
@@ -679,10 +628,11 @@ export function usePassProgress() {
 export function useClaimPassLevel() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (input: number | { level: number; seasonId?: number }) => {
+    mutationFn: (input: number | { level: number; seasonId?: number; track?: 'free' | 'gold' }) => {
       const level = typeof input === 'number' ? input : input.level;
       const seasonId = typeof input === 'number' ? undefined : input.seasonId;
-      return postJson<PassProgressDTO>(`/api/pass/claim/${level}`, seasonId == null ? {} : { seasonId });
+      const track = typeof input === 'number' ? 'free' : input.track ?? 'free';
+      return postJson<PassProgressDTO>(`/api/pass/claim/${level}`, { ...(seasonId == null ? {} : { seasonId }), track });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['pass'] });

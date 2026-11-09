@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { MERGE_LADDER, SCOUT_COST_GMT, SCOUT_RARITY_ORDER, SCOUT_RARITY_WEIGHTS, type PlatformConfigDTO, type ItemTemplateDTO, type ScoutRarityId } from '@mll/shared';
+import { MERGE_LADDER, SCOUT_RARITY_ORDER, SCOUT_RARITY_WEIGHTS, type PlatformConfigDTO, type ItemTemplateDTO, type ScoutRarityId } from '@mll/shared';
 import { adminClient } from '../../../lib/api/adminClient';
 import { AdminButton, AdminInput, AdminPageHeader } from '../../../components/admin/AdminTable';
 
@@ -243,6 +243,7 @@ export function AdminSettingsPage() {
     checkInStreakPlayerDays: 30, checkInStreakThreshold: 7,
     mergeDiscountPct: 0,
     scoutDiscountPct: 0,
+    scoutCostGmt: 0.25,
     scoutRarityWeights: { ...SCOUT_RARITY_WEIGHTS },
   });
   const [allocation, setAllocation] = useState<AllocationSlice[]>([
@@ -287,6 +288,7 @@ export function AdminSettingsPage() {
         checkInStreakThreshold: res.data.checkInStreakThreshold ?? 7,
         mergeDiscountPct: res.data.mergeDiscountPct ?? 0,
         scoutDiscountPct: res.data.scoutDiscountPct ?? 0,
+        scoutCostGmt: res.data.scoutCostGmt ?? 0.25,
         scoutRarityWeights: res.data.scoutRarityWeights ?? { ...SCOUT_RARITY_WEIGHTS },
       });
       if (res.data.allocationJson?.length) {
@@ -330,6 +332,7 @@ export function AdminSettingsPage() {
         checkInStreakThreshold: form.checkInStreakThreshold,
         mergeDiscountPct: form.mergeDiscountPct,
         scoutDiscountPct: form.scoutDiscountPct,
+        scoutCostGmt: form.scoutCostGmt,
         scoutRarityWeights: form.scoutRarityWeights,
         allocationJson: allocation,
       });
@@ -670,7 +673,7 @@ export function AdminSettingsPage() {
             }));
             const discount = form.mergeDiscountPct;
             const scoutDiscount = form.scoutDiscountPct;
-            const SCOUT_BASE = SCOUT_COST_GMT;
+            const SCOUT_BASE = form.scoutCostGmt;
             const scoutEffective = parseFloat((SCOUT_BASE * (1 - scoutDiscount)).toFixed(4));
             return (
               <div className="space-y-5">
@@ -755,12 +758,21 @@ export function AdminSettingsPage() {
                   </div>
                 </SectionCard>
 
-                <SectionCard title="Desconto de Scout / Mint" icon="bi-search">
+                <SectionCard title="Preço do Scout / Mint" icon="bi-search">
                   <p className="text-xs text-slate-500 -mt-2">
-                    Desconto global no preço do mint de atletas (Scout). Base: {SCOUT_BASE} GMT por NFT.
+                    Preço de cada carta no olheiro, em GMT. O comum no mercado custa 0,25 GMT.
+                    O desconto abaixo reduz esse preço para todo mundo.
                   </p>
-
-                  <Field label="Desconto (%)" hint={`Atual: ${(scoutDiscount * 100).toFixed(0)}% → ${scoutEffective} GMT / NFT`}>
+                  <Field label="Preço base (GMT)">
+                    <AdminInput
+                      type="number"
+                      min="0.01"
+                      step="0.01"
+                      value={String(form.scoutCostGmt)}
+                      onChange={(e) => setForm((f) => ({ ...f, scoutCostGmt: Number(e.target.value) }))}
+                    />
+                  </Field>
+                  <Field label="Desconto (%)" hint={`Cobrado agora: ${scoutEffective} GMT por carta`}>
                     <div className="flex items-center gap-3">
                       <input
                         type="range"

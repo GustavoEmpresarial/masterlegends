@@ -26,8 +26,6 @@ const PLAYER_ROUTES: { prefix: string; area: string; tab: string }[] = [
   { prefix: '/club/merger', area: 'MERCADO', tab: 'Fusão' },
   { prefix: '/ranking', area: 'TEMPORADA', tab: 'Tabela' },
   { prefix: '/pvp', area: 'TEMPORADA', tab: 'PvP' },
-  { prefix: '/minigames/penalty', area: 'CT', tab: 'Pênaltis' },
-  { prefix: '/minigames', area: 'CT', tab: 'Treinos' },
   { prefix: '/pass', area: 'TEMPORADA', tab: 'Passe' },
   { prefix: '/eventos', area: 'TEMPORADA', tab: 'Eventos' },
   { prefix: '/admin/eventos', area: 'Conteúdo do Jogo', tab: 'Eventos' },

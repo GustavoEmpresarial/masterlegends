@@ -11,7 +11,6 @@ import enMarket from './locales/en/market.json';
 import enPvp from './locales/en/pvp.json';
 import enPass from './locales/en/pass.json';
 import enEvents from './locales/en/events.json';
-import enMinigames from './locales/en/minigames.json';
 import enReferrals from './locales/en/referrals.json';
 import enErrors from './locales/en/errors.json';
 import enInventory from './locales/en/inventory.json';
@@ -28,7 +27,6 @@ import ptMarket from './locales/pt-BR/market.json';
 import ptPvp from './locales/pt-BR/pvp.json';
 import ptPass from './locales/pt-BR/pass.json';
 import ptEvents from './locales/pt-BR/events.json';
-import ptMinigames from './locales/pt-BR/minigames.json';
 import ptReferrals from './locales/pt-BR/referrals.json';
 import ptErrors from './locales/pt-BR/errors.json';
 import ptInventory from './locales/pt-BR/inventory.json';
@@ -45,7 +43,6 @@ import esMarket from './locales/es/market.json';
 import esPvp from './locales/es/pvp.json';
 import esPass from './locales/es/pass.json';
 import esEvents from './locales/es/events.json';
-import esMinigames from './locales/es/minigames.json';
 import esReferrals from './locales/es/referrals.json';
 import esErrors from './locales/es/errors.json';
 import esInventory from './locales/es/inventory.json';
@@ -67,7 +64,6 @@ const resources = {
     pvp: enPvp,
     pass: enPass,
     events: enEvents,
-    minigames: enMinigames,
     referrals: enReferrals,
     inventory: enInventory,
     merger: enMerger,
@@ -85,7 +81,6 @@ const resources = {
     pvp: ptPvp,
     pass: ptPass,
     events: ptEvents,
-    minigames: ptMinigames,
     referrals: ptReferrals,
     inventory: ptInventory,
     merger: ptMerger,
@@ -103,7 +98,6 @@ const resources = {
     pvp: esPvp,
     pass: esPass,
     events: esEvents,
-    minigames: esMinigames,
     referrals: esReferrals,
     inventory: esInventory,
     merger: esMerger,
@@ -120,7 +114,7 @@ i18n
     resources,
     fallbackLng: 'en',
     supportedLngs: SUPPORTED_LANGUAGES as unknown as string[],
-    ns: ['common', 'auth', 'landing', 'club', 'scout', 'market', 'pvp', 'pass', 'events', 'minigames', 'referrals', 'inventory', 'merger', 'errors', 'legal', 'whitepaper'],
+    ns: ['common', 'auth', 'landing', 'club', 'scout', 'market', 'pvp', 'pass', 'events', 'referrals', 'inventory', 'merger', 'errors', 'legal', 'whitepaper'],
     defaultNS: 'common',
     interpolation: { escapeValue: false },
     detection: {

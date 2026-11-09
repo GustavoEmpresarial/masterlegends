@@ -4,16 +4,16 @@ import { MERGE_LADDER, MERGE_LEGENDARY_VALUE_GMT, mergeFeeUsdcForInputRarityInde
 describe('merge economy', () => {
   it('funde cada raridade na seguinte, inclusive incomum', () => {
     expect(MERGE_LADDER.map((step) => [step.inputRarity, step.outputRarity, step.feeGmt])).toEqual([
-      [0, 1, 1],
-      [1, 2, 5],
-      [2, 3, 25],
-      [3, 4, 125],
-      [4, 5, 625],
+      [0, 1, 0.25],
+      [1, 2, 0.5],
+      [2, 3, 1],
+      [3, 4, 2],
+      [4, 5, 3],
     ]);
-    expect(mergeStepForInputRarity(0)).toMatchObject({ outputRarity: 1, feeGmt: 1 });
-    expect(mergeStepForInputRarity(1)).toMatchObject({ outputRarity: 2, feeGmt: 5 });
+    expect(mergeStepForInputRarity(0)).toMatchObject({ outputRarity: 1, feeGmt: 0.25 });
+    expect(mergeStepForInputRarity(1)).toMatchObject({ outputRarity: 2, feeGmt: 0.5 });
     expect(mergeStepForInputRarity(5)).toBeNull();
-    expect(mergeFeeUsdcForInputRarityIndex(4)).toBe(625);
+    expect(mergeFeeUsdcForInputRarityIndex(4)).toBe(3);
     expect(MERGE_LEGENDARY_VALUE_GMT).toBe(3125);
   });
 });

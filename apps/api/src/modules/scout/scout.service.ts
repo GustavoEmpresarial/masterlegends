@@ -34,17 +34,17 @@ export class ScoutService {
     private readonly prismaForConfig?: PrismaClient,
   ) {}
 
-  private async getScoutTuning(): Promise<{ discountPct: number; weights: ScoutRarityWeights }> {
+  private async getScoutTuning(): Promise<{ discountPct: number; weights: ScoutRarityWeights; costGmt: number }> {
     if (!this.prismaForConfig) {
-      return { discountPct: 0, weights: { ...SCOUT_RARITY_WEIGHTS } };
+      return { discountPct: 0, weights: { ...SCOUT_RARITY_WEIGHTS }, costGmt: SCOUT_COST_GMT };
     }
     const cfg = await new PlatformConfigService(this.prismaForConfig).get();
-    return { discountPct: cfg.scoutDiscountPct, weights: cfg.scoutRarityWeights };
+    return { discountPct: cfg.scoutDiscountPct, weights: cfg.scoutRarityWeights, costGmt: cfg.scoutCostGmt };
   }
 
   async getRules(): Promise<ScoutRulesDTO> {
-    const { discountPct, weights } = await this.getScoutTuning();
-    return buildScoutRules(discountPct, weights);
+    const { discountPct, weights, costGmt } = await this.getScoutTuning();
+    return buildScoutRules(discountPct, weights, costGmt);
   }
 
   /**
@@ -79,8 +79,8 @@ export class ScoutService {
   async mint(userId: string, input: MintInput) {
     await this.clubService.getClub(userId);
 
-    const { discountPct, weights } = await this.getScoutTuning();
-    const unitCost = parseFloat((SCOUT_COST_GMT * (1 - discountPct)).toFixed(4));
+    const { discountPct, weights, costGmt } = await this.getScoutTuning();
+    const unitCost = parseFloat((costGmt * (1 - discountPct)).toFixed(4));
     const minimumCost = parseFloat((unitCost * input.quantity).toFixed(4));
     const current = await this.clubService.getMgtBalance(userId);
     if (current < minimumCost) {

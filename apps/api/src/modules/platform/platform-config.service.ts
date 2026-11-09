@@ -1,6 +1,18 @@
 import type { PrismaClient } from '@prisma/client';
-import { parseScoutRarityWeights, type PlatformConfigDTO } from '@mll/shared';
+import { parseScoutRarityWeights, SCOUT_COST_GMT, type PlatformConfigDTO } from '@mll/shared';
 import { config } from '../../config/env.js';
+
+async function readScoutCostGmt(prisma: PrismaClient): Promise<number> {
+  try {
+    const rows = await prisma.$queryRaw<Array<{ scoutCostGmt: unknown }>>`
+      SELECT "scoutCostGmt" FROM "PlatformConfig" WHERE id = 'default'`;
+    const value = Number(rows[0]?.scoutCostGmt);
+    if (Number.isFinite(value) && value > 0) return parseFloat(value.toFixed(4));
+  } catch {
+    // A coluna chega com a migration. Até lá vale o preço do código.
+  }
+  return SCOUT_COST_GMT;
+}
 
 export class PlatformConfigService {
   constructor(private readonly prisma: PrismaClient) {}
@@ -41,6 +53,7 @@ export class PlatformConfigService {
       marketplaceFeeBps: row.marketplaceFeeBps,
       mergeDiscountPct: Number(row.mergeDiscountPct),
       scoutDiscountPct: Number(row.scoutDiscountPct),
+      scoutCostGmt: await readScoutCostGmt(this.prisma),
       scoutRarityWeights: parseScoutRarityWeights(row.scoutRarityWeights),
       referralNftName: row.referralNftName,
       referralNftImageUrl: row.referralNftImageUrl ?? null,
@@ -86,6 +99,7 @@ export class PlatformConfigService {
       marketplaceFeeBps: number;
       mergeDiscountPct: number;
       scoutDiscountPct: number;
+      scoutCostGmt: number;
       scoutRarityWeights: PlatformConfigDTO['scoutRarityWeights'];
       referralNftName: string;
       referralNftImageUrl: string | null;
@@ -157,6 +171,10 @@ export class PlatformConfigService {
         updatedBy: adminLogin,
       },
     });
+    if (data.scoutCostGmt !== undefined) {
+      await this.prisma.$executeRaw`
+        UPDATE "PlatformConfig" SET "scoutCostGmt" = ${data.scoutCostGmt} WHERE id = 'default'`;
+    }
     return this.get();
   }
 }

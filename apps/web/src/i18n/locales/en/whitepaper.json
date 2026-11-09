@@ -51,16 +51,13 @@
 
   "stamina": {
     "title": "Stamina & Training Center",
-    "body": "Players in the lineup lose stamina on the field based on rarity. Benched players do not decay — they only recover with a Coach or minigame.",
+    "body": "Players in the lineup lose stamina on the field based on rarity. Benched players do not decay — they only recover with a Coach.",
     "maxStamina": "Max stamina",
     "benchNote": "On the bench (locker room)",
     "benchNoteValue": "No stamina loss",
     "drainTitle": "On-field drain (by rarity)",
     "recovery": "Passive recovery (with Coach)",
-    "minigameRecovery": "Minigame recovery",
-    "minigameRecoveryValue": "+10 per run (with a goal)",
-    "coachNote": "🎽 The Coach automatically rotates the squad: removes players with 0 stamina and puts players with 100 stamina on the field.",
-    "minigameNote": "🎮 Recovery penalty: +10 stamina on your chosen player if you score at least 1 goal. Unlimited plays; every 10 runs adds +10s cooldown (decays after 12h)."
+    "coachNote": "🎽 The Coach automatically rotates the squad: removes players with 0 stamina and puts players with 100 stamina on the field."
   },
 
   "merger": {
@@ -68,7 +65,8 @@
     "body": "Fuse 5 players of the same rarity and receive 1 of the next rarity. Common becomes uncommon. The fee is GMT. The five cards are consumed and the same card cannot enter two fusions.",
     "note": "A legendary is worth 3,125 GMT and is not an ingredient. The new card's OVERWALL is rolled in the output rarity band.",
     "legendaryValue": "Legendary value",
-    "commonToRare": "Common → Rare",
+    "commonToUncommon": "Common → Uncommon",
+    "uncommonToRare": "Uncommon → Rare",
     "rareToSuperRare": "Rare → Super-Rare",
     "superRareToEpic": "Super-Rare → Epic",
     "epicToLegendary": "Epic → Legendary"
@@ -92,7 +90,7 @@
     "body": "Upgrade club buildings to unlock bonuses and features. Upgrade cost: {{formula}} (max level 10).",
     "stadium": { "name": "Stadium", "bonus": "+5% farm/level" },
     "locker": { "name": "Locker Room", "bonus": "Increases players' staminaMax" },
-    "ct": { "name": "Training Center (CT)", "bonus": "Passive recovery + minigames" },
+    "ct": { "name": "Training Center (CT)", "bonus": "Passive recovery from the coach" },
     "trophy": { "name": "Trophy Room", "bonus": "Displays achievements in the Museum" },
     "office": { "name": "Office", "bonus": "Hire Coach and Staff" }
   },

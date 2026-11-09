@@ -86,8 +86,8 @@ export function Layout() {
               </main>
               <Footer variant="content" />
             </div>
+            <AreaNav placement="bottom" />
           </div>
-          <AreaNav placement="bottom" />
         </>
       ) : (
         <>

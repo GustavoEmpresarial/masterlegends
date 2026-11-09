@@ -1,5 +1,5 @@
 import { calculatePassPremiumPricing } from './pass-premium-pricing.js';
-import { claimPassReward } from './pass-reward.service.js';
+import { claimPassReward, passClaimMarker } from './pass-reward.service.js';
 import { PrismaClient } from '@prisma/client';
 import { MgtTxType, findRankForLevel, findRewardBlockForLevel, parsePassRankConfig } from '@mll/shared';
 import { AppError, ErrorCode } from '../../common/lib/errors.js';
@@ -18,8 +18,8 @@ import {
 export class PassRepository {
   constructor(private readonly prisma: PrismaClient) {}
 
-  claimConfiguredReward(userId: string, season: ConfiguredPassSeason, level: number) {
-    return claimPassReward(this.prisma, userId, season, level);
+  claimConfiguredReward(userId: string, season: ConfiguredPassSeason, level: number, track: 'free' | 'gold' = 'free') {
+    return claimPassReward(this.prisma, userId, season, level, track);
   }
 
   findConfiguredSeason() {
@@ -89,10 +89,9 @@ export class PassRepository {
           totalLevels: pricing.totalLevels,
         });
       }
-      const passXp = Math.max(progress.xp, ...season.levels.map((level) => level.xpRequired));
       await tx.passProgress.update({
         where: { userId_seasonId: { userId, seasonId } },
-        data: { premium: true, xp: passXp },
+        data: { premium: true },
       });
       return pricing;
     }, { timeout: 15000 });
@@ -159,8 +158,10 @@ export class PassService {
     }
 
     const level = passLevelFromConfiguredXp(xp, season.levels);
+    const reached = (required: number) => xp >= required;
     const levels = season.levels.map((entry) => {
       const reward = findRewardBlockForLevel(entry.level, season.rewardBlocks) ?? entry;
+      const gold = entry.goldReward;
       return ({
       level: entry.level,
       xpRequired: entry.xpRequired,
@@ -168,8 +169,14 @@ export class PassService {
       rewardType: reward.rewardType,
       rewardImageUrl: reward.rewardImageUrl ?? null,
       quantity: reward.quantity ?? 1,
-      claimed: claimedLevels.includes(entry.level),
-      locked: !premium && xp < entry.xpRequired,
+      claimed: claimedLevels.includes(passClaimMarker(entry.level, 'free')),
+      locked: !reached(entry.xpRequired),
+      goldRewardLabel: gold?.rewardLabel ?? null,
+      goldRewardType: gold?.rewardType ?? null,
+      goldRewardImageUrl: gold?.rewardImageUrl ?? null,
+      goldQuantity: gold?.quantity ?? 1,
+      goldClaimed: claimedLevels.includes(passClaimMarker(entry.level, 'gold')),
+      goldLocked: !gold || !premium,
     }); });
 
     const progressRows: MissionProgressRow[] = await this.missionProgress.listForUser(userId, new Date(), season.id);
@@ -278,10 +285,10 @@ export class PassService {
     return season;
   }
 
-  async claim(userId: string, level: number, seasonId?: number) {
+  async claim(userId: string, level: number, seasonId?: number, track: 'free' | 'gold' = 'free') {
     const season = await this.seasonForAction(seasonId);
 
-    await this.repo.claimConfiguredReward(userId, season, level);
+    await this.repo.claimConfiguredReward(userId, season, level, track);
 
     // Mission hook: claiming a pass reward counts as `pass_claim`.
     void this.missionProgress.incrementEvent(userId, 'pass_claim', 1);

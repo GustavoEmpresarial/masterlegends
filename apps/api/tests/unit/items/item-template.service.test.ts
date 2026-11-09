@@ -24,11 +24,15 @@ function makePrisma() {
   const club = {
     updateMany: vi.fn(),
   };
-  const tx = { itemTemplate, basePlayer, club };
+  const listing = {
+    updateMany: vi.fn().mockResolvedValue({ count: 1 }),
+  };
+  const tx = { itemTemplate, basePlayer, club, listing };
   return {
     itemTemplate,
     basePlayer,
     club,
+    listing,
     $transaction: vi.fn(async (fn: (client: typeof tx) => Promise<unknown>) => fn(tx)),
   } as any;
 }
@@ -137,6 +141,34 @@ describe('ItemTemplateService CRUD', () => {
     await svc.delete('t1');
     expect(prisma.itemTemplate.delete).toHaveBeenCalledWith({ where: { id: 't1' } });
     expect(uploads.deleteItemImage).toHaveBeenCalledWith(baseRow.imageUrl);
+  });
+
+  it('deactivating unlists copies and does not relist them when activated again', async () => {
+    const prisma = makePrisma();
+    prisma.itemTemplate.update
+      .mockResolvedValueOnce({ ...baseRow, active: false })
+      .mockResolvedValueOnce({ ...baseRow, active: true });
+    const svc = new ItemTemplateService(prisma);
+
+    await svc.setActive('t1', false);
+    expect(prisma.listing.updateMany).toHaveBeenCalledWith({
+      where: { active: true, basePlayer: { templateId: 't1' } },
+      data: { active: false },
+    });
+    expect(prisma.basePlayer.updateMany).toHaveBeenCalledWith({
+      where: { templateId: 't1', listed: true },
+      data: { listed: false },
+    });
+
+    prisma.listing.updateMany.mockClear();
+    prisma.basePlayer.updateMany.mockClear();
+    await svc.setActive('t1', true);
+    expect(prisma.itemTemplate.update).toHaveBeenLastCalledWith({
+      where: { id: 't1' },
+      data: { active: true },
+    });
+    expect(prisma.listing.updateMany).not.toHaveBeenCalled();
+    expect(prisma.basePlayer.updateMany).not.toHaveBeenCalled();
   });
 });
 

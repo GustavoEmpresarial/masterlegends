@@ -109,7 +109,7 @@ function staffMeta(kind: string): { emoji: string; label: string; effect: string
     return {
       emoji: '👨‍🏫',
       label: 'Treinador',
-      effect: 'Sem recuperação passiva de stamina. Use minigames no CT para manter o elenco.',
+      effect: 'Sem recuperação passiva de stamina. O elenco só recupera com o treinador no CT.',
     };
   }
   return {

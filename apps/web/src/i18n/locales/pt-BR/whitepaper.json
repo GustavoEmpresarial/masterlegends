@@ -52,16 +52,13 @@
 
   "stamina": {
     "title": "Stamina & Centro de Treinamento",
-    "body": "Jogadores escalados perdem stamina em campo conforme a raridade. No banco não há decay — só recuperam com Treinador ou minigame.",
+    "body": "Jogadores escalados perdem stamina em campo conforme a raridade. No banco não há decay — só recuperam com o Treinador.",
     "maxStamina": "Stamina máxima",
     "benchNote": "No banco (vestiário)",
     "benchNoteValue": "Sem perda de stamina",
     "drainTitle": "Drain em campo (por raridade)",
     "recovery": "Recuperação passiva (com Treinador)",
-    "minigameRecovery": "Recuperação via minigame",
-    "minigameRecoveryValue": "+10 por partida (com gol)",
-    "coachNote": "🎽 O Treinador rotaciona automaticamente o elenco: remove jogadores com stamina 0 e coloca jogadores com stamina 100 em campo.",
-    "minigameNote": "🎮 Pênalti de recuperação: +10 stamina no jogador escolhido se você fizer pelo menos 1 gol. Pode jogar várias vezes; a cada 10 partidas soma +10s de cooldown (decai após 12h)."
+    "coachNote": "🎽 O Treinador rotaciona automaticamente o elenco: remove jogadores com stamina 0 e coloca jogadores com stamina 100 em campo."
   },
 
   "merger": {
@@ -69,7 +66,8 @@
     "body": "Funda 5 jogadores da mesma raridade e recebe 1 da raridade acima. Comum vira incomum. A taxa é em GMT. As cinco cartas somem e a mesma carta não entra em duas fusões.",
     "note": "O lendário vale 3.125 GMT e não é ingrediente. O OVERWALL da carta nova sai da faixa da raridade criada.",
     "legendaryValue": "Valor do lendário",
-    "commonToRare": "Comum → Raro",
+    "commonToUncommon": "Comum → Incomum",
+    "uncommonToRare": "Incomum → Raro",
     "rareToSuperRare": "Raro → Super-Raro",
     "superRareToEpic": "Super-Raro → Épico",
     "epicToLegendary": "Épico → Lendário"
@@ -93,7 +91,7 @@
     "body": "Melhore os prédios do clube para desbloquear bônus e funcionalidades. Custo de upgrade: {{formula}} (máximo nível 10).",
     "stadium": { "name": "Estádio", "bonus": "+5% farm/nível" },
     "locker": { "name": "Vestiário", "bonus": "Aumenta staminaMax dos jogadores" },
-    "ct": { "name": "Centro de Treinamento (CT)", "bonus": "Recuperação passiva + minigames" },
+    "ct": { "name": "Centro de Treinamento (CT)", "bonus": "Recuperação passiva do treinador" },
     "trophy": { "name": "Sala de Troféus", "bonus": "Exibe conquistas no Museu" },
     "office": { "name": "Escritório", "bonus": "Contrate Treinador e Staff" }
   },

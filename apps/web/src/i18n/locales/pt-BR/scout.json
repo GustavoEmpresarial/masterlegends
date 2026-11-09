@@ -25,7 +25,7 @@
   "rules": {
     "attributes": "Os atributos saem da mesma faixa de OVERWALL da raridade sorteada.",
     "lateral": "{{pct}}% de chance de a posição virar LAT.",
-    "payment": "Cada carta custa 1 GMT, qualquer raridade. Não tem estorno.",
+    "payment": "Cada carta custa 0,25 GMT, qualquer raridade. Não tem estorno.",
     "inventory": "A carta entra no inventário como jogador base."
   },
   "confirm": {

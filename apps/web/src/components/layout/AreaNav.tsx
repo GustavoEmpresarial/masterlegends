@@ -29,8 +29,8 @@ export function AreaNav({ placement }: { placement: 'side' | 'bottom' }) {
             aria-current={active ? 'page' : undefined}
             onClick={() => playUiBlip()}
           >
-            <span className="area-nav__icon-frame">
-              <PixelGlyph name={area.icon} size={placement === 'side' ? 36 : 28} />
+              <span className="area-nav__icon-frame">
+              <PixelGlyph name={area.icon} size={placement === 'side' ? 36 : 22} />
             </span>
             <span className="area-nav__label">{t(area.labelKey, { defaultValue: area.defaultLabel })}</span>
           </Link>

@@ -40,7 +40,7 @@ export function PassSeasonPreview({
       <div>
         <div className="flex justify-between text-xs text-slate-400 mb-1">
           <span>Nível 1</span>
-          <span>0 / {maxXp} XP</span>
+          <span>0 / {maxXp.toLocaleString('pt-BR')} XP</span>
         </div>
         <div className="h-2 rounded-full bg-white/[0.06] overflow-hidden">
           <div className="h-full w-[8%] rounded-full bg-gradient-to-r from-emerald-500 to-cyan-400" />

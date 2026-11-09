@@ -752,6 +752,7 @@ function SlotCard({
   onDragLeave: () => void;
   onDrop: (e: DragEvent) => void;
 }) {
+  const { t } = useTranslation(['club']);
   const meta = SLOT_META[slot];
 
   return (

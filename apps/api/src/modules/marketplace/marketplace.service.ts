@@ -33,6 +33,11 @@ export class MarketplaceRepository {
     return this.prisma.listing.findMany({
       where: {
         active: true,
+        OR: [
+          { basePlayerId: null },
+          { basePlayer: { templateId: null } },
+          { basePlayer: { template: { active: true } } },
+        ],
         ...(query.asset === 'item' ? { id: { in: [] } } : {}),
         ...(query.asset === 'player' ? { basePlayerId: { not: null } } : {}),
         ...(query.asset === 'nft' ? { tokenId: { not: null } } : {}),
@@ -111,6 +116,15 @@ export class MarketplaceRepository {
     price: number,
   ) {
     return this.prisma.$transaction(async (tx) => {
+      const card = await tx.basePlayer.findUnique({
+        where: { id: player.id },
+        select: { template: { select: { active: true } } },
+      });
+      if (card?.template && !card.template.active) {
+        throw new AppError(ErrorCode.VALIDATION_ERROR, 400, {
+          message: 'Esse jogador está inativo e não pode ser anunciado.',
+        });
+      }
       const existing = await tx.listing.findUnique({
         where: { basePlayerId: player.id },
       });
@@ -161,7 +175,7 @@ export class MarketplaceRepository {
     return this.prisma.$transaction(async (tx) => {
       const listing = await tx.listing.findUnique({
         where: { id: listingId },
-        include: { basePlayer: true },
+        include: { basePlayer: { include: { template: { select: { active: true } } } } },
       });
       if (!listing || !listing.active) {
         throw new AppError(ErrorCode.MARKETPLACE_LISTING_NOT_FOUND, 404);
@@ -213,6 +227,9 @@ export class MarketplaceRepository {
       }
 
       if (!listing.basePlayerId || !listing.basePlayer) {
+        throw new AppError(ErrorCode.MARKETPLACE_LISTING_NOT_FOUND, 404);
+      }
+      if (listing.basePlayer.template && !listing.basePlayer.template.active) {
         throw new AppError(ErrorCode.MARKETPLACE_LISTING_NOT_FOUND, 404);
       }
 
@@ -427,8 +444,11 @@ export class MarketplaceService {
     const supplies = await this.prisma.marketSupply.findMany({
       where: {
         remaining: { gt: 0 },
-        ...(rarityFilter !== undefined ? { template: { rarity: rarityFilter } } : {}),
-        ...(positionIdx >= 0 ? { template: { position: positionIdx, ...(rarityFilter !== undefined ? { rarity: rarityFilter } : {}) } } : {}),
+        template: {
+          active: true,
+          ...(rarityFilter !== undefined ? { rarity: rarityFilter } : {}),
+          ...(positionIdx >= 0 ? { position: positionIdx } : {}),
+        },
       },
       include: { template: true },
     });
@@ -631,7 +651,7 @@ export class MarketplaceService {
     if (buyerId === OFFICIAL_MARKET_SELLER_ID) {
       throw new AppError(ErrorCode.MARKETPLACE_CANNOT_BUY_OWN, 400);
     }
-    if (supply.remaining < 1) {
+    if (!supply.template.active || supply.remaining < 1) {
       throw new AppError(ErrorCode.MARKETPLACE_LISTING_NOT_FOUND, 404);
     }
 

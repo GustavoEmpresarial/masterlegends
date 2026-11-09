@@ -1,6 +1,6 @@
 /**
  * Preço da carta no mercado da liga, em GMT.
- * O mint do olheiro é sempre 1 GMT (`SCOUT_COST_GMT`), qualquer raridade.
+ * O mint do olheiro é sempre 0.25 GMT (`SCOUT_COST_GMT`), qualquer raridade.
  * O stake trava a metade deste preço.
  */
 export const RARITY_MINT_GMT: Record<ScoutRarityId, number> = {
@@ -13,7 +13,7 @@ export const RARITY_MINT_GMT: Record<ScoutRarityId, number> = {
 };
 
 /** GMT de cada carta no olheiro. Não muda com a raridade sorteada. */
-export const SCOUT_COST_GMT = 1;
+export const SCOUT_COST_GMT = 0.25;
 
 /** @deprecated use SCOUT_COST_GMT */
 export const SCOUT_COST_USDC = SCOUT_COST_GMT;
@@ -127,9 +127,13 @@ export interface ScoutRulesDTO {
   rarities: ScoutRarityRuleDTO[];
 }
 
-export function buildScoutRules(discountPct = 0, weights?: ScoutRarityWeights | null): ScoutRulesDTO {
+export function buildScoutRules(
+  discountPct = 0,
+  weights?: ScoutRarityWeights | null,
+  baseCost = SCOUT_COST_GMT,
+): ScoutRulesDTO {
   const clamped = Math.min(1, Math.max(0, discountPct));
-  const base = SCOUT_COST_USDC;
+  const base = Number.isFinite(baseCost) && baseCost > 0 ? baseCost : SCOUT_COST_GMT;
   const table = weights ? parseScoutRarityWeights(weights) : SCOUT_RARITY_WEIGHTS;
   const weightTotal = SCOUT_RARITY_ORDER.reduce((sum, id) => sum + table[id], 0);
   return {

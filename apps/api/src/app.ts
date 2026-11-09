@@ -39,7 +39,6 @@ import { registerCheckInRoutes } from './modules/checkin/checkin.routes.js';
 import { registerVestiarioRoutes } from './modules/vestiario/vestiario.routes.js';
 import { registerCtRoutes } from './modules/ct/ct.routes.js';
 import { registerOfficeRoutes } from './modules/office/office.routes.js';
-import { registerMinigamesRoutes } from './modules/minigames/minigames.routes.js';
 import { registerMergerRoutes } from './modules/merger/merger.routes.js';
 import { registerSocialRoutes } from './modules/social/social.routes.js';
 import { registerBlogRoutes } from './modules/blog/blog.routes.js';
@@ -126,7 +125,6 @@ export async function buildApp(): Promise<FastifyInstance> {
       await playerApi.register(registerCheckInRoutes, { prefix: '/checkin' });
       await playerApi.register(registerCtRoutes, { prefix: '/ct' });
       await playerApi.register(registerOfficeRoutes, { prefix: '/office' });
-      await playerApi.register(registerMinigamesRoutes, { prefix: '/minigames' });
       await playerApi.register(registerMarketplaceRoutes, { prefix: '/marketplace' });
       await playerApi.register(registerBonecoRoutes, { prefix: '/boneco' });
       await playerApi.register(registerPvpRoutes, { prefix: '/pvp' });

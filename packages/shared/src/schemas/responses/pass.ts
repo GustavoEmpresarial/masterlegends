@@ -7,6 +7,12 @@ export interface PassLevelDTO {
   quantity?: number;
   claimed: boolean;
   locked: boolean;
+  goldRewardLabel?: string | null;
+  goldRewardType?: string | null;
+  goldRewardImageUrl?: string | null;
+  goldQuantity?: number;
+  goldClaimed?: boolean;
+  goldLocked?: boolean;
 }
 
 export interface PassMissionDTO {

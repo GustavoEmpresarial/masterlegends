@@ -106,6 +106,7 @@ export const walletConfigPatchSchema = z.object({
   marketplaceFeeBps: z.number().int().min(0).max(10000).optional(),
   mergeDiscountPct: z.number().min(0).max(1).optional(),
   scoutDiscountPct: z.number().min(0).max(1).optional(),
+  scoutCostGmt: z.number().positive().max(10_000).optional(),
   scoutRarityWeights: z
     .object({
       common: z.number().min(0),
@@ -524,6 +525,8 @@ export interface PlatformConfigDTO {
   marketplaceFeeBps: number;
   mergeDiscountPct: number;
   scoutDiscountPct: number;
+  /** GMT cobrado em cada carta do olheiro, antes do desconto. */
+  scoutCostGmt: number;
   scoutRarityWeights: ScoutRarityWeights;
   referralNftName: string;
   referralNftImageUrl: string | null;

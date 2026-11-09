@@ -1,5 +1,6 @@
 import { GearSprite } from '../../components/gear/GearSprite';
 import { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import {
@@ -723,20 +724,21 @@ export function MarketplacePage() {
         </motion.div>
       )}
 
+      {typeof document !== 'undefined' && createPortal(
       <AnimatePresence>
         {listOpen && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/85 flex items-end sm:items-center justify-center z-50 p-0 sm:p-4"
+            className="mobile-sheet flex items-end justify-center bg-black/85 sm:items-center sm:p-4"
             onClick={() => setListOpen(false)}
           >
             <motion.div
               initial={{ y: 40, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 40, opacity: 0 }}
-              className="pixel-card w-full sm:max-w-4xl lg:max-w-5xl max-h-[92vh] sm:max-h-[88vh] flex flex-col rounded-t-2xl sm:rounded-none overflow-hidden"
+              className="pixel-card flex h-full max-h-full min-h-0 w-full flex-col overflow-hidden rounded-t-2xl sm:h-auto sm:max-h-full sm:max-w-4xl sm:rounded-none lg:max-w-5xl"
               style={{ borderColor: 'var(--gold)' }}
               onClick={(e) => e.stopPropagation()}
             >
@@ -797,7 +799,7 @@ export function MarketplacePage() {
                 </div>
               </div>
 
-              <div className="flex-1 overflow-y-auto px-4 sm:px-5 pb-4 min-h-0">
+              <div className="touch-scroll min-h-0 flex-1 overflow-y-auto px-4 pb-4 sm:px-5">
                 {listTab === 'meus' && (
                   <div className="space-y-3">
                     {myListingsLoading ? (
@@ -1147,8 +1149,12 @@ export function MarketplacePage() {
               {listTab === 'anunciar' && listablePlayers.length > 0 && (
                 <form
                   onSubmit={(e) => void handleList(e)}
-                  className="shrink-0 px-4 sm:px-5 py-4 border-t-4 space-y-3"
-                  style={{ borderColor: 'var(--bg-lighter)', background: 'var(--bg-dark)' }}
+                  className="shrink-0 space-y-3 border-t-4 px-4 py-4 sm:px-5"
+                  style={{
+                    borderColor: 'var(--bg-lighter)',
+                    background: 'var(--bg-dark)',
+                    paddingBottom: 'max(1rem, env(safe-area-inset-bottom))',
+                  }}
                 >
                   {pricedSelectedCount === 0 ? (
                     <div className="pixel-box-light py-3 px-4 text-center" style={{ borderColor: 'var(--bg-lighter)' }}>
@@ -1198,15 +1204,18 @@ export function MarketplacePage() {
             </motion.div>
           </motion.div>
         )}
-      </AnimatePresence>
+      </AnimatePresence>,
+      document.body,
+      )}
 
+      {typeof document !== 'undefined' && createPortal(
       <AnimatePresence>
         {selectedListing && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4"
+            className="mobile-sheet flex items-center justify-center overflow-y-auto bg-black/80 p-4"
             onClick={() => setSelectedListing(null)}
           >
             <motion.div
@@ -1344,7 +1353,9 @@ export function MarketplacePage() {
             </motion.div>
           </motion.div>
         )}
-      </AnimatePresence>
+      </AnimatePresence>,
+      document.body,
+      )}
 
       {spendTarget && (
         <SpendConfirmDialog

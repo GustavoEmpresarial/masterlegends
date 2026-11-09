@@ -217,7 +217,6 @@ export function WhitepaperPage() {
             <Row label={t('stamina.maxStamina')} value="100" />
             <Row label={t('stamina.benchNote')} value={t('stamina.benchNoteValue')} />
             <Row label={t('stamina.recovery')} value="+24/h" color="var(--green)" />
-            <Row label={t('stamina.minigameRecovery')} value={t('stamina.minigameRecoveryValue')} color="var(--cyan)" />
           </div>
           <p className="retro-text text-xs sm:text-sm tracking-widest mt-2" style={{ color: '#ffffff' }}>{t('stamina.drainTitle')}</p>
           <div className="space-y-2">
@@ -229,17 +228,17 @@ export function WhitepaperPage() {
             ))}
           </div>
           <p className="retro-text text-sm sm:text-base" style={{ color: '#ffffff' }}>{t('stamina.coachNote')}</p>
-          <p className="retro-text text-sm sm:text-base" style={{ color: '#ffffff' }}>{t('stamina.minigameNote')}</p>
         </Section>
 
         {/* 5 — Merger */}
         <Section icon="bi-shuffle" title={t('merger.title')} color="var(--purple)" index={4}>
           <p className="retro-text text-base sm:text-lg" style={{ color: '#ffffff' }}>{t('merger.body')}</p>
           <div>
-            <Row label={t('merger.commonToRare')} value="2 GMT" color="var(--purple)" />
-            <Row label={t('merger.rareToSuperRare')} value="10 GMT" color="var(--purple)" />
-            <Row label={t('merger.superRareToEpic')} value="50 GMT" color="var(--purple)" />
-            <Row label={t('merger.epicToLegendary')} value="625 GMT" color="var(--purple)" />
+            <Row label={t('merger.commonToUncommon')} value="0,25 GMT" color="var(--purple)" />
+            <Row label={t('merger.uncommonToRare')} value="0,50 GMT" color="var(--purple)" />
+            <Row label={t('merger.rareToSuperRare')} value="1 GMT" color="var(--purple)" />
+            <Row label={t('merger.superRareToEpic')} value="2 GMT" color="var(--purple)" />
+            <Row label={t('merger.epicToLegendary')} value="3 GMT" color="var(--purple)" />
             <Row label={t('merger.legendaryValue')} value="3.125 GMT" color="var(--purple)" />
           </div>
           <p className="retro-text text-sm sm:text-base" style={{ color: '#ffffff' }}>{t('merger.note')}</p>

@@ -166,13 +166,13 @@ describe('MergerService', () => {
     const result = await service().fuse('user-1', { playerIds: PLAYER_IDS });
 
     const expectedEarned = 1.5 + 0.5 * 4;
-    const expectedBasis = 10 + 1;
+    const expectedBasis = 10 + 0.25;
     const expectedAge = playerAgeFromRoi(expectedBasis, expectedEarned).age;
 
     expect(result.inputRarity).toBe('common');
     expect(result.outputRarity).toBe('uncommon');
     expect(result.burnedIds).toEqual(PLAYER_IDS);
-    expect(result.feeUsdc).toBe(1);
+    expect(result.feeUsdc).toBe(0.25);
     expect(result.newPlayer.rarity).toBe('uncommon');
     expect(result.newPlayer.costBasisUsdc).toBe(expectedBasis);
     expect(result.newPlayer.age).toBe(expectedAge);
@@ -180,7 +180,7 @@ describe('MergerService', () => {
       'user-1',
       'club-1',
       PLAYER_IDS,
-      1,
+      0.25,
       expect.objectContaining({
         rarity: 1,
         position: 3,
@@ -192,17 +192,17 @@ describe('MergerService', () => {
   });
 
   it('includes discounted fee in costBasis', async () => {
-    prisma = platformPrisma(0.5); // 50% off → fee 0.5
+    prisma = platformPrisma(0.5); // 50% off → fee 0.125
     const result = await service().fuse('user-1', { playerIds: PLAYER_IDS });
 
-    expect(result.feeUsdc).toBe(0.5);
-    expect(result.newPlayer.costBasisUsdc).toBe(10.5); // 10 + 0.5
+    expect(result.feeUsdc).toBe(0.125);
+    expect(result.newPlayer.costBasisUsdc).toBe(10.125); // 10 + 0.125
     expect(repo.fuse).toHaveBeenCalledWith(
       'user-1',
       'club-1',
       PLAYER_IDS,
-      0.5,
-      expect.objectContaining({ costBasisUsdc: 10.5, lifetimeEarnedUsdc: 0, rarity: 1 }),
+      0.125,
+      expect.objectContaining({ costBasisUsdc: 10.125, lifetimeEarnedUsdc: 0, rarity: 1 }),
       'gmt',
     );
   });
@@ -236,7 +236,7 @@ describe('MergerService', () => {
 
     const result = await service().fuse('user-1', { playerIds: PLAYER_IDS });
 
-    expect(result.feeUsdc).toBe(1);
+    expect(result.feeUsdc).toBe(0.25);
     expect(repo.fuse).toHaveBeenCalled();
   });
 
@@ -293,12 +293,12 @@ describe('MergerService', () => {
 
     expect(result.inputRarity).toBe('uncommon');
     expect(result.outputRarity).toBe('rare');
-    expect(result.feeUsdc).toBe(5);
+    expect(result.feeUsdc).toBe(0.5);
     expect(repo.fuse).toHaveBeenCalledWith(
       'user-1',
       'club-1',
       PLAYER_IDS,
-      5,
+      0.5,
       expect.objectContaining({ rarity: 2 }),
       'gmt',
     );
@@ -321,13 +321,13 @@ describe('MergerService', () => {
 
     expect(result.inputRarity).toBe('epic');
     expect(result.outputRarity).toBe('legendary');
-    expect(result.feeUsdc).toBe(625);
+    expect(result.feeUsdc).toBe(3);
     expect(result.newPlayer.costBasisUsdc).toBe(3125);
     expect(repo.fuse).toHaveBeenCalledWith(
       'user-1',
       'club-1',
       PLAYER_IDS,
-      625,
+      3,
       expect.objectContaining({ rarity: 5, costBasisUsdc: 3125 }),
       'gmt',
     );
@@ -353,11 +353,11 @@ describe('MergerService', () => {
     expect(rules.legendaryValueGmt).toBe(3125);
     expect(rules.tiers).toHaveLength(5);
     expect(rules.tiers.map((tier) => [tier.inputRarity, tier.outputRarity, tier.feeUsdc])).toEqual([
-      ['common', 'uncommon', 1],
-      ['uncommon', 'rare', 5],
-      ['rare', 'super-rare', 25],
-      ['super-rare', 'epic', 125],
-      ['epic', 'legendary', 625],
+      ['common', 'uncommon', 0.25],
+      ['uncommon', 'rare', 0.5],
+      ['rare', 'super-rare', 1],
+      ['super-rare', 'epic', 2],
+      ['epic', 'legendary', 3],
     ]);
   });
 });

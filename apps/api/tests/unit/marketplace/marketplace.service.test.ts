@@ -181,6 +181,7 @@ describe('MarketplaceRepository', () => {
       },
       basePlayer: {
         update: vi.fn(),
+        findUnique: vi.fn().mockResolvedValue({ template: { active: true } }),
         aggregate: vi.fn().mockResolvedValue({ _sum: { overwall: 0 } }),
       },
       club: { update: vi.fn() },
@@ -207,6 +208,20 @@ describe('MarketplaceRepository', () => {
       ...overrides,
     } as any;
   }
+
+  it('findActiveListings hides cards from an inactive template', async () => {
+    const prisma = makePrisma();
+    const repo = new MarketplaceRepository(prisma);
+    await repo.findActiveListings({ sortBy: 'price', limit: 10 } as never, undefined);
+    expect(prisma.listing.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: expect.objectContaining({
+          active: true,
+          OR: expect.arrayContaining([{ basePlayer: { template: { active: true } } }]),
+        }),
+      }),
+    );
+  });
 
   it('cancelListing throws when listing not found', async () => {
     const prisma = makePrisma();
@@ -277,6 +292,21 @@ describe('MarketplaceRepository', () => {
     expect(prisma._tx.basePlayer.update).toHaveBeenCalledWith(
       expect.objectContaining({ where: { id: 'p1' }, data: { listed: true } }),
     );
+  });
+
+  it('createListing refuses a card whose template is inactive', async () => {
+    const prisma = makePrisma();
+    prisma._tx.basePlayer.findUnique.mockResolvedValue({ template: { active: false } });
+    const repo = new MarketplaceRepository(prisma);
+    await expect(
+      repo.createListing(
+        'user-1',
+        { id: 'p1', rarity: 1, overwall: 400, position: 0, name: 'Striker', imageUrl: null },
+        99,
+      ),
+    ).rejects.toMatchObject({ code: 'VALIDATION_ERROR' });
+    expect(prisma._tx.listing.update).not.toHaveBeenCalled();
+    expect(prisma._tx.listing.create).not.toHaveBeenCalled();
   });
 
   it('buyListing throws when listing not active', async () => {

@@ -94,7 +94,7 @@ function SeasonCard({
             { label: 'Níveis', value: season.levels.length, color: 'text-sky-400' },
             { label: 'Missões', value: season.missions.length, color: 'text-purple-400' },
             { label: 'Blocos', value: season.rewardBlocks.length, color: 'text-amber-400' },
-            { label: 'XP máx', value: xpMax, color: 'text-emerald-400' },
+            { label: 'XP máx', value: xpMax.toLocaleString('pt-BR'), color: 'text-emerald-400' },
           ].map(({ label, value, color }) => (
             <div
               key={label}
@@ -179,8 +179,12 @@ export function AdminPassPage() {
     }
   }
 
-  const activeSeason = seasons.find((s) => s.active);
+  const activeSeasons = seasons.filter((s) => s.active);
   const totalLevels = seasons.reduce((acc, s) => Math.max(acc, s.levels.length), 0);
+  const soonestDays = activeSeasons.reduce<number | null>((min, season) => {
+    const days = daysLeft(season.endsAt);
+    return min == null || days < min ? days : min;
+  }, null);
 
   return (
     <div className="space-y-6">
@@ -207,13 +211,15 @@ export function AdminPassPage() {
           {
             label: 'Temporadas',
             value: seasons.length,
+            hint: '',
             icon: 'bi-calendar3',
             accent: 'text-sky-400',
             bg: 'bg-sky-500/10 border-sky-500/20',
           },
           {
-            label: 'Ativa agora',
-            value: activeSeason?.name ?? '—',
+            label: 'Ativas agora',
+            value: activeSeasons.length || '—',
+            hint: activeSeasons.map((season) => season.name).join(' · '),
             icon: 'bi-broadcast',
             accent: 'text-emerald-400',
             bg: 'bg-emerald-500/10 border-emerald-500/20',
@@ -221,18 +227,20 @@ export function AdminPassPage() {
           {
             label: 'Max níveis',
             value: totalLevels || '—',
+            hint: '',
             icon: 'bi-layers',
             accent: 'text-purple-400',
             bg: 'bg-purple-500/10 border-purple-500/20',
           },
           {
             label: 'Dias restantes',
-            value: activeSeason ? `${daysLeft(activeSeason.endsAt)}d` : '—',
+            value: soonestDays != null ? `${soonestDays}d` : '—',
+            hint: '',
             icon: 'bi-hourglass-split',
             accent: 'text-amber-400',
             bg: 'bg-amber-500/10 border-amber-500/20',
           },
-        ].map(({ label, value, icon, accent, bg }) => (
+        ].map(({ label, value, hint, icon, accent, bg }) => (
           <div key={label} className="admin-card p-4">
             <div className="flex items-start justify-between gap-2">
               <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">
@@ -245,6 +253,7 @@ export function AdminPassPage() {
               </span>
             </div>
             <p className="mt-2 text-xl font-semibold text-white truncate">{value}</p>
+            {hint && <p className="mt-1 text-[11px] leading-snug text-slate-400">{hint}</p>}
           </div>
         ))}
       </div>

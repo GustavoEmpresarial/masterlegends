@@ -44,7 +44,7 @@
 
     --app-header-h: 5.5rem;
     --app-sidebar-w: 6.5rem;
-    --app-mobile-nav-h: calc(6.4rem + env(safe-area-inset-bottom, 0px));
+    --app-mobile-nav-h: calc(5.2rem + env(safe-area-inset-bottom, 0px));
     --app-cookie-banner-h: 9rem;
     --app-btn-h-sm: 36px;
     --app-btn-h-md: 40px;
@@ -2512,13 +2512,35 @@
     z-index: 40;
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 2px;
+    gap: 1px;
     overflow: hidden;
     border-top: 4px solid var(--gold);
-    padding: 4px;
-    padding-bottom: max(4px, env(safe-area-inset-bottom));
-    height: auto;
+    padding: 2px 2px max(2px, env(safe-area-inset-bottom));
+    height: var(--app-mobile-nav-h);
     min-height: var(--app-mobile-nav-h);
+    box-sizing: border-box;
+  }
+
+  /* Sheets sit in the free band: under the header, above the bottom nav. */
+  .mobile-sheet {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: calc(var(--app-header-h) + 6px);
+    bottom: var(--app-mobile-nav-h);
+    z-index: 210;
+  }
+
+  .touch-scroll {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    touch-action: pan-y;
+  }
+
+  .area-nav--bottom .area-nav__btn {
+    gap: 1px;
+    padding: 1px 2px;
   }
 
   .area-nav__btn {
@@ -2750,6 +2772,11 @@
 
     .area-nav--bottom {
       display: none;
+    }
+
+    .mobile-sheet {
+      top: calc(var(--app-header-h) + 6px);
+      bottom: 0;
     }
   }
 }

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import type { AxiosError } from 'axios';
 import type { ItemTemplateDTO } from '@mll/shared';
 import { adminClient } from '../../../lib/api/adminClient';
@@ -75,6 +76,80 @@ function FormField({ label, children }: { label: string; children: React.ReactNo
   );
 }
 
+interface ActiveNotice {
+  name: string;
+  nextActive: boolean;
+  source: 'toggle' | 'save';
+  itemId?: string;
+}
+
+function ActiveChangeDialog({
+  name,
+  nextActive,
+  pending,
+  error,
+  onCancel,
+  onConfirm,
+}: {
+  name: string;
+  nextActive: boolean;
+  pending: boolean;
+  error: string;
+  onCancel: () => void;
+  onConfirm: () => void;
+}) {
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && !pending) onCancel();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [onCancel, pending]);
+
+  const turningOff = !nextActive;
+  return createPortal(
+    <div
+      className="fixed inset-0 z-[300] flex items-center justify-center bg-black/75 p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="active-change-title"
+    >
+      <div className="w-full max-w-md rounded-xl border border-amber-500/30 bg-[#101820] p-5 shadow-2xl">
+        <p className="text-[10px] font-semibold uppercase tracking-wider text-amber-300">Aviso</p>
+        <h3 id="active-change-title" className="mt-1 text-lg font-semibold text-white">
+          {turningOff ? `Desativar ${name}?` : `Reativar ${name}?`}
+        </h3>
+        <ul className="mt-3 list-disc space-y-2 pl-4 text-sm text-slate-300">
+          {turningOff ? (
+            <>
+              <li>Ele sai na hora do mercado, da lojinha e do olheiro.</li>
+              <li>Os anúncios das cópias dos jogadores são cancelados.</li>
+              <li>Se reativar depois, o estoque oficial volta se ainda houver quantidade. As cópias não voltam sozinhas para a venda.</li>
+            </>
+          ) : (
+            <>
+              <li>Ele volta para o olheiro e para o estoque oficial, se ainda houver quantidade.</li>
+              <li>As cópias que os jogadores tinham à venda continuam fora. Cada dono precisa anunciar de novo.</li>
+            </>
+          )}
+        </ul>
+        {error && (
+          <p className="mt-3 rounded-lg border border-red-500/25 bg-red-500/10 px-3 py-2 text-xs text-red-300">
+            {error}
+          </p>
+        )}
+        <div className="mt-5 flex justify-end gap-2">
+          <AdminButton variant="ghost" disabled={pending} onClick={onCancel}>Cancelar</AdminButton>
+          <AdminButton variant={turningOff ? 'danger' : 'primary'} disabled={pending} onClick={onConfirm}>
+            {pending ? 'Salvando…' : turningOff ? 'Desativar' : 'Reativar'}
+          </AdminButton>
+        </div>
+      </div>
+    </div>,
+    document.body,
+  );
+}
+
 export function AdminItemsPage() {
   const [items, setItems] = useState<ItemTemplateDTO[]>([]);
   const [form, setForm] = useState<FormState>(emptyForm);
@@ -86,6 +161,9 @@ export function AdminItemsPage() {
   const [filterActive, setFilterActive] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
   const formRef = useRef<HTMLDivElement>(null);
+  const [notice, setNotice] = useState<ActiveNotice | null>(null);
+  const [noticePending, setNoticePending] = useState(false);
+  const [noticeError, setNoticeError] = useState('');
 
   async function load() {
     const params = new URLSearchParams();
@@ -105,12 +183,26 @@ export function AdminItemsPage() {
     if (fileInputRef.current) fileInputRef.current.value = '';
   }
 
-  async function submit() {
+  async function submit(skipNotice = false) {
+    if (!form.name.trim()) { setError('Informe o nome do item.'); setMessage(''); return; }
+    const current = editing ? items.find((item) => item.id === editing) : undefined;
+    if (!skipNotice && current && current.active !== form.active) {
+      setNotice({
+        name: form.name.trim() || current.name,
+        nextActive: form.active,
+        source: 'save',
+        itemId: current.id,
+      });
+      return;
+    }
+    if (!skipNotice && !editing && !form.active) {
+      setNotice({ name: form.name.trim(), nextActive: false, source: 'save' });
+      return;
+    }
     setSubmitting(true);
     setMessage('');
     setError('');
     try {
-      if (!form.name.trim()) { setError('Informe o nome do item.'); return; }
 
       const payload = {
         name: form.name.trim(),
@@ -148,9 +240,38 @@ export function AdminItemsPage() {
     }
   }
 
-  async function toggleActive(item: ItemTemplateDTO) {
-    await adminClient.post(`/items/${item.id}/active`, { active: !item.active });
-    await load();
+  function requestToggle(item: ItemTemplateDTO) {
+    setNotice({
+      name: item.name,
+      nextActive: !item.active,
+      source: 'toggle',
+      itemId: item.id,
+    });
+  }
+
+  async function confirmNotice() {
+    if (!notice) return;
+    setNoticePending(true);
+    setNoticeError('');
+    try {
+      if (notice.source === 'toggle' && notice.itemId) {
+        await adminClient.post(`/items/${notice.itemId}/active`, { active: notice.nextActive });
+        setMessage(
+          notice.nextActive
+            ? `${notice.name} reativado. As cópias dos jogadores não voltaram para a venda.`
+            : `${notice.name} desativado. Saiu do mercado, da lojinha e do olheiro.`,
+        );
+        setNotice(null);
+        await load();
+      } else {
+        setNotice(null);
+        await submit(true);
+      }
+    } catch (err: unknown) {
+      setNoticeError(formatSaveError(err));
+    } finally {
+      setNoticePending(false);
+    }
   }
 
   async function remove(item: ItemTemplateDTO) {
@@ -173,7 +294,7 @@ export function AdminItemsPage() {
       file: null,
       preview: item.imageUrl ? resolveUploadUrl(item.imageUrl) : null,
     });
-    formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    formRef.current?.scrollIntoView?.({ behavior: 'smooth', block: 'start' });
   }
 
   // Pool stats
@@ -189,7 +310,7 @@ export function AdminItemsPage() {
     <>
       <AdminPageHeader
         title="Itens do Scout"
-        subtitle="O olheiro só sorteia jogadores cadastrados aqui. Itens inativos não entram no pool."
+        subtitle="Desativar tira o jogador do olheiro, da lojinha e do mercado. Reativar não recoloca as cópias dos jogadores à venda."
       />
 
       {/* Pool summary */}
@@ -320,7 +441,7 @@ export function AdminItemsPage() {
                   onChange={(e) => setForm((f) => ({ ...f, active: e.target.checked }))}
                   className="rounded border-white/20 accent-emerald-500"
                 />
-                <span className="text-sm text-slate-300">Item ativo (entra no pool do scout)</span>
+                <span className="text-sm text-slate-300">Item ativo (olheiro, lojinha e mercado)</span>
               </label>
 
               {error && (
@@ -439,7 +560,7 @@ export function AdminItemsPage() {
                         <td className="px-4 py-2.5">
                           <button
                             type="button"
-                            onClick={() => void toggleActive(it)}
+                            onClick={() => requestToggle(it)}
                             className={`flex items-center gap-1.5 rounded-lg border px-2.5 py-1 text-xs font-medium transition-colors ${
                               it.active
                                 ? 'border-emerald-500/25 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/15'
@@ -487,6 +608,16 @@ export function AdminItemsPage() {
           </div>
         </div>
       </div>
+      {notice && (
+        <ActiveChangeDialog
+          name={notice.name}
+          nextActive={notice.nextActive}
+          pending={noticePending}
+          error={noticeError}
+          onCancel={() => { if (!noticePending) { setNotice(null); setNoticeError(''); } }}
+          onConfirm={() => void confirmNotice()}
+        />
+      )}
     </>
   );
 }

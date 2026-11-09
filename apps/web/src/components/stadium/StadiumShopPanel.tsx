@@ -2,16 +2,25 @@ import { GearSprite } from '../gear/GearSprite';
 import { useEffect, useMemo, useState, type CSSProperties, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import type { GearCatalogItemDTO } from '@mll/shared';
+import type { GearCatalogItemDTO, StadiumShopItemDTO } from '@mll/shared';
+import { SpendConfirmDialog } from '../economy/SpendConfirmDialog';
 import {
   useBuyGear,
   useBuyStadiumShopItem,
+  useClub,
   useStadiumShop,
 } from '../../hooks/useApi';
 import { translateError } from '../../lib/apiError';
 import { resolveUploadUrl } from '../../lib/resolveUploadUrl';
 
 type ShopTab = 'gear' | 'stamina' | 'affiliate';
+
+type PendingSpend = {
+  kind: 'gear' | 'item';
+  id: string;
+  name: string;
+  amountGmt: number;
+};
 
 const RARITY_LABEL = ['Comum', 'Incomum', 'Raro', 'S.Raro', 'Épico', 'Lendário'];
 
@@ -37,6 +46,7 @@ function pickDefaultTab(gear: number, stamina: number, affiliate: number): ShopT
 export function StadiumShopPanel({ compact: _compact = false }: { compact?: boolean }) {
   const { t } = useTranslation(['club', 'common']);
   const { data: shop, isLoading: shopLoading } = useStadiumShop();
+  const { data: club } = useClub();
   const buyItem = useBuyStadiumShopItem();
   const buyGear = useBuyGear();
 
@@ -55,6 +65,9 @@ export function StadiumShopPanel({ compact: _compact = false }: { compact?: bool
   const [buyMsg, setBuyMsg] = useState('');
   const [buyErr, setBuyErr] = useState('');
   const [gearBought, setGearBought] = useState(false);
+  const [pending, setPending] = useState<PendingSpend | null>(null);
+  const [spendError, setSpendError] = useState('');
+  const [receipt, setReceipt] = useState<(PendingSpend & { balanceAfter: number | null }) | null>(null);
 
   useEffect(() => {
     if (shopLoading || tabReady) return;
@@ -62,28 +75,57 @@ export function StadiumShopPanel({ compact: _compact = false }: { compact?: bool
     setTabReady(true);
   }, [shopLoading, tabReady, gearItems.length, staminaItems.length, affiliateItems.length]);
 
-  async function handleBuy(itemId: string) {
+  function askToBuy(next: PendingSpend) {
     setBuyMsg('');
     setBuyErr('');
+    setSpendError('');
+    setReceipt(null);
+    setPending(next);
+  }
+
+  function gearName(item: GearCatalogItemDTO) {
+    return t(`club:${item.nameKey}`, { defaultValue: item.nameKey || item.slug });
+  }
+
+  function itemName(item: StadiumShopItemDTO) {
+    return t(`club:${item.nameKey}`, { defaultValue: item.nameKey || item.slug });
+  }
+
+  const spendPending = pending?.kind === 'gear' ? buyGear.isPending : buyItem.isPending;
+
+  async function confirmSpend() {
+    if (!pending || spendPending) return;
+    const target = pending;
+    const before = club?.gmtBalance ?? null;
+    setSpendError('');
     try {
-      await buyItem.mutateAsync({ itemId });
-      setBuyMsg(t('club:shop.sentToWarehouse', { defaultValue: 'Comprado! Retire no Almoxarifado.' }));
+      if (target.kind === 'gear') {
+        const result = await buyGear.mutateAsync({ catalogItemId: target.id });
+        setGearBought(true);
+        setBuyMsg(t('club:shop.gearBought'));
+        setReceipt({
+          ...target,
+          balanceAfter: result.gmtBalance ?? (before != null ? before - target.amountGmt : null),
+        });
+      } else {
+        const result = await buyItem.mutateAsync({ itemId: target.id });
+        setGearBought(false);
+        setBuyMsg(t('club:shop.sentToWarehouse', { defaultValue: 'Comprado! Retire no Almoxarifado.' }));
+        setReceipt({
+          ...target,
+          balanceAfter: result.gmtBalance ?? (before != null ? before - target.amountGmt : null),
+        });
+      }
+      setPending(null);
     } catch (err: unknown) {
-      setBuyErr(translateError(err, 'INSUFFICIENT_USDC'));
+      setSpendError(translateError(err, 'INSUFFICIENT_USDC'));
     }
   }
 
-  async function handleBuyGear(item: GearCatalogItemDTO) {
-    setBuyMsg('');
-    setBuyErr('');
-    setGearBought(false);
-    try {
-      await buyGear.mutateAsync({ catalogItemId: item.id });
-      setBuyMsg(t('club:shop.gearBought'));
-      setGearBought(true);
-    } catch (err: unknown) {
-      setBuyErr(translateError(err, 'INSUFFICIENT_USDC'));
-    }
+  function closeSpend() {
+    if (spendPending) return;
+    setPending(null);
+    setSpendError('');
   }
 
   const tabs: { key: ShopTab; label: string; count: number; accent: string; icon: string }[] = [
@@ -231,9 +273,21 @@ export function StadiumShopPanel({ compact: _compact = false }: { compact?: bool
               title={t(`club:${item.nameKey}`, { defaultValue: item.nameKey || item.slug })}
               meta={`${RARITY_LABEL[item.rarity] ?? item.rarity} · ${SLOT_LABEL[item.slot] ?? item.slot} · ${t('club:gear.bonus', { ow: item.owBonus, unit: '' })}`}
               priceLabel={`${item.priceGmt} ${t('club:shop.currencyGmt')}`}
-              cta={buyGear.isPending ? t('common:labels.status.loading') : t('club:shop.buyGear')}
+              cta={
+                pending?.id === item.id && buyGear.isPending
+                  ? t('common:labels.status.loading')
+                  : t('club:shop.buyGear')
+              }
+              selected={pending?.id === item.id}
               ctaDisabled={buyGear.isPending}
-              onCta={() => void handleBuyGear(item)}
+              onCta={() =>
+                askToBuy({
+                  kind: 'gear',
+                  id: item.id,
+                  name: gearName(item),
+                  amountGmt: Number(item.priceGmt),
+                })
+              }
             />
           ))}
         />
@@ -257,9 +311,21 @@ export function StadiumShopPanel({ compact: _compact = false }: { compact?: bool
                   : t('club:shop.effectFlat', { value: item.effectValue })
               }
               priceLabel={`${item.priceUsdc} ${t('club:shop.currencyGmt')}`}
-              cta={buyItem.isPending ? t('common:labels.status.loading') : t('club:shop.buy')}
+              cta={
+                pending?.id === item.id && buyItem.isPending
+                  ? t('common:labels.status.loading')
+                  : t('club:shop.buy')
+              }
+              selected={pending?.id === item.id}
               ctaDisabled={buyItem.isPending}
-              onCta={() => void handleBuy(item.id)}
+              onCta={() =>
+                askToBuy({
+                  kind: 'item',
+                  id: item.id,
+                  name: itemName(item),
+                  amountGmt: Number(item.priceUsdc),
+                })
+              }
             />
           ))}
         />
@@ -301,6 +367,30 @@ export function StadiumShopPanel({ compact: _compact = false }: { compact?: bool
         />
       )}
 
+      {pending && (
+        <SpendConfirmDialog
+          mode="confirm"
+          channel="shop"
+          itemName={pending.name}
+          amountGmt={pending.amountGmt}
+          balanceGmt={club?.gmtBalance ?? null}
+          pending={spendPending}
+          error={spendError}
+          onCancel={closeSpend}
+          onConfirm={() => void confirmSpend()}
+        />
+      )}
+      {receipt && (
+        <SpendConfirmDialog
+          mode="receipt"
+          channel="shop"
+          itemName={receipt.name}
+          amountGmt={receipt.amountGmt}
+          balanceAfter={receipt.balanceAfter}
+          onCancel={() => setReceipt(null)}
+          onConfirm={() => setReceipt(null)}
+        />
+      )}
     </section>
   );
 }
@@ -349,6 +439,7 @@ function ProductCard({
   priceLabel,
   cta,
   ctaDisabled,
+  selected = false,
   onCta,
 }: {
   accent: string;
@@ -360,6 +451,7 @@ function ProductCard({
   priceLabel: string;
   cta: string;
   ctaDisabled?: boolean;
+  selected?: boolean;
   onCta: () => void;
 }) {
   const resolved = safeImageSrc(imageUrl);
@@ -421,14 +513,18 @@ function ProductCard({
         <button
           type="button"
           disabled={ctaDisabled}
+          aria-pressed={selected}
           onClick={onCta}
-          className="game-action w-full text-label font-bold mt-1"
+          className="game-action w-full text-label font-bold mt-1 active:scale-[0.98]"
           style={{
             minHeight: 48,
             borderRadius: 5,
-            border: `2px solid ${accent}`,
-            background: `linear-gradient(180deg, color-mix(in srgb, ${accent} 27%, #252733), color-mix(in srgb, ${accent} 13%, #20222d))`,
-            color: '#fff',
+            border: `2px solid ${selected ? '#fff' : accent}`,
+            background: selected
+              ? accent
+              : `linear-gradient(180deg, color-mix(in srgb, ${accent} 27%, #252733), color-mix(in srgb, ${accent} 13%, #20222d))`,
+            color: selected ? '#111' : '#fff',
+            boxShadow: selected ? `0 0 0 3px ${accent}` : undefined,
             opacity: ctaDisabled ? 0.5 : 1,
           }}
         >

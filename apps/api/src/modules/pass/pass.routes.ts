@@ -2,6 +2,10 @@ import { FastifyInstance } from 'fastify';
 import { claimRewardParamsSchema } from '@mll/shared';
 import { PassRepository, PassService } from './pass.service.js';
 
+function assertPassOpen(_seasonId?: number) {
+  return;
+}
+
 export async function registerPassRoutes(app: FastifyInstance) {
   const service = new PassService(new PassRepository(app.prisma), app.prisma);
 
@@ -19,9 +23,11 @@ export async function registerPassRoutes(app: FastifyInstance) {
     },
     async (request) => {
       const params = claimRewardParamsSchema.parse(request.params);
-      const body = (request.body ?? {}) as { seasonId?: number };
+      const body = (request.body ?? {}) as { seasonId?: number; track?: string };
       const seasonId = Number(body.seasonId);
-      return service.claim(request.user.id, params.level, Number.isInteger(seasonId) ? seasonId : undefined);
+      assertPassOpen(Number.isInteger(seasonId) ? seasonId : undefined);
+      const track = body.track === 'gold' ? 'gold' : 'free';
+      return service.claim(request.user.id, params.level, Number.isInteger(seasonId) ? seasonId : undefined, track);
     },
   );
 
@@ -34,6 +40,7 @@ export async function registerPassRoutes(app: FastifyInstance) {
     async (request) => {
       const body = (request.body ?? {}) as { seasonId?: number };
       const seasonId = Number(body.seasonId);
+      assertPassOpen(Number.isInteger(seasonId) ? seasonId : undefined);
       return service.buyPremium(request.user.id, Number.isInteger(seasonId) ? seasonId : undefined);
     },
   );

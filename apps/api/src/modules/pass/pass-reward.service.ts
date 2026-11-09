@@ -27,7 +27,7 @@ export async function getPassRewardCatalog(prisma: PrismaClient): Promise<PassRe
 /** Resolve IDs on the server. The editor cannot invent an item image, identity or reward. */
 export async function normalizePassRewards<T extends Reward>(prisma: PrismaClient, rewards: T[]): Promise<T[]> {
   const catalog = await getPassRewardCatalog(prisma);
-  return rewards.map(reward => {
+  const apply = <T extends { rewardType: string; rewardLabel: string; usdcAmount?: number; rewardItemId?: string; quantity?: number; rewardImageUrl?: string | null }>(reward: T): T => {
     if (['player', 'cosmetic', 'ticket'].includes(reward.rewardType)) {
       throw new AppError(ErrorCode.VALIDATION_ERROR, 400, { reason: 'pass_reward_unavailable', message: 'Selecione uma carta cadastrada no catálogo, um equipamento, stamina ou saldo GMT.' });
     }
@@ -38,12 +38,30 @@ export async function normalizePassRewards<T extends Reward>(prisma: PrismaClien
     const item = catalog.find(item => item.rewardType === reward.rewardType && item.id === reward.rewardItemId);
     if (!item) throw new AppError(ErrorCode.VALIDATION_ERROR, 400, { reason: 'pass_reward_item_unavailable', message: 'Um dos prêmios foi removido ou desativado. Selecione outro item do catálogo.' });
     return { ...reward, rewardLabel: `${reward.quantity ?? 1}× ${item.name}`.slice(0, 128), rewardImageUrl: item.imageUrl };
+  };
+  return rewards.map(reward => {
+    const next = apply(reward);
+    if (!('goldReward' in reward) || !reward.goldReward) return next;
+    return { ...next, goldReward: apply(reward.goldReward) };
   });
 }
 
-async function deliver(tx: Prisma.TransactionClient, userId: string, seasonId: number, level: number, reward: Reward) {
+export const PASS_GOLD_CLAIM_OFFSET = 1000;
+
+export function passClaimMarker(level: number, track: 'free' | 'gold'): number {
+  return track === 'gold' ? level + PASS_GOLD_CLAIM_OFFSET : level;
+}
+
+async function deliver(
+  tx: Prisma.TransactionClient,
+  userId: string,
+  seasonId: number,
+  level: number,
+  reward: { rewardType: string; usdcAmount?: number; rewardItemId?: string; quantity?: number },
+  track: 'free' | 'gold',
+) {
   const quantity = reward.quantity ?? 1;
-  const sourceRef = `pass:${seasonId}:${level}`;
+  const sourceRef = track === 'gold' ? `pass:${seasonId}:${level}:gold` : `pass:${seasonId}:${level}`;
   if (reward.rewardType === 'usdc') {
     await applyMgtCredit(tx, userId, reward.usdcAmount ?? 0, MgtTxType.PASS_CLAIM, { seasonId, level });
     return;
@@ -74,18 +92,33 @@ async function deliver(tx: Prisma.TransactionClient, userId: string, seasonId: n
 }
 
 /** Row lock + delivery + claimed marker share one transaction, including rollback on delivery failure. */
-export async function claimPassReward(prisma: PrismaClient, userId: string, season: ConfiguredPassSeason, level: number) {
+export async function claimPassReward(
+  prisma: PrismaClient,
+  userId: string,
+  season: ConfiguredPassSeason,
+  level: number,
+  track: 'free' | 'gold' = 'free',
+) {
   const config = season.levels.find(entry => entry.level === level);
   if (!config) throw new AppError(ErrorCode.PASS_LEVEL_NOT_CLAIMABLE, 400);
+  const marker = passClaimMarker(level, track);
   return prisma.$transaction(async tx => {
     await tx.passProgress.upsert({ where: { userId_seasonId: { userId, seasonId: season.id } }, create: { userId, seasonId: season.id, xp: 0 }, update: {} });
     await tx.$queryRaw`SELECT "userId" FROM "PassProgress" WHERE "userId" = ${userId} AND "seasonId" = ${season.id} FOR UPDATE`;
     const progress = await tx.passProgress.findUniqueOrThrow({ where: { userId_seasonId: { userId, seasonId: season.id } } });
-    if (progress.claimedLevels.includes(level)) throw new AppError(ErrorCode.PASS_ALREADY_CLAIMED, 400);
+    if (progress.claimedLevels.includes(marker)) throw new AppError(ErrorCode.PASS_ALREADY_CLAIMED, 400);
     const seasonOpen = season.startsAt <= new Date() && season.endsAt > new Date();
-    if (!seasonOpen || (!progress.premium && progress.xp < config.xpRequired)) throw new AppError(ErrorCode.PASS_LEVEL_NOT_CLAIMABLE, 400);
-    const reward = findRewardBlockForLevel(level, season.rewardBlocks) ?? config;
-    await deliver(tx, userId, season.id, level, reward);
-    await tx.passProgress.update({ where: { userId_seasonId: { userId, seasonId: season.id } }, data: { claimedLevels: { push: level } } });
+    if (!seasonOpen) throw new AppError(ErrorCode.PASS_LEVEL_NOT_CLAIMABLE, 400);
+    if (track === 'gold') {
+      if (!progress.premium) throw new AppError(ErrorCode.PASS_LEVEL_NOT_CLAIMABLE, 400);
+    } else if (progress.xp < config.xpRequired) {
+      throw new AppError(ErrorCode.PASS_LEVEL_NOT_CLAIMABLE, 400);
+    }
+    const reward = track === 'gold'
+      ? config.goldReward
+      : (findRewardBlockForLevel(level, season.rewardBlocks) ?? config);
+    if (!reward) throw new AppError(ErrorCode.PASS_LEVEL_NOT_CLAIMABLE, 400);
+    await deliver(tx, userId, season.id, level, reward, track);
+    await tx.passProgress.update({ where: { userId_seasonId: { userId, seasonId: season.id } }, data: { claimedLevels: { push: marker } } });
   }, { timeout: 15000 });
 }

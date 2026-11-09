@@ -917,6 +917,8 @@ model PlatformConfig {
   marketplaceFeeBps      Int      @default(1000)
   mergeDiscountPct       Decimal  @default(0) @db.Decimal(5,4)
   scoutDiscountPct       Decimal  @default(0) @db.Decimal(5,4)
+  /// Preço base de cada carta no olheiro, em GMT, antes do desconto.
+  scoutCostGmt           Decimal  @default(0.25) @db.Decimal(36, 6)
   scoutRarityWeights     Json     @default("{\"common\":50,\"uncommon\":30,\"rare\":10,\"super-rare\":6,\"epic\":3,\"legendary\":1}")
   passRankConfig         Json     @default("[{\"rank\":\"bronze\",\"minLevel\":1,\"maxLevel\":10,\"bonusPct\":0},{\"rank\":\"prata\",\"minLevel\":11,\"maxLevel\":25,\"bonusPct\":0.05},{\"rank\":\"ouro\",\"minLevel\":26,\"maxLevel\":50,\"bonusPct\":0.1},{\"rank\":\"diamante\",\"minLevel\":51,\"maxLevel\":80,\"bonusPct\":0.15},{\"rank\":\"lendario\",\"minLevel\":81,\"maxLevel\":100,\"bonusPct\":0.2}]")
   referralNftName         String   @default("Craque Indicação") @db.VarChar(64)

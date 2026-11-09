@@ -25,7 +25,7 @@
   "rules": {
     "attributes": "Los atributos salen de la misma franja de OVERWALL de la rareza sorteada.",
     "lateral": "{{pct}}% de probabilidad de que la posición pase a LAT.",
-    "payment": "Cada carta cuesta 1 GMT, cualquier rareza. Sin reembolso.",
+    "payment": "Cada carta cuesta 0,25 GMT, cualquier rareza. Sin reembolso.",
     "inventory": "La carta entra al inventario como jugador base."
   },
   "confirm": {
