@@ -42,7 +42,7 @@ export async function registerLoginAndCreateClub(
     await clubInput.fill(opts.clubName);
     await dismissLifetimeNotice(page);
     await page.locator('form button[type="submit"]').click();
-    await expect(page.getByText(opts.clubName)).toBeVisible({ timeout: 15_000 });
+    await expect(page.getByRole('heading', { name: opts.clubName })).toBeVisible({ timeout: 15_000 });
   }
 }
 
