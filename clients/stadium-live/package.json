@@ -94,7 +94,7 @@
   "dependencies": {
     "@capacitor/android": "^6.2.0",
     "@capacitor/app": "^6.0.2",
-    "@capacitor/browser": "^6.0.6",
+    "@capacitor/browser": "^8.0.5",
     "@capacitor/core": "^6.2.0",
     "@capacitor/status-bar": "^6.0.2"
   },
