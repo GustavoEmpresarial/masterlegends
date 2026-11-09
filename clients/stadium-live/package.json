@@ -98,6 +98,9 @@
     "@capacitor/core": "^6.2.0",
     "@capacitor/status-bar": "^6.0.2"
   },
+  "overrides": {
+    "tar": "7.5.22"
+  },
   "devDependencies": {
     "@capacitor/cli": "^6.2.0",
     "electron": "^33.2.1",

@@ -23,10 +23,6 @@ export default defineProject({
     // Integration suites share one Postgres/Redis — never run API files in parallel.
     fileParallelism: false,
     maxWorkers: 1,
-    pool: 'forks',
-    poolOptions: {
-      forks: { singleFork: true },
-    },
     testTimeout: 30_000,
     coverage: {
       ...coverageDefaults,
