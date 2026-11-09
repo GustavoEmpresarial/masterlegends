@@ -133,7 +133,7 @@ jobs:
       - name: Observability summary
         if: always()
         run: npm run test:report
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: test-reports
@@ -160,7 +160,7 @@ jobs:
       - name: Mutation testing (critical modules)
         # stryker.config.mjs thresholds.break = 80 — job fails if score drops.
         run: npm run test:mutation
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: mutation-reports
