@@ -93,7 +93,7 @@
   "homepage": "https://masterlegends.online",
   "dependencies": {
     "@capacitor/android": "^6.2.0",
-    "@capacitor/app": "^6.0.2",
+    "@capacitor/app": "^8.1.2",
     "@capacitor/browser": "^6.0.6",
     "@capacitor/core": "^6.2.0",
     "@capacitor/status-bar": "^6.0.2"
