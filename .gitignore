@@ -43,9 +43,9 @@ pnpm-debug.log*
 # Testing
 coverage/
 .nyc_output/
-reports/
+/reports/
 .stryker-tmp/
-reports/mutation/
+/reports/mutation/
 
 # Hardhat
 apps/contracts/cache/
