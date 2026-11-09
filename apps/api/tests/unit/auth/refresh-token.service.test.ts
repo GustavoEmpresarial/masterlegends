@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import Fastify from 'fastify';
 import jwtPlugin from '@fastify/jwt';
 import Redis from 'ioredis-mock';
@@ -32,11 +32,17 @@ describe('RefreshTokenService', () => {
   });
 
   it('detects refresh reuse', async () => {
-    const first = await service.issue('user-1');
-    await service.rotate(first.token);
-    await expect(service.rotate(first.token)).rejects.toMatchObject({
-      code: ErrorCode.AUTH_REFRESH_REUSED,
-    });
+    vi.useFakeTimers();
+    try {
+      const first = await service.issue('user-1');
+      await service.rotate(first.token);
+      vi.advanceTimersByTime(16_000);
+      await expect(service.rotate(first.token)).rejects.toMatchObject({
+        code: ErrorCode.AUTH_REFRESH_REUSED,
+      });
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it('revokes all families for user', async () => {

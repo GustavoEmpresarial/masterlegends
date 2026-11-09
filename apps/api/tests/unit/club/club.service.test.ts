@@ -44,6 +44,8 @@ function mockPrisma() {
     miningBalance: { findUnique: vi.fn().mockResolvedValue(null) },
     miningBlock: { findFirst: vi.fn().mockResolvedValue(null) },
     playerCache: { aggregate: vi.fn().mockResolvedValue({ _sum: { overwall: 0 } }) },
+    playerStake: { findMany: vi.fn().mockResolvedValue([]) },
+    playerGearEquip: { findMany: vi.fn().mockResolvedValue([]) },
     platformConfig: {
       upsert: vi.fn().mockResolvedValue({}),
       findUniqueOrThrow: vi.fn().mockResolvedValue({

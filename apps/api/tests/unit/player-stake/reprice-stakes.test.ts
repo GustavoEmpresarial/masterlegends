@@ -53,7 +53,7 @@ beforeEach(() => {
 describe('repriceActivePlayerStakes', () => {
   it('locks the missing GMT when an active stake is below the current table', async () => {
     const { prisma, updateMany } = prismaFor({
-      stakes: [{ id: 's1', userId: 'u1', kind: 'base', playerId: 'p1', amount: '125' }],
+      stakes: [{ id: 's1', userId: 'u1', kind: 'base', playerId: 'p1', amount: '50' }],
       bases: [{ id: 'p1', rarity: 4 }],
     });
 
@@ -61,12 +61,12 @@ describe('repriceActivePlayerStakes', () => {
 
     expect(result).toEqual({ updated: 1, shortUsers: 0 });
     expect(updateMany).toHaveBeenCalledWith(
-      expect.objectContaining({ data: { amount: new Prisma.Decimal('250') } }),
+      expect.objectContaining({ data: { amount: new Prisma.Decimal('78.125') } }),
     );
     expect(lockGmt).toHaveBeenCalledWith(
       expect.anything(),
       'u1',
-      '125.00000000',
+      '28.12500000',
       'player_stake',
       { repair: 'stake-reprice' },
     );
@@ -86,7 +86,7 @@ describe('repriceActivePlayerStakes', () => {
     expect(releaseGmt).toHaveBeenCalledWith(
       expect.anything(),
       'u1',
-      '6.25000000',
+      '46.87500000',
       'player_unstake',
       { repair: 'stake-reprice' },
     );
@@ -95,7 +95,7 @@ describe('repriceActivePlayerStakes', () => {
 
   it('leaves a stake that already matches the table', async () => {
     const { prisma, updateMany } = prismaFor({
-      stakes: [{ id: 's1', userId: 'u1', kind: 'base', playerId: 'p1', amount: '0.6' }],
+      stakes: [{ id: 's1', userId: 'u1', kind: 'base', playerId: 'p1', amount: '0.125' }],
       bases: [{ id: 'p1', rarity: 0 }],
     });
 
@@ -108,7 +108,7 @@ describe('repriceActivePlayerStakes', () => {
 
   it('still writes the new amount when the available balance cannot cover the increase', async () => {
     const { prisma, updateMany } = prismaFor({
-      stakes: [{ id: 's1', userId: 'u1', kind: 'base', playerId: 'p1', amount: '125' }],
+      stakes: [{ id: 's1', userId: 'u1', kind: 'base', playerId: 'p1', amount: '50' }],
       bases: [{ id: 'p1', rarity: 4 }],
       available: '10',
     });

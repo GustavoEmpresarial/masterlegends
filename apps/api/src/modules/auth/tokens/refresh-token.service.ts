@@ -107,8 +107,10 @@ export class RefreshTokenService {
     }
 
     if (stored.used === 1) {
+      const configuredGrace = Number(process.env.REFRESH_REUSE_GRACE_MS);
+      const graceMs = Number.isFinite(configuredGrace) && configuredGrace >= 0 ? configuredGrace : REUSE_GRACE_MS;
       const withinGrace =
-        typeof stored.usedAt === 'number' && Date.now() - stored.usedAt < REUSE_GRACE_MS;
+        typeof stored.usedAt === 'number' && Date.now() - stored.usedAt < graceMs;
       if (withinGrace && stored.succ) {
         // Corrida legítima entre abas/dispositivos: devolve o mesmo par já emitido pela
         // rotação original em vez de tratar como token roubado.

@@ -65,7 +65,8 @@ describe('ItemTemplateService.update club sync', () => {
       aggregate: vi.fn().mockResolvedValue({ _sum: { overwall: 151759 } }),
     };
     const club = { updateMany: vi.fn() };
-    const tx = { itemTemplate, basePlayer, club };
+    const listing = { updateMany: vi.fn() };
+    const tx = { itemTemplate, basePlayer, club, listing };
     const prisma = {
       itemTemplate: { findUnique: itemTemplate.findUnique },
       $transaction: vi.fn(async (fn: (c: typeof tx) => Promise<unknown>) => fn(tx)),

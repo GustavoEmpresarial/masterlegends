@@ -63,7 +63,7 @@ describe('PassService', () => {
     vi.mocked(repo.findProgress).mockResolvedValue({ xp: 100, premium: false, claimedLevels: [] } as never);
     const service = new PassService(repo, mkPrisma());
     await service.claim('user-1', 1);
-    expect(repo.claimConfiguredReward).toHaveBeenCalledWith('user-1', configuredSeason, 1);
+    expect(repo.claimConfiguredReward).toHaveBeenCalledWith('user-1', configuredSeason, 1, 'free');
     expect(repo.creditMgt).not.toHaveBeenCalled();
   });
 

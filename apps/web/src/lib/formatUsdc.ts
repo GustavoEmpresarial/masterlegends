@@ -40,6 +40,10 @@ export function formatStableAmount(value: number): string {
 
 export function formatWalletUsdcAmount(type: string, amount: number, currency?: string): string {
   const code = (currency ?? (type === 'mining_claim' || type === 'usdt_withdraw' || type === 'coach_fee' ? 'usdt' : 'gmt')).toLowerCase();
-  if (code === 'usdc' || code === 'usdt') return formatStableAmount(amount);
+  if (code === 'usdc' || code === 'usdt') {
+    const abs = Math.abs(amount);
+    if (Number.isFinite(abs) && abs > 0 && abs < 0.0001) return formatUsdcAmountFixed(amount, 8);
+    return formatStableAmount(amount);
+  }
   return formatGmtAmount(amount);
 }

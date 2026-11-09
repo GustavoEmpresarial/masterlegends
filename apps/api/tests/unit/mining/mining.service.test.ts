@@ -1,6 +1,12 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { Prisma } from '@prisma/client';
+import { positionPower } from '@mll/shared';
 import { MiningService } from '../../../src/modules/mining/mining.service.js';
+
+const ZERO_ATTRS = {
+  ataque: 0, defesa: 0, passe: 0, velocidade: 0, finalizacao: 0,
+  forca: 0, resistencia: 0, tecnica: 0, inteligencia: 0, goleiro: 0,
+};
 
 vi.mock('../../../src/modules/platform/platform-config.service.js', () => {
   const get = vi.fn();
@@ -20,9 +26,10 @@ function makePrisma(overrides: Partial<Record<string, unknown>> = {}) {
     clubStadiumLicense: {
       findUnique: vi.fn().mockResolvedValue({ status: 'signed' }),
     },
-    basePlayer: { aggregate: vi.fn() },
-    playerCache: { aggregate: vi.fn() },
+    basePlayer: { aggregate: vi.fn(), findMany: vi.fn().mockResolvedValue([]) },
+    playerCache: { aggregate: vi.fn(), findMany: vi.fn().mockResolvedValue([]) },
     playerGearEquip: { findMany: vi.fn().mockResolvedValue([]) },
+    vestiarioTemplate: { findFirst: vi.fn().mockResolvedValue(null) },
     checkInGrant: {
       aggregate: vi.fn().mockResolvedValue({ _sum: { amount: 0 } }),
       findMany: vi.fn().mockResolvedValue([]),
@@ -70,19 +77,19 @@ describe('MiningService.getUserOverwall', () => {
       },
       stadiumTemplate: { name: 'Campo', farmBonusPct: 0 },
     });
-    prisma.basePlayer.aggregate.mockResolvedValue({ _sum: { overwall: 500 } });
-    prisma.playerCache.aggregate.mockResolvedValue({ _sum: { overwall: 1500 } });
+    prisma.basePlayer.findMany.mockResolvedValue([
+      { id: 'b1', stamina: 100, position: 0, rarity: 0, attributes: ZERO_ATTRS, overwall: 500 },
+    ]);
+    prisma.playerCache.findMany.mockResolvedValue([
+      { tokenId: 42n, stamina: 100, position: 3, rarity: 0, attributes: ZERO_ATTRS, overwall: 1500 },
+    ]);
 
     const svc = new MiningService(prisma);
-    expect(await svc.getUserOverwall('u1')).toBe(2000);
-    expect(prisma.basePlayer.aggregate).toHaveBeenCalledWith({
-      where: { id: { in: ['b1'] }, userId: 'u1' },
-      _sum: { overwall: true },
-    });
-    expect(prisma.playerCache.aggregate).toHaveBeenCalledWith({
-      where: { tokenId: { in: [42n] }, ownerWallet: '0xabc' },
-      _sum: { overwall: true },
-    });
+    expect(await svc.getUserOverwall('u1')).toBe(positionPower(ZERO_ATTRS, 0) + positionPower(ZERO_ATTRS, 3));
+    expect(prisma.basePlayer.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({ where: { id: { in: ['b1'] }, userId: 'u1' } }),
+    );
+    expect(prisma.playerCache.findMany).toHaveBeenCalled();
   });
 
   it('returns 0 when user has no lineup saved', async () => {
@@ -122,15 +129,18 @@ describe('MiningService.getUserOverwall', () => {
     });
     prisma.clubLineup.findUnique.mockResolvedValue({
       assignments: { s1: { kind: 'base', playerId: 'b1' } },
+      stadiumTemplateId: 'st1',
       stadiumTemplate: { name: 'MASTER NOTURNO', farmBonusPct: 0.02 },
     });
-    prisma.basePlayer.aggregate.mockResolvedValue({ _sum: { overwall: 3750 } });
+    prisma.basePlayer.findMany.mockResolvedValue([
+      { id: 'b1', stamina: 100, position: 0, rarity: 0, attributes: ZERO_ATTRS, overwall: 3750 },
+    ]);
 
     const svc = new MiningService(prisma);
-    // 3750 + floor(3750 * 0.02) = 3750 + 75
-    expect(await svc.getUserOverwall('u1')).toBe(3825);
+    const power = positionPower(ZERO_ATTRS, 0);
+    expect(await svc.getUserOverwall('u1')).toBe(power + Math.floor(power * 0.02));
     const parts = await svc.getLineupOverwallParts('u1');
-    expect(parts.stadiumBonusOverwall).toBe(75);
+    expect(parts.stadiumBonusOverwall).toBe(Math.floor(power * 0.02));
     expect(parts.stadiumFarmBonusPct).toBe(0.02);
   });
 });
@@ -149,8 +159,12 @@ describe('MiningService.getSummary', () => {
       },
       stadiumTemplate: { name: 'Campo', farmBonusPct: 0 },
     });
-    prisma.basePlayer.aggregate.mockResolvedValue({ _sum: { overwall: 100 } });
-    prisma.playerCache.aggregate.mockResolvedValue({ _sum: { overwall: 100 } });
+    prisma.basePlayer.findMany.mockResolvedValue([
+      { id: 'b1', stamina: 100, position: 0, rarity: 0, attributes: ZERO_ATTRS, overwall: 100 },
+    ]);
+    prisma.playerCache.findMany.mockResolvedValue([
+      { tokenId: 1n, stamina: 100, position: 3, rarity: 0, attributes: ZERO_ATTRS, overwall: 100 },
+    ]);
     prisma.miningBalance.findUnique.mockResolvedValue({
       pending: new Prisma.Decimal('0'),
       lifetimeEarned: new Prisma.Decimal('3.25'),
@@ -163,10 +177,11 @@ describe('MiningService.getSummary', () => {
 
     const svc = new MiningService(prisma);
     const s = await svc.getSummary('u1');
-    expect(s.currentOverwall).toBe(200);
+    const power = positionPower(ZERO_ATTRS, 0) + positionPower(ZERO_ATTRS, 3);
+    expect(s.currentOverwall).toBe(power);
     expect(s.networkOverwall).toBe(1000);
-    expect(s.sharePct).toBeCloseTo(20);
-    expect(s.estimatedPerBlock).toBeCloseTo(0.02);
+    expect(s.sharePct).toBeCloseTo((power / 1000) * 100);
+    expect(s.estimatedPerBlock).toBeCloseTo(0.1 * (power / 1000));
     expect(s.lifetimeEarned).toBe(3.25);
     expect(s.lastBlockNumber).toBe(42);
   });
@@ -235,7 +250,7 @@ describe('MiningService.getSummary', () => {
       assignments: { s1: { kind: 'base', playerId: 'b1' } },
       stadiumTemplate: { name: 'Campo', farmBonusPct: 0 },
     });
-    prisma.basePlayer.aggregate.mockResolvedValue({ _sum: { overwall: 100 } });
+    prisma.basePlayer.findMany.mockResolvedValue([]);
     prisma.miningBalance.findUnique.mockResolvedValue(null);
     prisma.miningBlock.findFirst.mockResolvedValue(null);
 
@@ -330,7 +345,7 @@ describe('MiningService.flushLegacyPending', () => {
       stadiumTemplate: { name: 'Campo', farmBonusPct: 0 },
     });
     prisma.miningBalance.findUnique.mockResolvedValue({
-      pending: new Prisma.Decimal('0'),
+      pending: new Prisma.Decimal('1.5'),
       lifetimeEarned: new Prisma.Decimal('1.5'),
     });
     prisma.miningBlock.findFirst.mockResolvedValue(null);

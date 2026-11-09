@@ -63,7 +63,7 @@ describe('SupportService', () => {
     });
 
     const msg = await service.addAdminMessage('t1', 'admin1', 'Hi');
-    expect(msg.body).toBe('Hi');
+    expect(msg.message.body).toBe('Hi');
     expect(prisma.supportTicket.update).toHaveBeenCalledWith(
       expect.objectContaining({
         data: expect.objectContaining({ status: 'in_progress' }),

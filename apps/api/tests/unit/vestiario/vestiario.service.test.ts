@@ -31,6 +31,8 @@ function mockPrisma() {
     affliction: {
       findFirst: vi.fn().mockResolvedValue(null),
     },
+    playerStake: { findMany: vi.fn().mockResolvedValue([]) },
+    playerGearEquip: { findMany: vi.fn().mockResolvedValue([]) },
   };
 }
 

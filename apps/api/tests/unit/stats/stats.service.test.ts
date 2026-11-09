@@ -8,6 +8,7 @@ function makePrisma(overrides = {}) {
       findFirst: vi.fn().mockResolvedValue(null),
     },
     basePlayer: { count: vi.fn().mockResolvedValue(0) },
+    vestiarioTemplate: { findFirst: vi.fn().mockResolvedValue(null) },
     playerCache: { count: vi.fn().mockResolvedValue(0) },
     walletTransaction: {
       findMany: vi.fn().mockResolvedValue([]),

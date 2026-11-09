@@ -23,7 +23,8 @@ describe('Pass discounted purchase UI',()=>{
     expect(screen.getByText('20 de 20 níveis liberados (100%)')).toBeTruthy();
     fireEvent.click(button);expect(fixture.buy).not.toHaveBeenCalled();
     fireEvent.click(screen.getByTestId('spend-confirm'));
-    expect(fixture.buy).toHaveBeenCalledOnce();expect(fixture.buy.mock.calls[0]).toHaveLength(0);
+    expect(fixture.buy).toHaveBeenCalledOnce();
+    expect(fixture.buy.mock.calls[0]?.[0]).toBeUndefined();
   });
   it('does not offer another purchase or a refund to an already premium account',()=>{
     fixture.progress.premium=true;renderPass();

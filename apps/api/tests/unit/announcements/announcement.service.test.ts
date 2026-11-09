@@ -15,6 +15,7 @@ function makeRow(overrides = {}) {
     createdBy: 'admin',
     createdAt: now,
     updatedAt: now,
+    _count: { dismissals: 0 },
     ...overrides,
   };
 }

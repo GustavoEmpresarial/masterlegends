@@ -71,7 +71,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     // No /admin a sessão de jogador não importa. Consultar /auth/* em manutenção
     // devolve 503 e cobria o painel com a tela "em manutenção".
-    if (typeof window !== 'undefined' && window.location.pathname.startsWith('/admin')) {
+    const path = typeof window !== 'undefined' ? window.location?.pathname ?? '' : '';
+    if (path.startsWith('/admin')) {
       setLoading(false);
       return;
     }

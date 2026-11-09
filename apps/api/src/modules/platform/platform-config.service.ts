@@ -89,6 +89,7 @@ export class PlatformConfigService {
       withdrawalsPaused: boolean;
       miningBlockRewardUsdc: number;
       miningBlockIntervalMin: number;
+      miningPaused: boolean;
       registrationOpen: boolean;
       maintenanceMode: boolean;
       maintenanceMessage: string | null;
@@ -135,6 +136,7 @@ export class PlatformConfigService {
         ...(data.withdrawalsPaused !== undefined ? { withdrawalsPaused: data.withdrawalsPaused } : {}),
         ...(data.miningBlockRewardUsdc !== undefined ? { miningBlockRewardUsdc: data.miningBlockRewardUsdc } : {}),
         ...(data.miningBlockIntervalMin !== undefined ? { miningBlockIntervalMin: data.miningBlockIntervalMin } : {}),
+        ...(data.miningPaused !== undefined ? { miningPaused: data.miningPaused } : {}),
         ...(data.registrationOpen !== undefined ? { registrationOpen: data.registrationOpen } : {}),
         ...(data.maintenanceMode !== undefined ? { maintenanceMode: data.maintenanceMode } : {}),
         ...(data.maintenanceMessage !== undefined ? { maintenanceMessage: data.maintenanceMessage } : {}),

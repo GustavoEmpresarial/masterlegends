@@ -67,6 +67,13 @@ run('events claim integration', () => {
       count: 1,
       target: 1,
     });
+    const club = await app.inject({
+      method: 'POST',
+      url: '/api/club/create',
+      headers: { authorization: `Bearer ${token}` },
+      payload: { name: 'FC Claim' },
+    });
+    expect(club.statusCode).toBe(200);
 
     const first = await app.inject({
       method: 'POST',
@@ -116,6 +123,20 @@ run('events claim integration', () => {
       count: 1,
       target: 1,
     });
+    const clubA = await app.inject({
+      method: 'POST',
+      url: '/api/club/create',
+      headers: { authorization: `Bearer ${tokenA}` },
+      payload: { name: 'FC Cap A' },
+    });
+    const clubB = await app.inject({
+      method: 'POST',
+      url: '/api/club/create',
+      headers: { authorization: `Bearer ${tokenB}` },
+      payload: { name: 'FC Cap B' },
+    });
+    expect(clubA.statusCode).toBe(200);
+    expect(clubB.statusCode).toBe(200);
 
     const first = await app.inject({
       method: 'POST',

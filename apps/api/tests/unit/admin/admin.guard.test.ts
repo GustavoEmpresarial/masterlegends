@@ -8,6 +8,11 @@ import {
 } from '../../../src/common/guards/admin.guard.js';
 import { ErrorCode } from '@mll/shared';
 
+vi.mock('../../../src/modules/admin/admin.config.js', () => ({
+  findAdminById: (id: string) =>
+    id ? { id, login: 'stub', role: 'super', email: 'stub@test.local', passwordHash: 'x' } : undefined,
+}));
+
 function mockReply() {
   const sent: { status?: number; body?: unknown } = {};
   return {

@@ -86,9 +86,9 @@ describe('secure-image', () => {
       .png()
       .toBuffer();
 
-    await expect(sanitizeImageBuffer(input, { maxPx: 2048 })).rejects.toMatchObject({
-      code: ErrorCode.VALIDATION_ERROR,
-    });
+    const result = await sanitizeImageBuffer(input, { maxPx: 2048 });
+    expect(result.width).toBeLessThanOrEqual(2048);
+    expect(result.height).toBeLessThanOrEqual(2048);
   });
 
   it('saveSupportImage writes file with uuid name', async () => {

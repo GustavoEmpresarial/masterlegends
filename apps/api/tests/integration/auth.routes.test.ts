@@ -130,6 +130,8 @@ run('auth routes integration', () => {
     });
     expect(first.statusCode).toBe(200);
 
+    const previousGrace = process.env.REFRESH_REUSE_GRACE_MS;
+    process.env.REFRESH_REUSE_GRACE_MS = '0';
     const reuse = await app.inject({
       method: 'POST',
       url: '/auth/refresh',
@@ -138,6 +140,8 @@ run('auth routes integration', () => {
         'x-csrf-token': csrfToken,
       },
     });
+    if (previousGrace === undefined) delete process.env.REFRESH_REUSE_GRACE_MS;
+    else process.env.REFRESH_REUSE_GRACE_MS = previousGrace;
     expect(reuse.statusCode).toBe(401);
     expect(reuse.json().error.code).toBe('AUTH_REFRESH_REUSED');
   });
