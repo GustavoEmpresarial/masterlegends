@@ -24,6 +24,8 @@ export default defineConfig({
       url: `${apiUrl}/health`,
       reuseExistingServer: !process.env.CI,
       timeout: 180_000,
+      stdout: 'pipe',
+      stderr: 'pipe',
       env: {
         ...process.env,
         NODE_ENV: 'development',
@@ -41,11 +43,13 @@ export default defineConfig({
       },
     },
     {
-      command: 'npm run dev -w @mll/web',
+      command: 'npm run dev -w @mll/web -- --host 127.0.0.1 --port 5173 --strictPort',
       cwd: '..',
       url: webUrl,
       reuseExistingServer: !process.env.CI,
-      timeout: 120_000,
+      timeout: 180_000,
+      stdout: 'pipe',
+      stderr: 'pipe',
       env: {
         VITE_API_URL: apiUrl,
       },
