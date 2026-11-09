@@ -188,7 +188,7 @@ export function PassPage() {
     if (!confirming) return;
     setError('');
     try {
-      if (confirming.seasonId == null) await buyPremium.mutateAsync();
+      if (confirming.seasonId == null) await buyPremium.mutateAsync(undefined);
       else await buyPremium.mutateAsync(confirming.seasonId);
       setConfirming(null);
     } catch (err) {

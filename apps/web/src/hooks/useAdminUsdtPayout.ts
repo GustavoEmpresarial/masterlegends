@@ -210,7 +210,7 @@ export function useAdminUsdtPayout() {
           args: [toWallet as `0x${string}`, toUsdtUnits(netUsdt)],
         });
         setLastTxHash(hash);
-        await waitForTransactionReceipt(wagmiConfig, { hash, chainId: targetChainId });
+        await waitForTransactionReceipt(wagmiConfig, { hash, chainId: targetChainId as 137 });
         return hash;
       } catch (err) {
         const msg = shortErr(err);

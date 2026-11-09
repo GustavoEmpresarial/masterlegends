@@ -14,6 +14,7 @@ module.exports = {
     'apps/contracts/artifacts/',
     'apps/contracts/cache/',
     'apps/contracts/typechain-types/',
+    'output/',
   ],
   rules: {
     '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],

@@ -294,7 +294,7 @@ export function MarketplacePage() {
     });
   };
 
-  const displayId = (l: Listing) => l.basePlayerId?.slice(0, 8) ?? l.tokenId ?? l.id.slice(0, 8);
+  const displayId = (l: Pick<ListingDTO, 'basePlayerId' | 'tokenId' | 'id'>) => l.basePlayerId?.slice(0, 8) ?? l.tokenId ?? l.id.slice(0, 8);
 
   const pricedSelectedCount = Array.from(selectedIds).filter(
     (id) => Number(priceMap[id] ?? 0) > 0,

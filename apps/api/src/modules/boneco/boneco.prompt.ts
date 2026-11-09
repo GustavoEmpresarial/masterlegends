@@ -45,7 +45,11 @@ export function bonecoRarityFromIndex(index: number): BonecoRarity {
 }
 
 export function sanitizeBonecoNote(raw: string): string {
-  return raw.replace(/[\u0000-\u001F\u007F]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 400);
+  const cleaned = Array.from(raw, (char) => {
+    const code = char.charCodeAt(0);
+    return code < 32 || code === 127 ? ' ' : char;
+  }).join('');
+  return cleaned.replace(/\s+/g, ' ').trim().slice(0, 400);
 }
 
 const KIT_NAME: Record<BonecoKit, string> = {

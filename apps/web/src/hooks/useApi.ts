@@ -501,7 +501,7 @@ export function useMarketplaceInfo() {
 export function useListItemsBulk() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (items: Array<{ basePlayerId: string; price: number }>) =>
+    mutationFn: (items: Array<{ basePlayerId?: string; tokenId?: string; price: number }>) =>
       postJson<{ results: Array<{ ok: boolean; basePlayerId?: string; error?: string }> }>(
         '/api/marketplace/list-bulk',
         { items },

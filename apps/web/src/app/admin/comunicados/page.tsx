@@ -6,6 +6,7 @@ import { adminClient } from '../../../lib/api/adminClient';
 import { resolveUploadUrl } from '../../../lib/resolveUploadUrl';
 import { AdminBadge, AdminButton, AdminPageHeader } from '../../../components/admin/AdminTable';
 import { usePageTab } from '../../../lib/telemetry/TabContext';
+import { SanitizedHtml } from '../../../lib/sanitized-html';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -14,7 +15,7 @@ function toSlug(title: string): string {
 }
 
 function renderMarkdown(md: string): string {
-  let html = md
+  const html = md
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
     .replace(/^### (.+)$/gm, '<h3 class="md-h3">$1</h3>')
     .replace(/^## (.+)$/gm, '<h2 class="md-h2">$1</h2>')
@@ -486,8 +487,10 @@ function NoticesTab() {
                     </div>
                     {form.imageUrl && <img src={resolveUploadUrl(form.imageUrl)} alt="" className="w-full max-h-36 object-cover rounded-lg" />}
                     <p className="text-base font-bold text-white">{form.title || '(título)'}</p>
-                    <div className="text-xs text-slate-300 leading-relaxed line-clamp-4"
-                      dangerouslySetInnerHTML={{ __html: form.body ? renderMarkdown(form.body) : '(corpo)' }} />
+                    <SanitizedHtml
+                      className="text-xs text-slate-300 leading-relaxed line-clamp-4"
+                      html={form.body ? renderMarkdown(form.body) : '(corpo)'}
+                    />
                     <div className="flex justify-end gap-2 pt-1 border-t border-white/[0.04]">
                       <button type="button" className="rounded-lg border border-white/[0.08] px-4 py-1.5 text-xs text-slate-300">Fechar</button>
                       <button type="button" className="rounded-lg bg-emerald-600 px-4 py-1.5 text-xs text-white font-medium">Entendido</button>
@@ -708,7 +711,7 @@ function BlogEditor({ post, onSaved, onCancel }: { post: BlogPostDTO | null; onS
               </div>
             )}
             {excerpt && <p className="text-slate-300 text-sm mb-4 italic border-l-2 border-emerald-600/60 pl-3">{excerpt}</p>}
-            <div className="blog-content text-sm text-slate-200 leading-relaxed" dangerouslySetInnerHTML={{ __html: renderMarkdown(content) }} />
+            <SanitizedHtml className="blog-content text-sm text-slate-200 leading-relaxed" html={renderMarkdown(content)} />
           </div>
         </div>
       </div>

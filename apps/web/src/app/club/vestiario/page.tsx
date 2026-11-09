@@ -173,7 +173,6 @@ export function VestiarioPage() {
       }
     }, 500);
     return () => clearTimeout(t);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dirty, assignments]);
 
   const handleSave = async () => {
@@ -225,7 +224,7 @@ export function VestiarioPage() {
     setRestErr('');
     try {
       const result = await dailyRest.mutateAsync();
-      setRestMsg(t('club:vestiario.restDone', { count: result.restoredCount, points: result.restoredStamina ?? 100 }));
+      setRestMsg(t('club:vestiario.restDone', { count: result.restoredCount, points: 100 }));
       autoFillStrongest();
     } catch (err: unknown) {
       setRestErr(translateError(err, 'DAILY_REST_ALREADY_CLAIMED'));

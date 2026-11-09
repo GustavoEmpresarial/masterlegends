@@ -3,6 +3,7 @@ import { isAxiosError } from 'axios';
 import { adminClient } from '../../../lib/api/adminClient';
 import { resolveUploadUrl } from '../../../lib/resolveUploadUrl';
 import { AdminButton, AdminPageHeader } from '../../../components/admin/AdminTable';
+import { SanitizedHtml } from '../../../lib/sanitized-html';
 
 type Audience = 'all' | 'user';
 type Format = 'plain' | 'html';
@@ -145,10 +146,7 @@ function EmailPreview({
             className="w-full max-h-48 object-cover rounded-lg border border-white/[0.06]"
           />
         )}
-        <div
-          className="text-slate-300 break-words"
-          dangerouslySetInnerHTML={{ __html: bodyHtml }}
-        />
+        <SanitizedHtml className="text-slate-300 break-words" html={bodyHtml} />
         {visibleButtons.length > 0 && (
           <div className="flex flex-wrap gap-2 pt-1">
             {visibleButtons.map((b, i) => (

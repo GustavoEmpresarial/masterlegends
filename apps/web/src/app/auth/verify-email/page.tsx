@@ -39,7 +39,6 @@ export function VerifyEmailPage() {
       cancelled = true;
     };
     // Intentionally only re-run when the token changes.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
   const message = (() => {

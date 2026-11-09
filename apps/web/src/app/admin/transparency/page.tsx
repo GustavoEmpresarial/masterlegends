@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { adminClient } from '../../../lib/api/adminClient';
 import { AdminButton, AdminPageHeader } from '../../../components/admin/AdminTable';
+import { SanitizedHtml } from '../../../lib/sanitized-html';
 
 // ─── Markdown renderer ────────────────────────────────────────────────────────
 
 function renderMarkdown(md: string): string {
-  let html = md
+  const html = md
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
     .replace(/^### (.+)$/gm, '<h3 class="md-h3">$1</h3>')
     .replace(/^## (.+)$/gm, '<h2 class="md-h2">$1</h2>')
@@ -276,7 +277,7 @@ function SectionsTab() {
                 {form.imageUrl && <img src={form.imageUrl} alt="" className="w-full max-h-48 object-cover rounded-lg border border-white/[0.06] mb-4" />}
                 {form.title ? <h2 className="text-lg font-bold text-white border-b border-white/[0.06] pb-3">{form.title}</h2> : <p className="text-slate-600 text-sm italic">Título da seção</p>}
                 {form.body
-                  ? <div className="prose-sm text-slate-300 leading-relaxed" dangerouslySetInnerHTML={{ __html: renderMarkdown(form.body) }} />
+                  ? <SanitizedHtml className="prose-sm text-slate-300 leading-relaxed" html={renderMarkdown(form.body)} />
                   : <p className="text-slate-600 text-sm italic">Escreva o conteúdo para ver o preview</p>}
               </div>
             </div>

@@ -37,7 +37,7 @@ export function WalletSwapForm() {
       return;
     }
     try {
-      await swap.mutateAsync({ amount: value, from });
+      await swap.mutateAsync({ amount: value });
       setAmount('');
     } catch (err) {
       setError(translateError(err, 'UNKNOWN'));

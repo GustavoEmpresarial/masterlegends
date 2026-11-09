@@ -166,7 +166,7 @@ export async function paintBonecoStats(
 
   for (const cell of CELLS) {
     let x = Math.round(cell.x * sx);
-    let y = Math.round(cell.y * sy);
+    const y = Math.round(cell.y * sy);
     let w = Math.round(cell.w * sx);
     const h = Math.round(cell.h * sy);
     const extend = Math.round(88 * sx);

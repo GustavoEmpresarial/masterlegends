@@ -143,7 +143,6 @@ export function AdminRoiPage() {
         setLastSync(new Date());
       }
     })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

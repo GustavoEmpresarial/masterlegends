@@ -13,7 +13,7 @@ function getTargetChain() {
   return polygon;
 }
 
-function chainAddParams(chain: typeof polygon) {
+function chainAddParams(chain: { id: number; name: string; nativeCurrency: { name: string; symbol: string; decimals: number }; rpcUrls: { default: { http: readonly string[] } }; blockExplorers?: { default: { url: string } } | undefined }) {
   const rpcUrls = chain.rpcUrls.default.http.filter(Boolean);
   const explorer = chain.blockExplorers?.default?.url;
   return {

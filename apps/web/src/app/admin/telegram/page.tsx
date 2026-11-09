@@ -3,6 +3,7 @@ import { isAxiosError } from 'axios';
 import { adminClient } from '../../../lib/api/adminClient';
 import { resolveUploadUrl } from '../../../lib/resolveUploadUrl';
 import { AdminButton, AdminPageHeader } from '../../../components/admin/AdminTable';
+import { SanitizedHtml } from '../../../lib/sanitized-html';
 
 type Target = 'dm' | 'global' | 'both';
 type DmMode = 'all' | 'user';
@@ -141,9 +142,9 @@ function MessagePreview({
           className="w-full max-h-48 object-cover rounded-lg border border-white/[0.06]"
         />
       )}
-      <div
+      <SanitizedHtml
         className="font-mono text-[12px] leading-relaxed text-slate-200 break-words"
-        dangerouslySetInnerHTML={{ __html: previewHtml }}
+        html={previewHtml}
       />
       <div className="flex flex-wrap gap-2 pt-1">
         {visibleButtons.map((b, i) => (

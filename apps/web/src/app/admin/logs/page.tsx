@@ -83,13 +83,13 @@ export function AdminLogsPage() {
     }
   }
 
-  useEffect(() => { void fetchLogs(); }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { void fetchLogs(); }, []);
 
   useEffect(() => {
     if (!auto) return;
     const t = setInterval(() => void fetchLogs(), 5000);
     return () => clearInterval(t);
-  }, [auto, level, service, q, limit]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [auto, level, service, q, limit]);
 
   const services = useMemo(() => Object.keys(stats?.byService ?? {}).sort(), [stats]);
 

@@ -17,7 +17,7 @@ export const wagmiConfig = createConfig({
       target: {
         id: 'metaMask',
         name: 'MetaMask',
-        provider: () => getMetaMaskProvider() ?? undefined,
+        provider: (() => getMetaMaskProvider() ?? undefined) as never,
       },
     }),
   ],

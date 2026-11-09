@@ -429,7 +429,7 @@ export function AdminStadiumShopPage() {
                 </h3>
               </div>
               {(editing || editingGear) && (
-                <button type="button" onClick={resetForm} className="text-xs text-slate-500 hover:text-slate-300">
+                <button type="button" onClick={() => resetForm()} className="text-xs text-slate-500 hover:text-slate-300">
                   Cancelar <i className="bi bi-x" />
                 </button>
               )}

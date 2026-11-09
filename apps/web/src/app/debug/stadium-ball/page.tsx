@@ -36,7 +36,7 @@ export function DebugStadiumBallPage() {
           role,
           xPct: pos.x,
           yPct: pos.y,
-          label: role,
+          label: role ?? 'FW',
         };
         if (i >= n) return { slot, player: null as LineupPlayerDTO | null };
         const player: LineupPlayerDTO = {
@@ -44,7 +44,7 @@ export function DebugStadiumBallPage() {
           kind: 'base',
           rarity: 'common',
           overwall: 350 + i * 50,
-          position: role,
+          position: role ?? 'FW',
           name: `${role}-${i}`,
           age: 18,
         };

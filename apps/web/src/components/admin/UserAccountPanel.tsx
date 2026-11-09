@@ -15,6 +15,7 @@ import { adminPt, formatAdminDate } from '../../lib/admin/i18n';
 interface UserAccountPanelProps {
   userId: string;
   canManage: boolean;
+  embedded?: boolean;
   onUpdated?: () => void;
 }
 

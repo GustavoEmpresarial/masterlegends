@@ -1,4 +1,5 @@
 import { renderMarkdown } from '../../lib/markdown';
+import { SanitizedHtml } from '../../lib/sanitized-html';
 
 interface MarkdownBodyProps {
   markdown: string;
@@ -7,9 +8,9 @@ interface MarkdownBodyProps {
 
 export function MarkdownBody({ markdown, className = '' }: MarkdownBodyProps) {
   return (
-    <div
+    <SanitizedHtml
       className={`blog-content retro-text text-base sm:text-lg leading-relaxed ${className}`.trim()}
-      dangerouslySetInnerHTML={{ __html: renderMarkdown(markdown) }}
+      html={renderMarkdown(markdown)}
     />
   );
 }

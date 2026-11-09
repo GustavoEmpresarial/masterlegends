@@ -142,7 +142,6 @@ export function AdminLayout() {
       next.delete(activeSection.id);
       setCollapsed(next);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname]);
 
   useEffect(() => {

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { apiClient } from '../../lib/api/client';
 import { resolveUploadUrl } from '../../lib/resolveUploadUrl';
 import { escapeHtml, markdownLinkHtml } from '../../lib/safeMarkdown';
+import { SanitizedHtml } from '../../lib/sanitized-html';
 
 interface Notice {
   id: string;
@@ -76,7 +77,7 @@ const LINK_TOKEN = '\uE000';
 /** Safe markdown for notices — bold/italic; links allowlisted (no XSS via href). */
 function renderMarkdown(md: string): string {
   const links: string[] = [];
-  let text = md.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_m, label: string, href: string) => {
+  const text = md.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_m, label: string, href: string) => {
     const i = links.length;
     links.push(
       markdownLinkHtml(label, href).replace(
@@ -221,10 +222,10 @@ export function LoginPopup({ userId }: { userId: string }) {
             {notice.title}
           </h2>
 
-          <div
+          <SanitizedHtml
             className="max-h-64 overflow-y-auto pr-1 text-[15px] leading-relaxed text-slate-200 sm:max-h-72 sm:text-base"
             style={{ fontFamily: 'inherit', letterSpacing: 'normal' }}
-            dangerouslySetInnerHTML={{ __html: renderMarkdown(notice.body) }}
+            html={renderMarkdown(notice.body)}
           />
 
           {notices.length > 1 && (

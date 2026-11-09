@@ -123,7 +123,6 @@ export function SeasonEditor({
 
   useEffect(() => {
     if (autoLoadTemplate && !isEdit) void loadTemplate();
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- run once on mount when requested
   }, [autoLoadTemplate, isEdit]);
 
   function cloneFrom(id: string) {
