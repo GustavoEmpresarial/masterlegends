@@ -1,4 +1,4 @@
-FROM node:20-alpine
+FROM node:26-alpine
 RUN apk add --no-cache libc6-compat openssl wget
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 appuser
