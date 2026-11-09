@@ -1,4 +1,4 @@
-FROM node:20-alpine AS deps
+FROM node:26-alpine AS deps
 RUN apk add --no-cache libc6-compat openssl
 WORKDIR /app
 COPY package.json package-lock.json ./
@@ -7,7 +7,7 @@ COPY packages/logging/package.json packages/logging/
 COPY apps/api/package.json apps/api/
 RUN npm install -w @mll/api -w @mll/shared -w @mll/logging --ignore-scripts
 
-FROM node:20-alpine
+FROM node:26-alpine
 RUN apk add --no-cache libc6-compat openssl wget
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 appuser
