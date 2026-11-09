@@ -40,6 +40,7 @@ export default defineConfig({
         LOG_LEVEL: 'silent',
         SMTP_HOST: 'localhost',
         SMTP_PORT: '1025',
+        E2E_AUTO_VERIFY_EMAIL: 'true',
       },
     },
     {

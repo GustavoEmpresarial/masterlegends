@@ -38,6 +38,7 @@ export class AuthRepository {
     password: string;
     referralCode: string;
     referredBy?: string;
+    emailVerifiedAt?: Date;
   }): Promise<User> {
     return this.prisma.user.create({
       data: {
@@ -46,6 +47,7 @@ export class AuthRepository {
         password: data.password,
         referralCode: data.referralCode,
         referredBy: data.referredBy,
+        emailVerifiedAt: data.emailVerifiedAt,
       },
     });
   }

@@ -93,11 +93,14 @@ export class AuthService {
     }
 
     const hashed = await bcrypt.hash(input.password, BCRYPT_ROUNDS);
+    const autoVerify =
+      process.env.NODE_ENV !== 'production' && process.env.E2E_AUTO_VERIFY_EMAIL === 'true';
     const user = await this.repo.create({
       email: input.email,
       username: input.username,
       password: hashed,
       referralCode: generateReferralCode(),
+      emailVerifiedAt: autoVerify ? new Date() : undefined,
     });
 
     // Todo novo usuário recebe o mesmo NFT vitalício definido pelo admin
