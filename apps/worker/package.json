@@ -21,7 +21,7 @@
     "bullmq": "^5.8.0",
     "dotenv": "^16.4.5",
     "ioredis": "^5.3.2",
-    "nodemailer": "^6.9.14",
+    "nodemailer": "^10.4.0",
     "pino": "^9.2.0",
     "prisma": "^5.9.0",
     "zod": "^4.4.3"
@@ -32,6 +32,6 @@
     "@vitest/coverage-v8": "^3.2.6",
     "tsx": "^4.7.0",
     "typescript": "^5.3.0",
-    "vitest": "^3.2.6"
+    "vitest": "^4.1.11"
   }
 }
