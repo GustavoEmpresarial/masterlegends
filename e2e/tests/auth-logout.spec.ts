@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { registerLoginAndCreateClub } from './register';
+import { registerLoginAndCreateClub, dismissTutorial } from './register';
 
 test('register → settings logout clears session', async ({ page }) => {
   const unique = Date.now();
@@ -11,6 +11,7 @@ test('register → settings logout clears session', async ({ page }) => {
   await registerLoginAndCreateClub(page, { email, username, password, clubName });
 
   await page.goto('/settings');
+  await dismissTutorial(page);
   const logoutBtn = page.getByRole('button', { name: /sair|logout|log out/i }).first();
   await expect(logoutBtn).toBeVisible({ timeout: 15_000 });
   await logoutBtn.click();

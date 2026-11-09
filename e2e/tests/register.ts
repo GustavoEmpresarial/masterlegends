@@ -1,5 +1,13 @@
 import { expect, type Page } from '@playwright/test';
 
+export async function dismissTutorial(page: Page) {
+  const skip = page.getByRole('button', { name: /pular tutorial|skip tutorial|saltar tutorial/i });
+  if (await skip.isVisible({ timeout: 4_000 }).catch(() => false)) {
+    await skip.click();
+    await expect(page.locator('aside[aria-label="Tutorial"]')).toBeHidden({ timeout: 10_000 });
+  }
+}
+
 export async function registerLoginAndCreateClub(
   page: Page,
   opts: { email: string; username: string; password: string; clubName: string },
@@ -18,6 +26,7 @@ export async function registerLoginAndCreateClub(
   await page.locator('input[type="password"]').fill(opts.password);
   await page.locator('button[type="submit"]').click();
   await expect(page).toHaveURL(/\/club/, { timeout: 20_000 });
+  await dismissTutorial(page);
 
   const clubInput = page.locator('form input[type="text"]').first();
   if (await clubInput.isVisible({ timeout: 5_000 }).catch(() => false)) {
@@ -26,3 +35,4 @@ export async function registerLoginAndCreateClub(
     await expect(page.getByText(opts.clubName)).toBeVisible({ timeout: 15_000 });
   }
 }
+
